@@ -1,5 +1,6 @@
 import { motion, useInView } from "framer-motion";
 import { useRef, useState, useEffect } from "react";
+import { ChevronDown } from "lucide-react";
 import {
   LineChart,
   Line,
@@ -195,6 +196,24 @@ const ScienceSection = () => {
             </p>
           </motion.div>
         </div>
+
+        {/* More Features Notice */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6, delay: 0.6 }}
+          className="flex flex-col items-center mt-12 text-center"
+        >
+          <p className="text-muted-foreground text-sm tracking-wide mb-3">
+            And many more insights to discover...
+          </p>
+          <motion.div
+            animate={{ y: [0, 6, 0] }}
+            transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+          >
+            <ChevronDown className="w-5 h-5 text-muted-foreground" />
+          </motion.div>
+        </motion.div>
       </div>
     </section>
   );
