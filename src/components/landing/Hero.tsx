@@ -1,8 +1,32 @@
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { ChevronDown } from "lucide-react";
+import RoleSelector from "./RoleSelector";
+import { useCustomerType, CustomerType } from "@/context/CustomerTypeContext";
+
+const heroContent: Record<CustomerType, { subheadline: string; ctaText: string }> = {
+  boxer: {
+    subheadline: "Hard data proves your power. Objective metrics earn respect. Real-time feedback sharpens every strike.",
+    ctaText: "Join the Waitlist",
+  },
+  coach: {
+    subheadline: "Stop guessing. Start measuring. Turn your fighters into data-driven champions.",
+    ctaText: "Request Demo",
+  },
+  promoter: {
+    subheadline: "Live strike data. Transparent scoring. Unmatched fan engagement. This is boxing reimagined.",
+    ctaText: "Partner With Us",
+  },
+  fan: {
+    subheadline: "Get real-time strike data, fighter biometrics, and performance analytics before anyone else.",
+    ctaText: "Get Early Access",
+  },
+};
 
 const Hero = () => {
+  const { customerType } = useCustomerType();
+  const content = heroContent[customerType];
+
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id);
     element?.scrollIntoView({ behavior: "smooth" });
@@ -58,17 +82,22 @@ const Hero = () => {
             <span className="text-gradient-red">IMPACT.</span>
           </motion.h1>
 
-          {/* Subheadline */}
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-            className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed"
-          >
-            Precision sensors. AI-driven insights. Real-time feedback.
-            <br className="hidden md:block" />
-            Unlock the science behind every strike.
-          </motion.p>
+          {/* Role Selector */}
+          <RoleSelector />
+
+          {/* Subheadline - Dynamic */}
+          <AnimatePresence mode="wait">
+            <motion.p
+              key={customerType}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.3 }}
+              className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed"
+            >
+              {content.subheadline}
+            </motion.p>
+          </AnimatePresence>
 
           {/* CTA Buttons */}
           <motion.div
@@ -77,15 +106,25 @@ const Hero = () => {
             transition={{ duration: 0.8, delay: 0.5 }}
             className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-4"
           >
-            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.98 }}>
-              <Button
-                size="lg"
-                onClick={() => scrollToSection("cta")}
-                className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold px-8 py-6 text-lg glow-red animate-pulse-glow"
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={customerType}
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                transition={{ duration: 0.3 }}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.98 }}
               >
-                Get Early Access
-              </Button>
-            </motion.div>
+                <Button
+                  size="lg"
+                  onClick={() => scrollToSection("cta")}
+                  className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold px-8 py-6 text-lg glow-red animate-pulse-glow"
+                >
+                  {content.ctaText}
+                </Button>
+              </motion.div>
+            </AnimatePresence>
             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.98 }}>
               <Button
                 size="lg"
