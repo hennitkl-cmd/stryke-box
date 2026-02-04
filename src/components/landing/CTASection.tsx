@@ -1,9 +1,17 @@
-import { motion, useInView } from "framer-motion";
+import { motion, useInView, AnimatePresence } from "framer-motion";
 import { useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ArrowRight, CheckCircle, Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useCustomerType, CustomerType } from "@/context/CustomerTypeContext";
+
+const ctaContent: Record<CustomerType, string> = {
+  boxer: "Join the Waitlist",
+  coach: "Request Demo",
+  promoter: "Partner With Us",
+  fan: "Get Early Access",
+};
 
 const CTASection = () => {
   const ref = useRef(null);
@@ -12,6 +20,8 @@ const CTASection = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const { toast } = useToast();
+  const { customerType } = useCustomerType();
+  const ctaText = ctaContent[customerType];
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -111,23 +121,33 @@ const CTASection = () => {
                   className="h-14 bg-secondary border-border text-foreground placeholder:text-muted-foreground focus:border-primary flex-1"
                   disabled={isSubmitting}
                 />
-                <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-                  <Button
-                    type="submit"
-                    size="lg"
-                    disabled={isSubmitting}
-                    className="h-14 px-8 bg-primary hover:bg-primary/90 text-primary-foreground font-bold glow-red whitespace-nowrap"
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={customerType}
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.95 }}
+                    transition={{ duration: 0.3 }}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
                   >
-                    {isSubmitting ? (
-                      <Loader2 className="w-5 h-5 animate-spin" />
-                    ) : (
-                      <>
-                        Get Early Access
-                        <ArrowRight className="w-5 h-5 ml-2" />
-                      </>
-                    )}
-                  </Button>
-                </motion.div>
+                    <Button
+                      type="submit"
+                      size="lg"
+                      disabled={isSubmitting}
+                      className="h-14 px-8 bg-primary hover:bg-primary/90 text-primary-foreground font-bold glow-red whitespace-nowrap"
+                    >
+                      {isSubmitting ? (
+                        <Loader2 className="w-5 h-5 animate-spin" />
+                      ) : (
+                        <>
+                          {ctaText}
+                          <ArrowRight className="w-5 h-5 ml-2" />
+                        </>
+                      )}
+                    </Button>
+                  </motion.div>
+                </AnimatePresence>
               </form>
             )}
           </motion.div>

@@ -5,18 +5,21 @@ import ScienceSection from "@/components/landing/ScienceSection";
 import FeatureGrid from "@/components/landing/FeatureGrid";
 import CTASection from "@/components/landing/CTASection";
 import Footer from "@/components/landing/Footer";
+import { CustomerTypeProvider } from "@/context/CustomerTypeContext";
 
 const Index = () => {
   return (
-    <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
-      <Navigation />
-      <Hero />
-      <ProductShowcase />
-      <ScienceSection />
-      <FeatureGrid />
-      <CTASection />
-      <Footer />
-    </div>
+    <CustomerTypeProvider>
+      <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
+        <Navigation />
+        <Hero />
+        <ProductShowcase />
+        <ScienceSection />
+        <FeatureGrid />
+        <CTASection />
+        <Footer />
+      </div>
+    </CustomerTypeProvider>
   );
 };
 
