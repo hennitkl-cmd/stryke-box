@@ -4,21 +4,25 @@ import { ChevronDown } from "lucide-react";
 import RoleSelector from "./RoleSelector";
 import { useCustomerType, CustomerType } from "@/context/CustomerTypeContext";
 
-const heroContent: Record<CustomerType, { subheadline: string; ctaText: string }> = {
+const heroContent: Record<CustomerType, { headline: string; subheadline: string; ctaText: string }> = {
   boxer: {
+    headline: "BECOME UNDENIABLE",
     subheadline: "Hard data proves your power. Objective metrics earn respect. Real-time feedback sharpens every strike.",
     ctaText: "Join the Waitlist",
   },
   coach: {
-    subheadline: "Stop guessing. Start measuring. Turn your fighters into data-driven champions.",
+    headline: "COACH WITH CERTAINTY",
+    subheadline: "Stop guessing. Start measuring. Turn your fighters into data-driven champions with objective performance tracking.",
     ctaText: "Request Demo",
   },
   promoter: {
-    subheadline: "Live strike data. Transparent scoring. Unmatched fan engagement. This is boxing reimagined.",
+    headline: "THE FUTURE OF FIGHT ENTERTAINMENT",
+    subheadline: "Live strike data. Transparent scoring. Unmatched fan engagement. This is boxing reimagined for the data-driven era.",
     ctaText: "Partner With Us",
   },
   fan: {
-    subheadline: "Get real-time strike data, fighter biometrics, and performance analytics before anyone else.",
+    headline: "BET ON SCIENCE, NOT HYPE",
+    subheadline: "Get real-time strike data, fighter biometrics, and performance analytics before anyone else. Know what the bookmakers don't.",
     ctaText: "Get Early Access",
   },
 };
@@ -71,16 +75,18 @@ const Hero = () => {
           </motion.div>
 
           {/* Headline */}
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
-            className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tight"
-          >
-            <span className="text-foreground">MASTER YOUR</span>
-            <br />
-            <span className="text-gradient-red">IMPACT.</span>
-          </motion.h1>
+          <AnimatePresence mode="wait">
+            <motion.h1
+              key={customerType}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.3 }}
+              className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tight text-gradient-red"
+            >
+              {content.headline}
+            </motion.h1>
+          </AnimatePresence>
 
           {/* Role Selector */}
           <RoleSelector />

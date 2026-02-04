@@ -1,6 +1,6 @@
 import { motion, useInView, AnimatePresence } from "framer-motion";
 import { useRef } from "react";
-import { Target, Award, Bot, Activity, Zap, Trophy, Tv, Shield, DollarSign, TrendingUp, Eye, BarChart3, LucideIcon } from "lucide-react";
+import { Zap, Target, Bot, TrendingUp, BarChart3, Timer, Search, Trophy, Tv, Scale, Wallet, Flame, Dices, Eye, LucideIcon } from "lucide-react";
 import { useCustomerType, CustomerType } from "@/context/CustomerTypeContext";
 
 interface Feature {
@@ -13,82 +13,106 @@ interface Feature {
 const featuresByCustomer: Record<CustomerType, Feature[]> = {
   boxer: [
     {
-      icon: Target,
+      icon: Zap,
       title: "Competitive Edge",
-      description: "Your opponents train blind. You train with precision data that reveals every strength and weakness.",
+      description: "Your opponents train blind. You train with precision data on every punch—speed, force, accuracy, and fatigue patterns.",
       highlight: "Train smarter",
     },
     {
-      icon: Award,
+      icon: Target,
       title: "Prove Your Worth",
-      description: "No more politics. Your stats speak for themselves. Let the data earn you the respect you deserve.",
+      description: "No more politics or subjective opinions. Your punch force, speed rankings, and fight metrics speak for themselves in contract negotiations.",
       highlight: "Objective proof",
     },
     {
       icon: Bot,
-      title: "24/7 AI Coach",
-      description: "Get instant feedback on every technique flaw. Your personal AI coach never sleeps.",
+      title: "24/7 AI Coaching",
+      description: "Get instant feedback on technique flaws, punch combinations, and ring positioning—like having a world-class trainer analyzing every session.",
       highlight: "Always learning",
+    },
+    {
+      icon: TrendingUp,
+      title: "Measurable Progress",
+      description: "See your improvement week-over-week. Track punch velocity increases, power gains, and stamina improvements with hard data.",
+      highlight: "Track growth",
     },
   ],
   coach: [
     {
-      icon: Activity,
-      title: "Objective Tracking",
-      description: "Monitor every fighter's progress with strike-level precision. No more guessing games.",
+      icon: BarChart3,
+      title: "Objective Performance Tracking",
+      description: "Monitor every fighter's progress with strike-level precision. See exactly which fighters are improving and who needs attention.",
       highlight: "Data-driven",
     },
     {
-      icon: Zap,
-      title: "Real-Time Adjustments",
-      description: "See fatigue and technique breakdown as it happens. Adjust strategy before it's too late.",
+      icon: Timer,
+      title: "Real-Time Training Adjustments",
+      description: "See fatigue, technique breakdown, and power drop-off as they happen during training. Make corrections immediately, not after reviewing video.",
       highlight: "Live insights",
     },
     {
+      icon: Search,
+      title: "Spot Hidden Weaknesses",
+      description: "Find technique flaws invisible to the human eye. Identify which punch types are slower, weaker, or less accurate.",
+      highlight: "Deep analysis",
+    },
+    {
       icon: Trophy,
-      title: "Build Champions Faster",
-      description: "Identify weaknesses invisible to the human eye. Accelerate your fighter's path to the top.",
+      title: "Accelerate Development",
+      description: "Use data to create personalized training programs. Know exactly what each fighter needs to work on based on their unique metrics.",
       highlight: "Faster growth",
     },
   ],
   promoter: [
     {
       icon: Tv,
-      title: "Broadcast Gold",
-      description: "Live punch speed, force, and stats keep fans engaged. Transform every fight into a data spectacle.",
+      title: "Next-Gen Broadcast Experience",
+      description: "Display live punch speed, impact force, and fighter biometrics on screen. Give fans NFL-style stats that keep them engaged every round.",
       highlight: "Fan engagement",
     },
     {
-      icon: Shield,
-      title: "End Controversies",
-      description: "Objective data reduces rigged-fight accusations. Transparent scoring builds trust.",
+      icon: Scale,
+      title: "Objective Scoring Support",
+      description: "Reduce rigged-fight accusations with transparent, data-backed judging assistance. Show fans the numbers behind every decision.",
       highlight: "Full transparency",
     },
     {
-      icon: DollarSign,
-      title: "New Revenue Streams",
-      description: "Power betting markets and data licensing deals. Monetize the data your fights generate.",
+      icon: Wallet,
+      title: "Monetize Fight Data",
+      description: "License real-time strike data to betting platforms, fantasy sports leagues, and media companies. Create entirely new revenue channels.",
       highlight: "More revenue",
+    },
+    {
+      icon: Flame,
+      title: "Keep Fans Hooked",
+      description: "Live leaderboards, fighter power rankings, and in-fight stats create storylines that drive social media buzz and viewership.",
+      highlight: "Viral moments",
     },
   ],
   fan: [
     {
-      icon: TrendingUp,
-      title: "Smarter Bets",
-      description: "Access data bookmakers don't have—force, fatigue, patterns. Make informed decisions.",
+      icon: Dices,
+      title: "Data-Driven Betting Edge",
+      description: "Access punch force, fatigue patterns, and fighting style analytics that bookmakers don't have. Bet on facts, not just records.",
       highlight: "Insider data",
     },
     {
       icon: Eye,
-      title: "Live Insights",
-      description: "Know who's winning before the judges do. Real-time analytics during every round.",
-      highlight: "Real-time",
+      title: "Real-Time Fight Analysis",
+      description: "Watch fights with live overlay stats showing punch speed, power, and accuracy. Know who's winning before the judges announce it.",
+      highlight: "Live insights",
     },
     {
       icon: BarChart3,
-      title: "Fighter Rankings",
-      description: "Power rankings and KO probabilities backed by data. See beyond the hype.",
+      title: "Deep Fighter Analytics",
+      description: "See historical performance data, power rankings, speed leaderboards, and KO probability scores—all backed by real sensor data.",
       highlight: "Data-backed",
+    },
+    {
+      icon: TrendingUp,
+      title: "Next-Gen Betting Markets",
+      description: "Bet on round-by-round metrics: 'Will Fighter A land 50+ punches this round?' or 'Will the next knockdown come from a hook or uppercut?'",
+      highlight: "New markets",
     },
   ],
 };
@@ -124,7 +148,7 @@ const FeatureGrid = () => {
         </motion.div>
 
         {/* Features Grid */}
-        <div className="grid md:grid-cols-3 gap-6">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
           <AnimatePresence mode="wait">
             {features.map((feature, index) => (
               <motion.div
