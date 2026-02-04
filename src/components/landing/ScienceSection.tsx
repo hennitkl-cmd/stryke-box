@@ -202,17 +202,13 @@ const ScienceSection = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, delay: 0.6 }}
-          className="flex flex-col items-center mt-12 text-center"
+          className="flex justify-center mt-12"
         >
-          <p className="text-muted-foreground text-sm tracking-wide mb-3">
-            And many more insights to discover...
-          </p>
-          <motion.div
-            animate={{ y: [0, 6, 0] }}
-            transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-          >
-            <ChevronDown className="w-5 h-5 text-muted-foreground" />
-          </motion.div>
+          <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass text-sm font-medium text-muted-foreground">
+            <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
+            And a lot of other features
+            <ChevronDown className="w-4 h-4" />
+          </span>
         </motion.div>
       </div>
     </section>
