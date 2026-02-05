@@ -5,6 +5,10 @@ const SplashTitle = () => {
   const [isVisible, setIsVisible] = useState(true);
 
   useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsVisible(false);
+    }, 5000);
+
     const handleScroll = () => {
       if (window.scrollY > 50) {
         setIsVisible(false);
@@ -19,6 +23,7 @@ const SplashTitle = () => {
     window.addEventListener("click", handleClick);
 
     return () => {
+      clearTimeout(timer);
       window.removeEventListener("scroll", handleScroll);
       window.removeEventListener("click", handleClick);
     };
@@ -37,9 +42,11 @@ const SplashTitle = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="text-4xl md:text-6xl lg:text-7xl font-black tracking-tight text-gradient-red text-center px-6 max-w-4xl"
+            className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tight text-gradient-red text-center px-6 max-w-4xl"
           >
-            Don't just watch the fight — read it
+            Don't just watch the fight.
+            <br />
+            Read it.
           </motion.h1>
           
           <motion.p
