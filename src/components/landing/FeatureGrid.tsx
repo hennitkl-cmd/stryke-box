@@ -27,18 +27,18 @@ interface PhoneFeature {
 const phoneFeaturesByCustomer: Record<CustomerType, PhoneFeature[]> = {
   boxer: [
     {
-      title: "At a Glance",
-      description: "Track every punch, combo, and session with real-time metrics that matter.",
+      title: "Session Summary",
+      description: "Review every session with detailed stats on duration, calories, and punch breakdown.",
       screen: <BoxerTrainingScreen />,
     },
     {
-      title: "Optimize Recovery",
-      description: "Know when to push hard and when to rest with intelligent recovery insights.",
+      title: "AI Coach",
+      description: "Get personalized training plans and guided exercises from your AI-powered coach.",
       screen: <BoxerRecoveryScreen />,
     },
     {
-      title: "Measure Progress",
-      description: "See your power, speed, and accuracy trends over weeks and months.",
+      title: "Community Challenges",
+      description: "Compete in challenges, climb leaderboards, and win prizes with fighters worldwide.",
       screen: <BoxerProgressScreen />,
     },
   ],
