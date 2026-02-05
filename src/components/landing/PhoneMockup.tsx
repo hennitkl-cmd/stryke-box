@@ -40,7 +40,7 @@ const PhoneMockup = ({ children, className = "" }: PhoneMockupProps) => {
               </div>
               
               {/* Screen content */}
-              <div className="aspect-[9/19.5] overflow-hidden">
+              <div className="aspect-[576/968] overflow-hidden">
                 {children}
               </div>
             </div>
