@@ -121,18 +121,22 @@ const ProductShowcase = () => {
           </p>
         </motion.div>
 
-        {/* Product Image - Centered */}
+        {/* Product Image - Centered with Glow */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8, delay: 0.2 }}
           className="flex justify-center mb-16"
         >
-          <img 
-            src={strykeSensorImage} 
-            alt="STRYKE sensor device" 
-            className="w-full max-w-md h-auto"
-          />
+          <div className="relative">
+            {/* Glow effect */}
+            <div className="absolute inset-0 bg-primary/20 blur-[80px] rounded-full scale-75" />
+            <img 
+              src={strykeSensorImage} 
+              alt="STRYKE sensor device" 
+              className="relative w-full max-w-md h-auto"
+            />
+          </div>
         </motion.div>
 
         {/* Feature Cards Grid - Full Width 3 Columns */}
