@@ -1,78 +1,57 @@
 
 
-# Replace Boxer Phone Mockup Screens with Real Screenshots
+# Replace Product Placeholder with Real STRYKE Sensor Image
 
-Integrate the 3 uploaded STRYKE app screenshots into the phone mockups for the Boxer customer segment.
-
----
-
-## Screenshot Mapping
-
-| Screenshot | Current Screen | New Purpose |
-|------------|----------------|-------------|
-| Screenshot 1 (Session summary with 45:32 duration, 687 calories, punch stats) | `BoxerTrainingScreen` | "At a Glance" - Session data |
-| Screenshot 2 (Training page with AI Coach, 0% progress, exercises) | `BoxerRecoveryScreen` | "Optimize Recovery" - AI Coach & Training |
-| Screenshot 3 (Community tab with 10,000 Punch Challenge, prizes) | `BoxerProgressScreen` | "Measure Progress" - Community & Challenges |
+Swap the abstract CSS-based visualization with the actual product mockup photo in the "Built for Champions" section.
 
 ---
 
-## Implementation Steps
+## Current vs. New
 
-1. **Copy screenshots to project assets**
-   - Save to `src/assets/screens/` folder
-   - File names: `boxer-session.png`, `boxer-training.png`, `boxer-community.png`
-
-2. **Update PhoneMockup.tsx**
-   - Import the screenshot images
-   - Replace the CSS-based `BoxerTrainingScreen`, `BoxerRecoveryScreen`, and `BoxerProgressScreen` components with simple image displays
-   - Keep the same export names so no changes needed in `FeatureGrid.tsx`
-
-3. **Image styling**
-   - Use `object-cover` to fill the screen area
-   - Add slight padding top to account for the Dynamic Island overlay
-   - Maintain smooth transitions when switching customer types
+| Current | New |
+|---------|-----|
+| Abstract rotating rings with Zap icon | Actual STRYKE sensor device photo |
+| Generic placeholder feel | Premium product photography |
+| CSS-generated graphics | Real hardware showcase |
 
 ---
 
-## Technical Details
-
-### New Screen Components
-
-Each Boxer screen component becomes a simple image display:
-
-```
-BoxerTrainingScreen:
-  <img src={boxerSessionImage} className="w-full h-full object-cover" />
-
-BoxerRecoveryScreen:
-  <img src={boxerTrainingImage} className="w-full h-full object-cover" />
-
-BoxerProgressScreen:
-  <img src={boxerCommunityImage} className="w-full h-full object-cover" />
-```
+## Implementation
 
 ### File Changes
 
 | File | Change |
 |------|--------|
-| `src/assets/screens/boxer-session.png` | New file - Session summary screenshot |
-| `src/assets/screens/boxer-training.png` | New file - AI Coach screenshot |
-| `src/assets/screens/boxer-community.png` | New file - Community tab screenshot |
-| `src/components/landing/PhoneMockup.tsx` | Replace 3 Boxer screen components with image-based versions |
+| `src/assets/stryke-sensor.png` | New file - Copy the product mockup image |
+| `src/components/landing/ProductShowcase.tsx` | Replace the abstract visualization (lines 66-111) with an image display |
+
+### New Product Image Section
+
+Replace the entire abstract visualization block with:
+
+```text
+<div className="glass-card p-4 md:p-6 relative overflow-hidden">
+  <img 
+    src={strykeSensorImage} 
+    alt="STRYKE sensor device" 
+    className="w-full h-auto rounded-xl"
+  />
+</div>
+```
+
+### Keep Existing Animations
+
+- Maintain the entrance animation (`opacity: 0, x: -50` to visible)
+- Can optionally add subtle hover effects to the image (scale, glow)
+- Keep the specs grid on the right side unchanged
 
 ---
 
-## No Changes Needed
+## Visual Result
 
-- `FeatureGrid.tsx` - No changes needed since export names stay the same
-- Other customer segments (Coach, Promoter, Fan) - Keep current CSS-based screens until you provide screenshots for those
+The section will now show:
+- **Left side**: Real STRYKE sensor photo (the black device with red lightning logo and water droplets)
+- **Right side**: Tech specs grid (High-Frequency Sensors, AI-Driven Insights, etc.)
 
----
-
-## Future Screenshots
-
-When you're ready, you can provide screenshots for the other segments:
-- **Coach**: 3 screenshots for team/analytics views
-- **Promoter**: 3 screenshots for live broadcast/stats views  
-- **Fan**: 3 screenshots for betting/comparison views
+This creates a powerful "here's what you get" moment that builds trust and showcases the premium hardware quality.
 
