@@ -3,6 +3,7 @@ import { useRef, useState, useEffect } from "react";
 import { useCustomerType, CustomerType } from "@/context/CustomerTypeContext";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Carousel, CarouselContent, CarouselItem, type CarouselApi } from "@/components/ui/carousel";
+import { Tv, BarChart3, TrendingUp, Scale, Activity, Target, LucideIcon } from "lucide-react";
 import PhoneMockup, {
   BoxerTrainingScreen,
   BoxerRecoveryScreen,
@@ -10,12 +11,6 @@ import PhoneMockup, {
   CoachRosterScreen,
   CoachAnalyticsScreen,
   CoachInsightsScreen,
-  PromoterLiveScreen,
-  PromoterStatsScreen,
-  PromoterEngagementScreen,
-  FanCompareScreen,
-  FanLiveScreen,
-  FanBettingScreen,
 } from "./PhoneMockup";
 
 interface PhoneFeature {
@@ -24,7 +19,13 @@ interface PhoneFeature {
   screen: React.ReactNode;
 }
 
-const phoneFeaturesByCustomer: Record<CustomerType, PhoneFeature[]> = {
+interface BenefitItem {
+  icon: LucideIcon;
+  title: string;
+  description: string;
+}
+
+const phoneFeaturesByCustomer: Record<"boxer" | "coach", PhoneFeature[]> = {
   boxer: [
     {
       title: "Session Summary",
@@ -59,38 +60,41 @@ const phoneFeaturesByCustomer: Record<CustomerType, PhoneFeature[]> = {
       screen: <CoachInsightsScreen />,
     },
   ],
+};
+
+const benefitsByCustomer: Record<"promoter" | "fan", BenefitItem[]> = {
   promoter: [
     {
-      title: "Live Broadcast",
-      description: "Display real-time punch data, speed, and power during fights.",
-      screen: <PromoterLiveScreen />,
+      icon: Tv,
+      title: "Live Data Overlay",
+      description: "Real-time punch stats displayed during broadcasts",
     },
     {
+      icon: BarChart3,
       title: "Event Analytics",
-      description: "Track punch counts, accuracy, and excitement metrics across your card.",
-      screen: <PromoterStatsScreen />,
+      description: "Track performance metrics across your entire fight card",
     },
     {
-      title: "Fan Engagement",
-      description: "Drive social buzz and betting volume with exclusive data access.",
-      screen: <PromoterEngagementScreen />,
+      icon: TrendingUp,
+      title: "Revenue Growth",
+      description: "Monetize exclusive data access for fans and bettors",
     },
   ],
   fan: [
     {
-      title: "Fighter Compare",
-      description: "Head-to-head stats on power, speed, and accuracy before fights.",
-      screen: <FanCompareScreen />,
+      icon: Scale,
+      title: "Fighter Comparison",
+      description: "Head-to-head stats on power, speed, and accuracy",
     },
     {
-      title: "Live Stats",
-      description: "Watch fights with real-time overlay showing punch power and fatigue.",
-      screen: <FanLiveScreen />,
+      icon: Activity,
+      title: "Live Performance",
+      description: "Real-time fatigue and stamina tracking during fights",
     },
     {
-      title: "Betting Edge",
-      description: "Data-driven insights on KO probability, stamina trends, and more.",
-      screen: <FanBettingScreen />,
+      icon: Target,
+      title: "Betting Insights",
+      description: "Data-driven KO probability and round predictions",
     },
   ],
 };
@@ -134,8 +138,11 @@ const FeatureGrid = () => {
   const containerRef = useRef(null);
   const isInView = useInView(containerRef, { once: true, margin: "-100px" });
   const { customerType } = useCustomerType();
-  const phoneFeatures = phoneFeaturesByCustomer[customerType];
   const isMobile = useIsMobile();
+  
+  const showPhoneMockups = customerType === "boxer" || customerType === "coach";
+  const phoneFeatures = showPhoneMockups ? phoneFeaturesByCustomer[customerType] : [];
+  const benefits = !showPhoneMockups ? benefitsByCustomer[customerType as "promoter" | "fan"] : [];
   
   // Carousel state for mobile
   const [carouselApi, setCarouselApi] = useState<CarouselApi>();
@@ -191,76 +198,109 @@ const FeatureGrid = () => {
           </p>
         </motion.div>
 
-        {/* Phone Mockups - Conditional Rendering */}
+        {/* Content - Conditional Rendering */}
         <AnimatePresence mode="wait">
-          {isMobile ? (
-            // Mobile: Swipeable Carousel
-            <motion.div
-              key={`${customerType}-carousel`}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.4 }}
-            >
-              <Carousel 
-                setApi={setCarouselApi} 
-                opts={{ align: "center", loop: true }}
-                className="w-full"
+          {showPhoneMockups ? (
+            // Phone Mockups for Boxer and Coach
+            isMobile ? (
+              // Mobile: Swipeable Carousel
+              <motion.div
+                key={`${customerType}-carousel`}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.4 }}
               >
-                <CarouselContent>
-                  {phoneFeatures.map((feature) => (
-                    <CarouselItem key={feature.title} className="flex justify-center">
-                      <div className="flex flex-col items-center px-4">
-                        <div className="mb-6">
-                          <PhoneMockup>{feature.screen}</PhoneMockup>
+                <Carousel 
+                  setApi={setCarouselApi} 
+                  opts={{ align: "center", loop: true }}
+                  className="w-full"
+                >
+                  <CarouselContent>
+                    {phoneFeatures.map((feature) => (
+                      <CarouselItem key={feature.title} className="flex justify-center">
+                        <div className="flex flex-col items-center px-4">
+                          <div className="mb-6">
+                            <PhoneMockup>{feature.screen}</PhoneMockup>
+                          </div>
+                          <div className="text-center max-w-xs">
+                            <h3 className="text-xl font-bold mb-2 text-foreground">
+                              {feature.title}
+                            </h3>
+                            <p className="text-muted-foreground text-sm leading-relaxed">
+                              {feature.description}
+                            </p>
+                          </div>
                         </div>
-                        <div className="text-center max-w-xs">
-                          <h3 className="text-xl font-bold mb-2 text-foreground">
-                            {feature.title}
-                          </h3>
-                          <p className="text-muted-foreground text-sm leading-relaxed">
-                            {feature.description}
-                          </p>
-                        </div>
-                      </div>
-                    </CarouselItem>
+                      </CarouselItem>
+                    ))}
+                  </CarouselContent>
+                </Carousel>
+                
+                {/* Dot indicators */}
+                <div className="flex justify-center gap-3 mt-8">
+                  {phoneFeatures.map((_, i) => (
+                    <button
+                      key={i}
+                      className={`w-2.5 h-2.5 rounded-full transition-all duration-200 ${
+                        i === currentSlide 
+                          ? 'bg-primary scale-110' 
+                          : 'bg-white/20 hover:bg-white/40'
+                      }`}
+                      onClick={() => carouselApi?.scrollTo(i)}
+                      aria-label={`Go to slide ${i + 1}`}
+                    />
                   ))}
-                </CarouselContent>
-              </Carousel>
-              
-              {/* Dot indicators */}
-              <div className="flex justify-center gap-3 mt-8">
-                {phoneFeatures.map((_, i) => (
-                  <button
-                    key={i}
-                    className={`w-2.5 h-2.5 rounded-full transition-all duration-200 ${
-                      i === currentSlide 
-                        ? 'bg-primary scale-110' 
-                        : 'bg-white/20 hover:bg-white/40'
-                    }`}
-                    onClick={() => carouselApi?.scrollTo(i)}
-                    aria-label={`Go to slide ${i + 1}`}
+                </div>
+              </motion.div>
+            ) : (
+              // Desktop: Grid with Parallax
+              <motion.div
+                key={`${customerType}-grid`}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.4 }}
+                className="grid md:grid-cols-3 gap-8 lg:gap-12"
+              >
+                {phoneFeatures.map((feature, index) => (
+                  <ParallaxPhone
+                    key={feature.title}
+                    feature={feature}
+                    yTransform={yTransforms[index]}
+                    isInView={isInView}
                   />
                 ))}
-              </div>
-            </motion.div>
+              </motion.div>
+            )
           ) : (
-            // Desktop: Grid with Parallax
+            // Benefits List for Promoter and Fan
             <motion.div
-              key={`${customerType}-grid`}
+              key={`${customerType}-benefits`}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.4 }}
-              className="grid md:grid-cols-3 gap-8 lg:gap-12"
+              className="grid md:grid-cols-3 gap-6 lg:gap-8"
             >
-              {phoneFeatures.map((feature, index) => (
-                <ParallaxPhone
-                  key={feature.title}
-                  feature={feature}
-                  yTransform={yTransforms[index]}
-                  isInView={isInView}
-                />
+              {benefits.map((benefit, index) => (
+                <motion.div
+                  key={benefit.title}
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={isInView ? { opacity: 1, y: 0 } : {}}
+                  transition={{ duration: 0.6, delay: 0.2 + index * 0.1 }}
+                  className="glass-card p-8 group hover:border-primary/30 transition-colors"
+                >
+                  <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-6 group-hover:bg-primary/20 transition-colors">
+                    <benefit.icon className="w-7 h-7 text-primary" />
+                  </div>
+                  <h3 className="text-xl font-bold mb-3 text-foreground">
+                    {benefit.title}
+                  </h3>
+                  <p className="text-muted-foreground leading-relaxed">
+                    {benefit.description}
+                  </p>
+                </motion.div>
               ))}
             </motion.div>
           )}
