@@ -53,70 +53,74 @@ const Navigation = () => {
         initial={{ y: -100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.6, ease: "easeOut" }}
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          scrolled || mobileMenuOpen
-            ? "bg-background/80 backdrop-blur-xl border-b border-border"
-            : "bg-transparent"
-        }`}
+        className="fixed top-0 left-0 right-0 z-50 px-4 pt-4"
       >
-        <div className="container mx-auto px-6 py-4">
-          <div className="flex items-center justify-between">
-            {/* Logo */}
-            <motion.div
-              className="flex items-center gap-3 cursor-pointer"
-              whileHover={{ scale: 1.02 }}
-              onClick={() => {
-                setMobileMenuOpen(false);
-                window.scrollTo({ top: 0, behavior: "smooth" });
-              }}
-            >
-              <img src={logo} alt="STRYKE" className="h-10 w-auto" />
-              <span className="text-xl font-black tracking-tight text-foreground">
-                STRYKE
-              </span>
-            </motion.div>
-
-            {/* Desktop Nav Links */}
-            <div className="hidden md:flex items-center gap-8">
-              {navItems.map((item) => (
-                <motion.button
-                  key={item}
-                  onClick={() => scrollToSection(item.toLowerCase())}
-                  className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
-                  whileHover={{ y: -2 }}
-                >
-                  {item}
-                </motion.button>
-              ))}
-            </div>
-
-            {/* Desktop CTA Button */}
-            <motion.div
-              className="hidden md:block"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              <Button
-                onClick={() => scrollToSection("cta")}
-                className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold px-6 glow-red-subtle"
+        {/* Floating pill container */}
+        <div
+          className={`mx-auto max-w-5xl rounded-full border border-white/10 bg-background/80 backdrop-blur-xl transition-all duration-300 ${
+            scrolled ? "shadow-lg shadow-black/20" : ""
+          }`}
+        >
+          <div className="px-6 py-3">
+            <div className="flex items-center justify-between">
+              {/* Logo */}
+              <motion.div
+                className="flex items-center gap-2 cursor-pointer"
+                whileHover={{ scale: 1.02 }}
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  window.scrollTo({ top: 0, behavior: "smooth" });
+                }}
               >
-                Get Started
-              </Button>
-            </motion.div>
+                <img src={logo} alt="STRYKE" className="h-8 w-auto" />
+                <span className="text-lg font-black tracking-tight text-foreground">
+                  STRYKE
+                </span>
+              </motion.div>
 
-            {/* Mobile Menu Button */}
-            <motion.button
-              className="md:hidden p-2 text-foreground"
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              whileTap={{ scale: 0.95 }}
-              aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
-            >
-              {mobileMenuOpen ? (
-                <X className="w-6 h-6" />
-              ) : (
-                <Menu className="w-6 h-6" />
-              )}
-            </motion.button>
+              {/* Desktop Nav Links */}
+              <div className="hidden md:flex items-center gap-8">
+                {navItems.map((item) => (
+                  <motion.button
+                    key={item}
+                    onClick={() => scrollToSection(item.toLowerCase())}
+                    className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+                    whileHover={{ y: -2 }}
+                  >
+                    {item}
+                  </motion.button>
+                ))}
+              </div>
+
+              {/* Desktop CTA Button - Outline style */}
+              <motion.div
+                className="hidden md:block"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                <Button
+                  variant="outline"
+                  onClick={() => scrollToSection("cta")}
+                  className="rounded-full border-white/20 bg-transparent hover:bg-white/5 hover:border-white/30 text-foreground font-semibold px-6"
+                >
+                  Get Started
+                </Button>
+              </motion.div>
+
+              {/* Mobile Menu Button */}
+              <motion.button
+                className="md:hidden p-2 text-foreground"
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                whileTap={{ scale: 0.95 }}
+                aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
+              >
+                {mobileMenuOpen ? (
+                  <X className="w-6 h-6" />
+                ) : (
+                  <Menu className="w-6 h-6" />
+                )}
+              </motion.button>
+            </div>
           </div>
         </div>
       </motion.nav>
@@ -166,8 +170,9 @@ const Navigation = () => {
               >
                 <Button
                   size="lg"
+                  variant="outline"
                   onClick={() => scrollToSection("cta")}
-                  className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold px-8 py-6 text-lg glow-red"
+                  className="rounded-full border-white/20 bg-transparent hover:bg-white/5 hover:border-white/30 text-foreground font-bold px-8 py-6 text-lg"
                 >
                   Get Started
                 </Button>
