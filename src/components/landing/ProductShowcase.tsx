@@ -63,15 +63,15 @@ const FeatureCard = ({
   return (
     <motion.div
       key={spec.title}
-      initial={{ opacity: 0, y: 30 }}
+      initial={{ opacity: 0, y: 20 }}
       animate={isInView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.6, delay: 0.3 + index * 0.1 }}
+      transition={{ duration: 0.5, delay: 0.2 + index * 0.08 }}
     >
-      <div className="glass-card p-6 h-full group hover:border-primary/30 transition-colors flex flex-col">
-        <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors">
-          <spec.icon className="w-6 h-6 text-primary" />
+      <div className="glass-card p-4 h-full group hover:border-primary/30 transition-colors flex flex-col">
+        <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center mb-3 group-hover:bg-primary/20 transition-colors">
+          <spec.icon className="w-5 h-5 text-primary" />
         </div>
-        <h3 className="font-bold text-lg mb-2">{spec.title}</h3>
+        <h3 className="font-bold text-base mb-1.5">{spec.title}</h3>
         <div className="flex-1">
           <p className={`text-xs text-muted-foreground leading-relaxed transition-all duration-300 ${
             isLongDescription && !isExpanded ? 'line-clamp-3' : ''
@@ -81,7 +81,7 @@ const FeatureCard = ({
           {isLongDescription && (
             <button
               onClick={() => setExpandedCard(isExpanded ? null : index)}
-              className="text-primary text-xs font-semibold mt-2 hover:underline"
+              className="text-primary text-xs font-semibold mt-1.5 hover:underline"
             >
               {isExpanded ? 'Read less' : 'Read more'}
             </button>
@@ -121,36 +121,39 @@ const ProductShowcase = () => {
           </p>
         </motion.div>
 
-        {/* Product Image - Centered with Glow */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          className="flex justify-center mb-16"
-        >
-          <div className="relative">
-            {/* Glow effect */}
-            <div className="absolute inset-0 bg-primary/20 blur-[80px] rounded-full scale-75" />
-            <img 
-              src={strykeSensorImage} 
-              alt="STRYKE sensor device" 
-              className="relative w-full max-w-md h-auto"
-            />
-          </div>
-        </motion.div>
+        {/* Two-column layout: Image left, Cards right */}
+        <div className="flex flex-col lg:flex-row items-center lg:items-start gap-8 lg:gap-12">
+          {/* Left Column - Product Image with Glow */}
+          <motion.div
+            initial={{ opacity: 0, x: -30 }}
+            animate={isInView ? { opacity: 1, x: 0 } : {}}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="w-full lg:w-2/5 flex justify-center lg:sticky lg:top-32"
+          >
+            <div className="relative">
+              {/* Glow effect */}
+              <div className="absolute inset-0 bg-primary/20 blur-[80px] rounded-full scale-75" />
+              <img 
+                src={strykeSensorImage} 
+                alt="STRYKE sensor device" 
+                className="relative w-full max-w-sm h-auto"
+              />
+            </div>
+          </motion.div>
 
-        {/* Feature Cards Grid - Full Width 3 Columns */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {specs.map((spec, index) => (
-            <FeatureCard
-              key={spec.title}
-              spec={spec}
-              index={index}
-              isInView={isInView}
-              expandedCard={expandedCard}
-              setExpandedCard={setExpandedCard}
-            />
-          ))}
+          {/* Right Column - Feature Cards Grid */}
+          <div className="w-full lg:w-3/5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {specs.map((spec, index) => (
+              <FeatureCard
+                key={spec.title}
+                spec={spec}
+                index={index}
+                isInView={isInView}
+                expandedCard={expandedCard}
+                setExpandedCard={setExpandedCard}
+              />
+            ))}
+          </div>
         </div>
       </div>
     </section>
