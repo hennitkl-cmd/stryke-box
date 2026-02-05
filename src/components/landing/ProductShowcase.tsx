@@ -64,14 +64,12 @@ const ProductShowcase = () => {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="relative"
           >
-            <div className="glass-card p-4 md:p-6 relative overflow-hidden group">
+            <div className="relative">
               <img 
                 src={strykeSensorImage} 
                 alt="STRYKE sensor device" 
-                className="w-full h-auto rounded-xl transition-transform duration-500 group-hover:scale-105"
+                className="w-full h-auto"
               />
-              {/* Subtle glow effect on hover */}
-              <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none glow-red-subtle" />
             </div>
           </motion.div>
 
