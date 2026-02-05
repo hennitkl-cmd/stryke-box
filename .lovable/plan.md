@@ -1,67 +1,125 @@
 
-# Redesign "Built for Champions" Layout
+# Liquid Glass Effect for Feature Cards
 
-Change the section from a stacked layout (image on top, cards below) to a side-by-side layout with the STRYKE sensor image on the left and compact feature cards on the right.
+Transform the feature cards in the "Built for Champions" section to have a modern liquid glass aesthetic with enhanced depth, reflections, and dynamic visual effects.
 
 ---
 
-## New Layout Structure
+## Visual Concept
 
-```text
-┌─────────────────────────────────────────────────────────────────┐
-│                    Built for Champions                          │
-├───────────────────────────┬─────────────────────────────────────┤
-│                           │  ┌─────────┐ ┌─────────┐ ┌─────────┐│
-│                           │  │High-Freq│ │AI-Driven│ │Real-Time││
-│    [STRYKE Sensor         │  └─────────┘ └─────────┘ └─────────┘│
-│     Image with Glow]      │  ┌─────────┐ ┌─────────┐ ┌─────────┐│
-│                           │  │Biometric│ │Ring Pos │ │ History ││
-│                           │  └─────────┘ └─────────┘ └─────────┘│
-└───────────────────────────┴─────────────────────────────────────┘
-```
+The liquid glass effect will create cards that appear to have flowing, refractive qualities with:
+- Stronger backdrop blur for a frosted glass look
+- Gradient overlays that simulate light refraction
+- Animated shimmer/highlight effect on hover
+- Softer, more organic borders with gradient edges
+- Subtle inner glow for depth
 
 ---
 
 ## Changes
 
-### 1. Create two-column layout
-- Use a flex container with `lg:flex-row` for side-by-side on desktop
-- Left column: Product image (roughly 40% width)
-- Right column: Feature cards grid (roughly 60% width)
-- Stack vertically on mobile
+### 1. Create new `.liquid-glass` utility class
+Add to `src/index.css`:
+- Increased backdrop blur (`backdrop-blur-2xl` instead of `xl`)
+- Gradient border effect using a pseudo-element
+- Inner highlight/reflection gradient
+- Animated shimmer keyframe for hover state
 
-### 2. Make cards more compact
-- Reduce card padding from `p-6` to `p-4`
-- Reduce icon size from `w-12 h-12` to `w-10 h-10`
-- Reduce title font size from `text-lg` to `text-base`
-- Keep descriptions at `text-xs` with line-clamp
-
-### 3. Adjust cards grid
-- Change from `lg:grid-cols-3` to `grid-cols-2 lg:grid-cols-3`
-- 6 cards arranged in 2 rows of 3 on larger screens
-- 3 rows of 2 on tablets
-- Single column on mobile
+### 2. Update FeatureCard component
+Replace `glass-card` with new liquid glass styling:
+- Relative positioning for pseudo-elements
+- Gradient overlay for light refraction effect
+- Animated highlight sweep on hover
+- Enhanced shadow with color tinting
 
 ---
 
 ## Technical Details
 
-**File:** `src/components/landing/ProductShowcase.tsx`
+### New CSS in `src/index.css`
 
-1. Replace the stacked layout with a flex row container
-2. Update FeatureCard component with smaller dimensions
-3. Adjust the cards grid to fit beside the image
-4. Keep the glow effect and animations intact
+```css
+.liquid-glass {
+  @apply relative bg-white/[0.03] backdrop-blur-2xl rounded-2xl overflow-hidden;
+  border: 1px solid transparent;
+  background-image: linear-gradient(
+    135deg,
+    rgba(255,255,255,0.1) 0%,
+    rgba(255,255,255,0.02) 50%,
+    rgba(255,255,255,0.05) 100%
+  );
+  background-origin: border-box;
+}
+
+.liquid-glass::before {
+  /* Gradient border effect */
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(
+    135deg,
+    rgba(255,255,255,0.2),
+    rgba(255,255,255,0.05),
+    rgba(255,255,255,0.1)
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+.liquid-glass::after {
+  /* Shimmer highlight effect */
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 40%,
+    rgba(255,255,255,0.08) 45%,
+    rgba(255,255,255,0.12) 50%,
+    rgba(255,255,255,0.08) 55%,
+    transparent 60%
+  );
+  transform: translateX(-100%);
+  transition: transform 0.6s ease;
+  pointer-events: none;
+}
+
+.liquid-glass:hover::after {
+  transform: translateX(100%);
+}
+```
+
+### Component Update in `ProductShowcase.tsx`
+
+Replace line 76:
+```tsx
+// Before
+<div className="glass-card p-4 h-full group hover:border-primary/40 ...">
+
+// After  
+<div className="liquid-glass p-4 h-full group hover:shadow-lg hover:shadow-primary/10 transition-all duration-300 flex flex-col">
+```
 
 ---
 
-## Visual Comparison
+## Files to Modify
 
-| Element | Before | After |
-|---------|--------|-------|
-| Layout | Stacked (image top, cards below) | Side-by-side (image left, cards right) |
-| Card padding | `p-6` | `p-4` |
-| Icon container | `w-12 h-12` | `w-10 h-10` |
-| Icon size | `w-6 h-6` | `w-5 h-5` |
-| Title size | `text-lg` | `text-base` |
-| Image width | `max-w-md` | `max-w-sm` (slightly smaller) |
+| File | Change |
+|------|--------|
+| `src/index.css` | Add `.liquid-glass` utility with pseudo-elements and shimmer animation |
+| `src/components/landing/ProductShowcase.tsx` | Replace `glass-card` with `liquid-glass` on the feature cards |
+
+---
+
+## Result
+
+Cards will have:
+- A subtle gradient that simulates light passing through glass
+- A gradient border that shifts from brighter to softer edges
+- A smooth shimmer effect that sweeps across on hover
+- Enhanced depth perception with softer backdrop blur
