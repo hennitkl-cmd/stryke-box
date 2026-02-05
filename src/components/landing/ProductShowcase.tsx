@@ -1,10 +1,16 @@
 import { motion } from "framer-motion";
 import { useInView } from "framer-motion";
-import { useRef } from "react";
-import { Cpu, Brain, Zap, Activity } from "lucide-react";
+import { useRef, useState } from "react";
+import { Cpu, Brain, Zap, Activity, MapPin, History, LucideIcon } from "lucide-react";
 import strykeSensorImage from "@/assets/stryke-sensor.png";
 
-const specs = [
+interface SpecItem {
+  icon: LucideIcon;
+  title: string;
+  description: string;
+}
+
+const specs: SpecItem[] = [
   {
     icon: Cpu,
     title: "High-Frequency Sensors",
@@ -25,11 +31,71 @@ const specs = [
     title: "Biometric Integration",
     description: "Heart rate, fatigue levels, and recovery metrics in one device",
   },
+  {
+    icon: MapPin,
+    title: "Ring Positioning Intelligence",
+    description: "Ultra-wideband sensors track your exact position with 10cm accuracy—like GPS for indoors. Analyze ring control, distance management, and movement patterns. See heatmaps showing where you throw your best punches. Pro coaches use this to improve footwork and ring generalship.",
+  },
+  {
+    icon: History,
+    title: "Complete Fight History Archive",
+    description: "Every punch you've ever thrown, stored forever. Track your improvement over months and years with historical performance graphs. See your power progression, speed increases, and technique evolution. Compare your current camp to previous fight preps. Coaches can analyze long-term athlete development and identify training patterns that lead to peak performance. Your entire career in one dashboard.",
+  },
 ];
+
+// Feature card with expandable description
+const FeatureCard = ({ 
+  spec, 
+  index, 
+  isInView,
+  expandedCard,
+  setExpandedCard 
+}: { 
+  spec: SpecItem; 
+  index: number; 
+  isInView: boolean;
+  expandedCard: number | null;
+  setExpandedCard: (index: number | null) => void;
+}) => {
+  const isLongDescription = spec.description.length > 100;
+  const isExpanded = expandedCard === index;
+  
+  return (
+    <motion.div
+      key={spec.title}
+      initial={{ opacity: 0, y: 30 }}
+      animate={isInView ? { opacity: 1, y: 0 } : {}}
+      transition={{ duration: 0.6, delay: 0.3 + index * 0.1 }}
+    >
+      <div className="glass-card p-6 h-full group hover:border-primary/30 transition-colors flex flex-col">
+        <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors">
+          <spec.icon className="w-6 h-6 text-primary" />
+        </div>
+        <h3 className="font-bold text-lg mb-2">{spec.title}</h3>
+        <div className="flex-1">
+          <p className={`text-xs text-muted-foreground leading-relaxed transition-all duration-300 ${
+            isLongDescription && !isExpanded ? 'line-clamp-3' : ''
+          }`}>
+            {spec.description}
+          </p>
+          {isLongDescription && (
+            <button
+              onClick={() => setExpandedCard(isExpanded ? null : index)}
+              className="text-primary text-xs font-semibold mt-2 hover:underline"
+            >
+              {isExpanded ? 'Read less' : 'Read more'}
+            </button>
+          )}
+        </div>
+      </div>
+    </motion.div>
+  );
+};
 
 const ProductShowcase = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
+  const [expandedCard, setExpandedCard] = useState<number | null>(null);
 
   return (
     <section id="product" className="py-24 md:py-32 relative overflow-hidden">
@@ -55,45 +121,32 @@ const ProductShowcase = () => {
           </p>
         </motion.div>
 
-        {/* Product Visual + Specs */}
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
-          {/* Product Visualization */}
-          <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            animate={isInView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="relative"
-          >
-            <div className="relative">
-              <img 
-                src={strykeSensorImage} 
-                alt="STRYKE sensor device" 
-                className="w-4/5 h-auto mx-auto"
-              />
-            </div>
-          </motion.div>
+        {/* Product Image - Centered */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.8, delay: 0.2 }}
+          className="flex justify-center mb-16"
+        >
+          <img 
+            src={strykeSensorImage} 
+            alt="STRYKE sensor device" 
+            className="w-full max-w-md h-auto"
+          />
+        </motion.div>
 
-          {/* Specs Grid */}
-          <div className="grid sm:grid-cols-2 gap-4">
-            {specs.map((spec, index) => (
-              <motion.div
-                key={spec.title}
-                initial={{ opacity: 0, y: 30 }}
-                animate={isInView ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.6, delay: 0.3 + index * 0.1 }}
-              >
-                <div className="glass-card p-6 h-full group hover:border-primary/30 transition-colors">
-                  <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors">
-                    <spec.icon className="w-6 h-6 text-primary" />
-                  </div>
-                  <h3 className="font-bold text-lg mb-2">{spec.title}</h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
-                    {spec.description}
-                  </p>
-                </div>
-              </motion.div>
-            ))}
-          </div>
+        {/* Feature Cards Grid - Full Width 3 Columns */}
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {specs.map((spec, index) => (
+            <FeatureCard
+              key={spec.title}
+              spec={spec}
+              index={index}
+              isInView={isInView}
+              expandedCard={expandedCard}
+              setExpandedCard={setExpandedCard}
+            />
+          ))}
         </div>
       </div>
     </section>
