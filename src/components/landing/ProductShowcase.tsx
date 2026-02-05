@@ -68,7 +68,7 @@ const ProductShowcase = () => {
               <img 
                 src={strykeSensorImage} 
                 alt="STRYKE sensor device" 
-                className="w-full h-auto"
+                className="w-4/5 h-auto mx-auto"
               />
             </div>
           </motion.div>
