@@ -66,12 +66,21 @@ const FeatureCard = ({
       initial={{ opacity: 0, y: 20 }}
       animate={isInView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.5, delay: 0.2 + index * 0.08 }}
+      whileHover={{ 
+        y: -6, 
+        scale: 1.02,
+        transition: { type: "spring", stiffness: 400, damping: 20 }
+      }}
+      className="cursor-pointer"
     >
-      <div className="glass-card p-4 h-full group hover:border-primary/30 transition-colors flex flex-col">
-        <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center mb-3 group-hover:bg-primary/20 transition-colors">
-          <spec.icon className="w-5 h-5 text-primary" />
-        </div>
-        <h3 className="font-bold text-base mb-1.5">{spec.title}</h3>
+      <div className="glass-card p-4 h-full group hover:border-primary/40 hover:shadow-lg hover:shadow-primary/10 transition-all duration-300 flex flex-col">
+        <motion.div 
+          className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center mb-3 group-hover:bg-primary/20 transition-colors duration-300"
+          whileHover={{ rotate: [0, -10, 10, 0], transition: { duration: 0.5 } }}
+        >
+          <spec.icon className="w-5 h-5 text-primary group-hover:scale-110 transition-transform duration-300" />
+        </motion.div>
+        <h3 className="font-bold text-base mb-1.5 group-hover:text-primary transition-colors duration-300">{spec.title}</h3>
         <div className="flex-1">
           <p className={`text-xs text-muted-foreground leading-relaxed transition-all duration-300 ${
             isLongDescription && !isExpanded ? 'line-clamp-3' : ''
@@ -80,7 +89,10 @@ const FeatureCard = ({
           </p>
           {isLongDescription && (
             <button
-              onClick={() => setExpandedCard(isExpanded ? null : index)}
+              onClick={(e) => {
+                e.stopPropagation();
+                setExpandedCard(isExpanded ? null : index);
+              }}
               className="text-primary text-xs font-semibold mt-1.5 hover:underline"
             >
               {isExpanded ? 'Read less' : 'Read more'}
