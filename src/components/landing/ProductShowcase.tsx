@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { useInView } from "framer-motion";
 import { useRef } from "react";
 import { Cpu, Brain, Zap, Activity } from "lucide-react";
+import strykeSensorImage from "@/assets/stryke-sensor.png";
 
 const specs = [
   {
@@ -63,51 +64,14 @@ const ProductShowcase = () => {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="relative"
           >
-            <div className="glass-card p-8 md:p-12 relative">
-              {/* Abstract product representation */}
-              <div className="aspect-square relative flex items-center justify-center">
-                {/* Outer ring */}
-                <div className="absolute inset-8 rounded-full border-2 border-primary/20 animate-pulse" />
-                
-                {/* Middle ring */}
-                <motion.div
-                  animate={{ rotate: 360 }}
-                  transition={{ repeat: Infinity, duration: 20, ease: "linear" }}
-                  className="absolute inset-16 rounded-full border border-primary/40"
-                  style={{
-                    borderStyle: "dashed",
-                  }}
-                />
-                
-                {/* Center device representation */}
-                <div className="relative w-32 h-32 md:w-40 md:h-40">
-                  <div className="absolute inset-0 bg-gradient-to-br from-primary/30 to-primary/10 rounded-2xl blur-xl" />
-                  <div className="relative w-full h-full glass-card flex items-center justify-center glow-red-subtle">
-                    <Zap className="w-16 h-16 md:w-20 md:h-20 text-primary" />
-                  </div>
-                </div>
-
-                {/* Floating data points */}
-                {[0, 1, 2, 3].map((i) => (
-                  <motion.div
-                    key={i}
-                    className="absolute w-3 h-3 bg-primary rounded-full"
-                    animate={{
-                      scale: [1, 1.5, 1],
-                      opacity: [0.5, 1, 0.5],
-                    }}
-                    transition={{
-                      repeat: Infinity,
-                      duration: 2,
-                      delay: i * 0.5,
-                    }}
-                    style={{
-                      top: `${20 + i * 20}%`,
-                      left: i % 2 === 0 ? "10%" : "85%",
-                    }}
-                  />
-                ))}
-              </div>
+            <div className="glass-card p-4 md:p-6 relative overflow-hidden group">
+              <img 
+                src={strykeSensorImage} 
+                alt="STRYKE sensor device" 
+                className="w-full h-auto rounded-xl transition-transform duration-500 group-hover:scale-105"
+              />
+              {/* Subtle glow effect on hover */}
+              <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none glow-red-subtle" />
             </div>
           </motion.div>
 
