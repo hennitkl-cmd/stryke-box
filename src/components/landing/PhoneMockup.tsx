@@ -1,10 +1,15 @@
 import { motion } from "framer-motion";
 import { ReactNode } from "react";
 
-// Boxer screenshots
+// Boxer screenshots (used as poster/fallback)
 import boxerSessionImage from "@/assets/screens/boxer-session.png";
 import boxerTrainingImage from "@/assets/screens/boxer-training.png";
 import boxerCommunityImage from "@/assets/screens/boxer-community.png";
+
+// Boxer screen recordings
+import boxerSessionVideo from "@/assets/screens/boxer-session.mov";
+import boxerTrainingVideo from "@/assets/screens/boxer-training.mp4";
+import boxerCommunityVideo from "@/assets/screens/boxer-community.mp4";
 
 interface PhoneMockupProps {
   children: ReactNode;
@@ -50,25 +55,37 @@ const PhoneMockup = ({ children, className = "" }: PhoneMockupProps) => {
 // ============ BOXER SCREENS ============
 
 export const BoxerTrainingScreen = () => (
-  <img 
-    src={boxerSessionImage} 
-    alt="Session summary with punch stats" 
+  <video 
+    src={boxerSessionVideo}
+    poster={boxerSessionImage}
+    autoPlay
+    loop
+    muted
+    playsInline
     className="w-full h-full object-cover"
   />
 );
 
 export const BoxerRecoveryScreen = () => (
-  <img 
-    src={boxerTrainingImage} 
-    alt="AI Coach and training exercises" 
+  <video 
+    src={boxerTrainingVideo}
+    poster={boxerTrainingImage}
+    autoPlay
+    loop
+    muted
+    playsInline
     className="w-full h-full object-cover"
   />
 );
 
 export const BoxerProgressScreen = () => (
-  <img 
-    src={boxerCommunityImage} 
-    alt="Community challenges and leaderboards" 
+  <video 
+    src={boxerCommunityVideo}
+    poster={boxerCommunityImage}
+    autoPlay
+    loop
+    muted
+    playsInline
     className="w-full h-full object-cover"
   />
 );
