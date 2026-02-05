@@ -73,7 +73,7 @@ const FeatureCard = ({
       }}
       className="cursor-pointer"
     >
-      <div className="liquid-glass p-4 h-full group hover:shadow-lg hover:shadow-primary/10 transition-all duration-300 flex flex-col">
+      <div className="glass-card p-4 h-full group hover:border-primary/40 hover:shadow-lg hover:shadow-primary/10 transition-all duration-300 flex flex-col">
         <motion.div 
           className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center mb-3 group-hover:bg-primary/20 transition-colors duration-300"
           whileHover={{ rotate: [0, -10, 10, 0], transition: { duration: 0.5 } }}
