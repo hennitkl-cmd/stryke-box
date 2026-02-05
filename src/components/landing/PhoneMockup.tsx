@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { ReactNode } from "react";
+import { ReactNode, useRef, useEffect } from "react";
 
 // Boxer screenshots (used as poster/fallback)
 import boxerSessionImage from "@/assets/screens/boxer-session.png";
@@ -10,6 +10,10 @@ import boxerCommunityImage from "@/assets/screens/boxer-community.png";
 import boxerSessionVideo from "@/assets/screens/boxer-session.mov";
 import boxerTrainingVideo from "@/assets/screens/boxer-training.mp4";
 import boxerCommunityVideo from "@/assets/screens/boxer-community.mp4";
+
+export interface VideoScreenProps {
+  isPlaying?: boolean;
+}
 
 interface PhoneMockupProps {
   children: ReactNode;
@@ -54,41 +58,83 @@ const PhoneMockup = ({ children, className = "" }: PhoneMockupProps) => {
 
 // ============ BOXER SCREENS ============
 
-export const BoxerTrainingScreen = () => (
-  <video 
-    src={boxerSessionVideo}
-    poster={boxerSessionImage}
-    autoPlay
-    loop
-    muted
-    playsInline
-    className="w-full h-full object-cover"
-  />
-);
+export const BoxerTrainingScreen = ({ isPlaying = true }: VideoScreenProps) => {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  
+  useEffect(() => {
+    if (videoRef.current) {
+      if (isPlaying) {
+        videoRef.current.play().catch(() => {});
+      } else {
+        videoRef.current.pause();
+      }
+    }
+  }, [isPlaying]);
 
-export const BoxerRecoveryScreen = () => (
-  <video 
-    src={boxerTrainingVideo}
-    poster={boxerTrainingImage}
-    autoPlay
-    loop
-    muted
-    playsInline
-    className="w-full h-full object-cover"
-  />
-);
+  return (
+    <video 
+      ref={videoRef}
+      src={boxerSessionVideo}
+      poster={boxerSessionImage}
+      loop
+      muted
+      playsInline
+      className="w-full h-full object-cover"
+    />
+  );
+};
 
-export const BoxerProgressScreen = () => (
-  <video 
-    src={boxerCommunityVideo}
-    poster={boxerCommunityImage}
-    autoPlay
-    loop
-    muted
-    playsInline
-    className="w-full h-full object-cover"
-  />
-);
+export const BoxerRecoveryScreen = ({ isPlaying = true }: VideoScreenProps) => {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  
+  useEffect(() => {
+    if (videoRef.current) {
+      if (isPlaying) {
+        videoRef.current.play().catch(() => {});
+      } else {
+        videoRef.current.pause();
+      }
+    }
+  }, [isPlaying]);
+
+  return (
+    <video 
+      ref={videoRef}
+      src={boxerTrainingVideo}
+      poster={boxerTrainingImage}
+      loop
+      muted
+      playsInline
+      className="w-full h-full object-cover"
+    />
+  );
+};
+
+export const BoxerProgressScreen = ({ isPlaying = true }: VideoScreenProps) => {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  
+  useEffect(() => {
+    if (videoRef.current) {
+      if (isPlaying) {
+        videoRef.current.play().catch(() => {});
+      } else {
+        videoRef.current.pause();
+      }
+    }
+  }, [isPlaying]);
+
+  return (
+    <video 
+      ref={videoRef}
+      src={boxerCommunityVideo}
+      poster={boxerCommunityImage}
+      loop
+      muted
+      playsInline
+      className="w-full h-full object-cover"
+    />
+  );
+};
 
 // ============ COACH SCREENS ============
 

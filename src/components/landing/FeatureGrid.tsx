@@ -11,12 +11,14 @@ import PhoneMockup, {
   CoachRosterScreen,
   CoachAnalyticsScreen,
   CoachInsightsScreen,
+  VideoScreenProps,
 } from "./PhoneMockup";
 
-interface PhoneFeature {
+interface PhoneFeatureData {
   title: string;
   description: string;
-  screen: React.ReactNode;
+  ScreenComponent: React.ComponentType<VideoScreenProps> | React.ComponentType;
+  hasVideo?: boolean;
 }
 
 interface BenefitItem {
@@ -25,39 +27,42 @@ interface BenefitItem {
   description: string;
 }
 
-const phoneFeaturesByCustomer: Record<"boxer" | "coach", PhoneFeature[]> = {
+const phoneFeaturesByCustomer: Record<"boxer" | "coach", PhoneFeatureData[]> = {
   boxer: [
     {
       title: "Session Summary",
       description: "Review every session with detailed stats on duration, calories, and punch breakdown.",
-      screen: <BoxerTrainingScreen />,
+      ScreenComponent: BoxerTrainingScreen,
+      hasVideo: true,
     },
     {
       title: "AI Coach",
       description: "Get personalized training plans and guided exercises from your AI-powered coach.",
-      screen: <BoxerRecoveryScreen />,
+      ScreenComponent: BoxerRecoveryScreen,
+      hasVideo: true,
     },
     {
       title: "Community Challenges",
       description: "Compete in challenges, climb leaderboards, and win prizes with fighters worldwide.",
-      screen: <BoxerProgressScreen />,
+      ScreenComponent: BoxerProgressScreen,
+      hasVideo: true,
     },
   ],
   coach: [
     {
       title: "Team Dashboard",
       description: "Monitor every fighter's status, readiness, and training load at a glance.",
-      screen: <CoachRosterScreen />,
+      ScreenComponent: CoachRosterScreen,
     },
     {
       title: "Training Analytics",
       description: "Balance intensity and volume across your team with objective data.",
-      screen: <CoachAnalyticsScreen />,
+      ScreenComponent: CoachAnalyticsScreen,
     },
     {
       title: "AI Insights",
       description: "Spot technique flaws invisible to the eye. Get actionable recommendations.",
-      screen: <CoachInsightsScreen />,
+      ScreenComponent: CoachInsightsScreen,
     },
   ],
 };
@@ -103,36 +108,54 @@ const benefitsByCustomer: Record<"promoter" | "fan", BenefitItem[]> = {
 const ParallaxPhone = ({ 
   feature, 
   yTransform, 
-  isInView 
+  isInView,
+  isPlaying,
+  onMouseEnter,
+  onMouseLeave,
 }: { 
-  feature: PhoneFeature; 
+  feature: PhoneFeatureData; 
   yTransform: MotionValue<number>; 
   isInView: boolean;
-}) => (
-  <motion.div
-    initial={{ opacity: 0, y: 60 }}
-    animate={isInView ? { opacity: 1, y: 0 } : {}}
-    transition={{ duration: 0.6 }}
-    className="flex flex-col items-center"
-  >
+  isPlaying: boolean;
+  onMouseEnter: () => void;
+  onMouseLeave: () => void;
+}) => {
+  const ScreenComponent = feature.ScreenComponent;
+  
+  return (
     <motion.div
-      style={{ y: yTransform }}
-      whileHover={{ y: -10, scale: 1.02 }}
-      transition={{ type: "spring", stiffness: 300, damping: 20 }}
-      className="mb-6"
+      initial={{ opacity: 0, y: 60 }}
+      animate={isInView ? { opacity: 1, y: 0 } : {}}
+      transition={{ duration: 0.6 }}
+      className="flex flex-col items-center"
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
     >
-      <PhoneMockup>{feature.screen}</PhoneMockup>
+      <motion.div
+        style={{ y: yTransform }}
+        whileHover={{ y: -10, scale: 1.02 }}
+        transition={{ type: "spring", stiffness: 300, damping: 20 }}
+        className="mb-6"
+      >
+        <PhoneMockup>
+          {feature.hasVideo ? (
+            <ScreenComponent isPlaying={isPlaying} />
+          ) : (
+            <ScreenComponent />
+          )}
+        </PhoneMockup>
+      </motion.div>
+      <div className="text-center max-w-xs">
+        <h3 className="text-xl font-bold mb-2 text-foreground">
+          {feature.title}
+        </h3>
+        <p className="text-muted-foreground text-sm leading-relaxed">
+          {feature.description}
+        </p>
+      </div>
     </motion.div>
-    <div className="text-center max-w-xs">
-      <h3 className="text-xl font-bold mb-2 text-foreground">
-        {feature.title}
-      </h3>
-      <p className="text-muted-foreground text-sm leading-relaxed">
-        {feature.description}
-      </p>
-    </div>
-  </motion.div>
-);
+  );
+};
 
 const FeatureGrid = () => {
   const containerRef = useRef(null);
@@ -147,6 +170,10 @@ const FeatureGrid = () => {
   // Carousel state for mobile
   const [carouselApi, setCarouselApi] = useState<CarouselApi>();
   const [currentSlide, setCurrentSlide] = useState(0);
+  
+  // Hover state for desktop (controls which video plays)
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const activeVideoIndex = hoveredIndex ?? 0; // Default to first video
   
   // Parallax scroll setup for desktop
   const { scrollYProgress } = useScroll({
@@ -217,23 +244,32 @@ const FeatureGrid = () => {
                   className="w-full"
                 >
                   <CarouselContent>
-                    {phoneFeatures.map((feature) => (
-                      <CarouselItem key={feature.title} className="flex justify-center">
-                        <div className="flex flex-col items-center px-4">
-                          <div className="mb-6">
-                            <PhoneMockup>{feature.screen}</PhoneMockup>
+                    {phoneFeatures.map((feature, index) => {
+                      const ScreenComponent = feature.ScreenComponent;
+                      return (
+                        <CarouselItem key={feature.title} className="flex justify-center">
+                          <div className="flex flex-col items-center px-4">
+                            <div className="mb-6">
+                              <PhoneMockup>
+                                {feature.hasVideo ? (
+                                  <ScreenComponent isPlaying={index === currentSlide} />
+                                ) : (
+                                  <ScreenComponent />
+                                )}
+                              </PhoneMockup>
+                            </div>
+                            <div className="text-center max-w-xs">
+                              <h3 className="text-xl font-bold mb-2 text-foreground">
+                                {feature.title}
+                              </h3>
+                              <p className="text-muted-foreground text-sm leading-relaxed">
+                                {feature.description}
+                              </p>
+                            </div>
                           </div>
-                          <div className="text-center max-w-xs">
-                            <h3 className="text-xl font-bold mb-2 text-foreground">
-                              {feature.title}
-                            </h3>
-                            <p className="text-muted-foreground text-sm leading-relaxed">
-                              {feature.description}
-                            </p>
-                          </div>
-                        </div>
-                      </CarouselItem>
-                    ))}
+                        </CarouselItem>
+                      );
+                    })}
                   </CarouselContent>
                 </Carousel>
                 
@@ -269,6 +305,9 @@ const FeatureGrid = () => {
                     feature={feature}
                     yTransform={yTransforms[index]}
                     isInView={isInView}
+                    isPlaying={index === activeVideoIndex}
+                    onMouseEnter={() => setHoveredIndex(index)}
+                    onMouseLeave={() => setHoveredIndex(null)}
                   />
                 ))}
               </motion.div>
