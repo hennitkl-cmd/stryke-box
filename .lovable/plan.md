@@ -1,47 +1,35 @@
 
 
-# Adjust Phone Mockup Screen to Match Video Dimensions
+# Keep Phone Proportions, Crop Video to Fit
 
-Update the phone mockup aspect ratio to match your video dimensions (576 × 968px) so the full video content is visible without cropping.
-
----
-
-## The Problem
-
-| Current | Your Videos |
-|---------|-------------|
-| `aspect-[9/19.5]` = ~0.46:1 | 576 × 968 = ~0.595:1 |
-| Taller, narrower screen | Shorter, wider screen |
-
-The current aspect ratio is taller than your videos, causing `object-cover` to crop the sides of the video content.
+Revert the aspect ratio back to the original phone proportions. The `object-cover` class on the videos will handle cropping them to fit the screen area naturally.
 
 ---
 
-## The Fix
+## The Change
 
 **File: `src/components/landing/PhoneMockup.tsx`**
 
-Change the screen content aspect ratio from `aspect-[9/19.5]` to `aspect-[576/968]` (which simplifies to `aspect-[72/121]`):
+Revert line 43 back to the original aspect ratio:
 
-| Line | Current | New |
-|------|---------|-----|
-| 43 | `aspect-[9/19.5]` | `aspect-[576/968]` |
+| Current | Revert To |
+|---------|-----------|
+| `aspect-[576/968]` | `aspect-[9/19.5]` |
 
 ```tsx
 {/* Screen content */}
-<div className="aspect-[576/968] overflow-hidden">
+<div className="aspect-[9/19.5] overflow-hidden">
   {children}
 </div>
 ```
 
 ---
 
-## Visual Impact
+## How It Works
 
-The phone mockup will become slightly shorter/wider to match your video dimensions exactly. This ensures:
-- No video content is cropped
-- Videos fill the screen area completely
-- The aspect ratio matches your screen recordings perfectly
+- The phone mockup keeps its normal phone-like proportions
+- The videos use `object-cover` which scales and crops them to fill the screen area
+- Some video content may be cropped, but the phone looks natural
 
 ---
 
@@ -49,5 +37,5 @@ The phone mockup will become slightly shorter/wider to match your video dimensio
 
 | File | Change |
 |------|--------|
-| `src/components/landing/PhoneMockup.tsx` | Update aspect ratio from `9/19.5` to `576/968` on line 43 |
+| `src/components/landing/PhoneMockup.tsx` | Revert aspect ratio from `576/968` back to `9/19.5` |
 
