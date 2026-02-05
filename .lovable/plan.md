@@ -1,138 +1,53 @@
 
 
-# Implement Single Video Playback
+# Adjust Phone Mockup Screen to Match Video Dimensions
 
-Add logic to ensure only one video plays at a time across all phone mockups.
-
----
-
-## Verification Results
-
-- The screen recordings are **loading and playing correctly** in the Boxer phone mockups
-- Currently **all 3 videos play simultaneously**, which we need to change
+Update the phone mockup aspect ratio to match your video dimensions (576 × 968px) so the full video content is visible without cropping.
 
 ---
 
-## Implementation Approach
+## The Problem
 
-### Strategy
+| Current | Your Videos |
+|---------|-------------|
+| `aspect-[9/19.5]` = ~0.46:1 | 576 × 968 = ~0.595:1 |
+| Taller, narrower screen | Shorter, wider screen |
 
-**For Mobile (Carousel)**: Only play the video in the currently visible slide. Use the carousel's `currentSlide` state to control playback.
-
-**For Desktop (Grid)**: Play only one video at a time based on hover interaction. When a user hovers over a phone mockup, that video plays and others pause.
+The current aspect ratio is taller than your videos, causing `object-cover` to crop the sides of the video content.
 
 ---
 
-## File Changes
-
-### 1. Create Video Screen Components with Playback Control
+## The Fix
 
 **File: `src/components/landing/PhoneMockup.tsx`**
 
-Update the Boxer screen components to accept an `isPlaying` prop:
+Change the screen content aspect ratio from `aspect-[9/19.5]` to `aspect-[576/968]` (which simplifies to `aspect-[72/121]`):
+
+| Line | Current | New |
+|------|---------|-----|
+| 43 | `aspect-[9/19.5]` | `aspect-[576/968]` |
 
 ```tsx
-interface VideoScreenProps {
-  isPlaying?: boolean;
-}
-
-export const BoxerTrainingScreen = ({ isPlaying = true }: VideoScreenProps) => {
-  const videoRef = useRef<HTMLVideoElement>(null);
-  
-  useEffect(() => {
-    if (videoRef.current) {
-      if (isPlaying) {
-        videoRef.current.play();
-      } else {
-        videoRef.current.pause();
-      }
-    }
-  }, [isPlaying]);
-
-  return (
-    <video 
-      ref={videoRef}
-      src={boxerSessionVideo}
-      poster={boxerSessionImage}
-      loop
-      muted
-      playsInline
-      className="w-full h-full object-cover"
-    />
-  );
-};
-```
-
-Apply the same pattern to `BoxerRecoveryScreen` and `BoxerProgressScreen`.
-
----
-
-### 2. Update FeatureGrid to Control Video Playback
-
-**File: `src/components/landing/FeatureGrid.tsx`**
-
-#### For Mobile Carousel
-- Pass `isPlaying` based on whether the slide is currently visible
-- Only the current slide's video plays
-
-#### For Desktop Grid
-- Add hover state to track which phone is being hovered
-- Default to playing the first video (index 0) when no hover
-- On hover, play that video and pause others
-
-```tsx
-// Desktop hover state
-const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
-const activeVideoIndex = hoveredIndex ?? 0; // Default to first video
-
-// Pass to PhoneFeature data
-const getPhoneFeatures = () => phoneFeaturesByCustomer[customerType].map((feature, index) => ({
-  ...feature,
-  isPlaying: index === activeVideoIndex
-}));
+{/* Screen content */}
+<div className="aspect-[576/968] overflow-hidden">
+  {children}
+</div>
 ```
 
 ---
 
-### 3. Update Data Structure
+## Visual Impact
 
-Change the `phoneFeaturesByCustomer` from static JSX to a function that generates screens with playback props:
-
-```tsx
-const getBoxerScreens = (activeIndex: number) => [
-  {
-    title: "Session Summary",
-    description: "...",
-    screen: <BoxerTrainingScreen isPlaying={activeIndex === 0} />,
-  },
-  {
-    title: "AI Coach", 
-    description: "...",
-    screen: <BoxerRecoveryScreen isPlaying={activeIndex === 1} />,
-  },
-  {
-    title: "Community Challenges",
-    description: "...",
-    screen: <BoxerProgressScreen isPlaying={activeIndex === 2} />,
-  },
-];
-```
+The phone mockup will become slightly shorter/wider to match your video dimensions exactly. This ensures:
+- No video content is cropped
+- Videos fill the screen area completely
+- The aspect ratio matches your screen recordings perfectly
 
 ---
 
-## Behavior Summary
+## Files Changed
 
-| View | Behavior |
-|------|----------|
-| Mobile (Carousel) | Only the visible slide's video plays. Swiping pauses previous and plays next. |
-| Desktop (Grid) | First video plays by default. Hovering a phone plays that video and pauses others. |
-
----
-
-## Files Modified
-
-| File | Changes |
-|------|---------|
-| `src/components/landing/PhoneMockup.tsx` | Add `isPlaying` prop to Boxer video screens with ref-based play/pause control |
-| `src/components/landing/FeatureGrid.tsx` | Add hover state for desktop, use `currentSlide` for mobile, pass `isPlaying` to screens |
+| File | Change |
+|------|--------|
+| `src/components/landing/PhoneMockup.tsx` | Update aspect ratio from `9/19.5` to `576/968` on line 43 |
 
