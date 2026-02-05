@@ -142,15 +142,7 @@ const ProductShowcase = () => {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="w-full lg:w-2/5 flex justify-center lg:sticky lg:top-32"
           >
-            <motion.div 
-              className="relative"
-              animate={{ y: [0, -10, 0] }}
-              transition={{ 
-                duration: 4, 
-                repeat: Infinity, 
-                ease: "easeInOut" 
-              }}
-            >
+            <div className="relative">
               {/* Glow effect */}
               <div className="absolute inset-0 bg-primary/20 blur-[80px] rounded-full scale-75" />
               <div className="relative rounded-3xl border border-white/10 bg-white/5 backdrop-blur-sm p-6 overflow-hidden">
@@ -160,7 +152,7 @@ const ProductShowcase = () => {
                   className="relative w-full max-w-sm h-auto rounded-2xl"
                 />
               </div>
-            </motion.div>
+            </div>
           </motion.div>
 
           {/* Right Column - Feature Cards Grid */}
