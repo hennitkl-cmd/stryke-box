@@ -1,180 +1,197 @@
 
-# Header Redesign + Phone Mockups for Feature Grid
 
-Two visual enhancements inspired by the orreco.ai reference screenshots.
+# Phone Mockups: Parallax Animations + Mobile Carousel
 
----
-
-## Part 1: Header Redesign (orreco.ai Style)
-
-### Current vs Target Design
-
-| Element | Current | Target (orreco.ai style) |
-|---------|---------|--------------------------|
-| Container | Full-width, transparent | Floating pill/rounded rectangle with border |
-| Border | Bottom border on scroll | Always visible rounded border |
-| Shape | Standard rectangular | Pill-shaped with large border-radius |
-| CTA Button | Red filled button | Outlined/ghost button with rounded border |
-| Position | Edge-to-edge | Centered with padding from edges |
-
-### Design Details
-
-The orreco.ai header has these key characteristics:
-- Pill-shaped container with subtle border
-- Floats slightly below top of page
-- Dark background with glassmorphism effect
-- Navigation links centered
-- CTA button has outline style (not filled)
-- Clean, minimal look with rounded corners (full pill shape)
-
-### Implementation
-
-**File:** `src/components/landing/Navigation.tsx`
-
-Changes:
-1. Add a wrapper container that creates the "floating pill" effect
-2. Use `rounded-full` or large `rounded-3xl` for the pill shape
-3. Add subtle border that's always visible
-4. Change CTA button from filled red to outline style
-5. Add slight margin from top edge (`mt-4`) to create floating effect
-6. Keep all existing functionality (scroll behavior, mobile menu)
+Add scroll-based floating/parallax effects to the phone mockups and implement a swipeable carousel for mobile users.
 
 ---
 
-## Part 2: Phone Mockups in Feature Grid
+## Overview
 
-### Concept
+Two enhancements to the "Train Like a Pro" section:
 
-Transform the "Train Like a Pro" section to include phone mockup visuals showing app data, similar to screenshots 2-3. Instead of just text cards, show the data visualizations in styled phone frames.
-
-### Design Approach
-
-Since we don't have actual app screenshots, we'll create **CSS-based phone mockups** with placeholder UI elements that represent STRYKE app screens:
-
-1. **Training Data Screen** - Shows weekly stats, distance, accelerations
-2. **Live Metrics Screen** - Real-time punch data visualization  
-3. **Progress Chart Screen** - Week/Month/Year fatigue tracking
-
-### Layout Options
-
-**Option A: Replace current cards entirely**
-- 3 phone mockups in a row with text descriptions below each
-- Similar to screenshot 3 layout
-
-**Option B: Hybrid approach**
-- Keep 2 feature cards on the left
-- Add phone mockup showcase on the right
-- Best of both worlds
-
-**Recommended: Option A** - Matches the reference design more closely
-
-### Implementation
-
-**File:** `src/components/landing/FeatureGrid.tsx`
-
-Changes:
-1. Create a new `PhoneMockup` component for the phone frame styling
-2. Add CSS for the phone bezel, notch, and screen area
-3. Create 3 mock app screens with:
-   - Gradient backgrounds
-   - Metric displays (numbers, charts represented via CSS)
-   - Period selectors (Week/Month/Year tabs)
-4. Add title + description below each phone
-5. Keep section header and animate on scroll
-6. Make responsive (stack on mobile)
-
-### Phone Screen Content
-
-**Screen 1 - "At a glance"**
-- Weekly training summary
-- Stats: Distance, Accelerations, Average
-- Line chart placeholder
-
-**Screen 2 - "Optimize performance"**  
-- Sleep/recovery donut chart visual
-- Light/REM metrics display
-- Navigation bar at bottom
-
-**Screen 3 - "Understand your body"**
-- Week/Month/Year toggle
-- Fatigue line chart
-- Daily breakdown (Fri-Thu)
+1. **Parallax floating effect** - Each phone moves at a different speed as the user scrolls, creating depth
+2. **Mobile carousel** - On screens smaller than 768px, phones display in a swipeable carousel with dot indicators
 
 ---
 
-## Files to Modify
+## Part 1: Parallax/Floating Animations
+
+### Effect Description
+
+As the user scrolls down the page, each phone mockup will have a subtle vertical offset that creates a "floating" illusion:
+
+- **Left phone**: Moves slower (parallax factor 0.05)
+- **Center phone**: Moves at normal speed (no offset) - serves as anchor
+- **Right phone**: Moves slightly faster (parallax factor -0.05)
+
+This creates a layered 3D effect where phones seem to float at different depths.
+
+### Technical Approach
+
+Use Framer Motion's `useScroll` and `useTransform` hooks:
+
+```text
+useScroll() -> scrollYProgress (0 to 1)
+    |
+    v
+useTransform() -> convert to Y offset (-20px to +20px per phone)
+    |
+    v
+motion.div style={{ y: transformedValue }}
+```
+
+Each phone gets a different transform multiplier based on its index:
+- Index 0 (left): `y = scrollOffset * 30` (moves down as you scroll)
+- Index 1 (center): `y = 0` (anchor point)
+- Index 2 (right): `y = scrollOffset * -30` (moves up as you scroll)
+
+### Additional Subtle Effects
+
+- Add gentle "breathing" animation using CSS keyframes
+- Subtle shadow that intensifies on scroll to enhance depth perception
+
+---
+
+## Part 2: Mobile Carousel
+
+### Behavior
+
+On screens < 768px (`useIsMobile` hook):
+- Replace the 3-column grid with an Embla Carousel
+- Show one phone at a time, centered
+- Add dot indicators below to show current position
+- Enable swipe gestures for navigation
+
+### Layout Structure
+
+```text
+Desktop (md+):
+┌─────────────┬─────────────┬─────────────┐
+│   Phone 1   │   Phone 2   │   Phone 3   │
+│  (parallax) │  (parallax) │  (parallax) │
+└─────────────┴─────────────┴─────────────┘
+
+Mobile (<768px):
+        ┌─────────────┐
+        │   Phone 1   │  <- swipe left/right
+        └─────────────┘
+           ● ○ ○        <- dot indicators
+```
+
+### Carousel Implementation
+
+Use the existing `Carousel` components from `src/components/ui/carousel.tsx`:
+- `Carousel` wrapper with `opts={{ align: "center", loop: true }}`
+- `CarouselContent` for the scrollable container
+- `CarouselItem` for each phone (with `basis-full` to show one at a time)
+- Custom dot indicators that sync with carousel state
+
+---
+
+## File Changes
 
 | File | Changes |
 |------|---------|
-| `src/components/landing/Navigation.tsx` | Pill-shaped floating container, outline CTA button |
-| `src/components/landing/FeatureGrid.tsx` | Add phone mockups with CSS-based app screens |
-| `src/index.css` | Add phone-mockup utility classes |
+| `src/components/landing/FeatureGrid.tsx` | Add parallax transforms, mobile carousel logic, dot indicators |
 
 ---
 
-## Technical Details
+## Technical Implementation Details
 
-### Navigation Changes
+### Imports to Add
 
-```text
-Current structure:
-┌──────────────────────────────────────────────────────┐
-│ [Logo]                    Links        [CTA Button]  │
-└──────────────────────────────────────────────────────┘
-
-New structure:
-    ┌──────────────────────────────────────────────┐
-    │ [Logo]            Links         [CTA Button] │
-    └──────────────────────────────────────────────┘
-         ↑ Floating pill with rounded corners
+```typescript
+import { useScroll, useTransform } from "framer-motion";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { Carousel, CarouselContent, CarouselItem, type CarouselApi } from "@/components/ui/carousel";
+import { useState, useEffect } from "react";
 ```
 
-Key CSS classes:
-- `rounded-full` for pill shape
-- `border border-white/10` for subtle outline
-- `bg-background/80 backdrop-blur-xl` for glass effect
-- `mx-auto max-w-5xl` to contain width
-- `mt-4` for floating effect from top
+### Parallax Setup
 
-### Phone Mockup Structure
+```typescript
+const containerRef = useRef(null);
+const { scrollYProgress } = useScroll({
+  target: containerRef,
+  offset: ["start end", "end start"]
+});
 
-```text
-┌─────────────────────────────────┐
-│         ┌───────────┐           │  ← Phone bezel
-│         │  (notch)  │           │
-│  ┌──────┴───────────┴──────┐    │
-│  │                         │    │
-│  │    App Screen Content   │    │
-│  │    - Metrics            │    │
-│  │    - Charts             │    │
-│  │    - Navigation         │    │
-│  │                         │    │
-│  └─────────────────────────┘    │
-└─────────────────────────────────┘
+// Different parallax factors for each phone
+const parallaxFactors = [30, 0, -30]; // left, center, right
+
+// Create transforms for each phone
+const yTransforms = parallaxFactors.map(factor =>
+  useTransform(scrollYProgress, [0, 1], [factor, -factor])
+);
 ```
 
-CSS approach:
-- Outer div with rounded corners and dark gradient for bezel
-- Inner div for screen area with content
-- Absolute positioned notch element
-- Flexbox/Grid for screen content layout
+### Mobile Carousel Logic
+
+```typescript
+const isMobile = useIsMobile();
+const [carouselApi, setCarouselApi] = useState<CarouselApi>();
+const [currentSlide, setCurrentSlide] = useState(0);
+
+useEffect(() => {
+  if (!carouselApi) return;
+  carouselApi.on("select", () => {
+    setCurrentSlide(carouselApi.selectedScrollSnap());
+  });
+}, [carouselApi]);
+```
+
+### Conditional Rendering
+
+```typescript
+{isMobile ? (
+  // Carousel view for mobile
+  <Carousel setApi={setCarouselApi} opts={{ align: "center", loop: true }}>
+    <CarouselContent>
+      {phoneFeatures.map((feature, index) => (
+        <CarouselItem key={feature.title}>
+          {/* Phone + text */}
+        </CarouselItem>
+      ))}
+    </CarouselContent>
+    {/* Dot indicators */}
+    <div className="flex justify-center gap-2 mt-6">
+      {phoneFeatures.map((_, i) => (
+        <button
+          key={i}
+          className={`w-2 h-2 rounded-full transition-colors ${
+            i === currentSlide ? 'bg-primary' : 'bg-white/20'
+          }`}
+          onClick={() => carouselApi?.scrollTo(i)}
+        />
+      ))}
+    </div>
+  </Carousel>
+) : (
+  // Grid view with parallax for desktop
+  <motion.div className="grid md:grid-cols-3 gap-8 lg:gap-12">
+    {/* Phones with parallax transforms */}
+  </motion.div>
+)}
+```
 
 ---
 
-## Responsive Behavior
+## Animation Timing
 
-**Desktop (lg+)**: 3 phones in a row
-**Tablet (md)**: 3 phones, slightly smaller
-**Mobile**: Stack vertically or show 1 at a time with carousel
+| Animation | Duration | Easing |
+|-----------|----------|--------|
+| Parallax scroll | Continuous | Linear (scroll-linked) |
+| Hover lift | 0.3s | Spring (stiffness: 300, damping: 20) |
+| Carousel transition | 0.4s | Ease-out |
+| Dot indicator | 0.2s | Ease |
 
 ---
 
-## Customer Segmentation Consideration
+## Responsive Breakpoints
 
-The phone mockup content could potentially change based on customer type:
-- **Boxer**: Training metrics screen
-- **Coach**: Multi-athlete dashboard
-- **Promoter**: Broadcast stats view
-- **Fan**: Betting/analytics view
+| Screen Size | Behavior |
+|-------------|----------|
+| < 768px | Carousel with swipe, single phone visible |
+| >= 768px | 3-column grid with parallax effects |
 
-For initial implementation, we'll use static screens that work for all segments. Dynamic screens can be added as a future enhancement.
