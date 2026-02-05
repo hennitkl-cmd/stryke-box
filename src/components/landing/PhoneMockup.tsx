@@ -7,7 +7,7 @@ import boxerTrainingImage from "@/assets/screens/boxer-training.png";
 import boxerCommunityImage from "@/assets/screens/boxer-community.png";
 
 // Boxer screen recordings
-import boxerSessionVideo from "@/assets/screens/boxer-session.mov";
+import boxerSessionVideo from "@/assets/screens/boxer-session.mp4";
 import boxerTrainingVideo from "@/assets/screens/boxer-training.mp4";
 import boxerCommunityVideo from "@/assets/screens/boxer-community.mp4";
 
