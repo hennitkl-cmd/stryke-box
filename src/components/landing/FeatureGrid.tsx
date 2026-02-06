@@ -53,16 +53,19 @@ const phoneFeaturesByCustomer: Record<"boxer" | "coach", PhoneFeatureData[]> = {
       title: "Team Dashboard",
       description: "Monitor every fighter's status, readiness, and training load at a glance.",
       ScreenComponent: CoachRosterScreen,
+      hasVideo: true,
     },
     {
       title: "Training Analytics",
       description: "Balance intensity and volume across your team with objective data.",
       ScreenComponent: CoachAnalyticsScreen,
+      hasVideo: true,
     },
     {
       title: "AI Insights",
       description: "Spot technique flaws invisible to the eye. Get actionable recommendations.",
       ScreenComponent: CoachInsightsScreen,
+      hasVideo: true,
     },
   ],
 };
