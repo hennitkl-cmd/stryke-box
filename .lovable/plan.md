@@ -1,125 +1,89 @@
 
-# Liquid Glass Effect for Feature Cards
+# Stryke AI Chatbot for Landing Page
 
-Transform the feature cards in the "Built for Champions" section to have a modern liquid glass aesthetic with enhanced depth, reflections, and dynamic visual effects.
+Build a floating AI chatbot widget on the landing page powered by Lovable AI, acting as the Stryke AI Assistant to answer visitor questions and drive waitlist signups.
 
 ---
 
-## Visual Concept
+## What You'll Get
 
-The liquid glass effect will create cards that appear to have flowing, refractive qualities with:
-- Stronger backdrop blur for a frosted glass look
-- Gradient overlays that simulate light refraction
-- Animated shimmer/highlight effect on hover
-- Softer, more organic borders with gradient edges
-- Subtle inner glow for depth
+- A floating chat bubble (bottom-right corner) with the Stryke brand styling
+- Expandable chat window with message history, streaming AI responses, and markdown rendering
+- The full Stryke AI personality and knowledge base baked into the backend prompt
+- Mobile-responsive design matching the existing glass/dark aesthetic
+- Smooth open/close animations using Framer Motion
+
+---
+
+## Architecture
+
+The chatbot will consist of three parts:
+
+1. **Backend function** (`chat`) -- Receives user messages, prepends the full Stryke system prompt, and streams responses from the AI gateway
+2. **Chat UI component** (`AIChatbot.tsx`) -- Floating button + expandable chat panel with message bubbles, input field, and streaming text display
+3. **Integration** -- Added to the Index page alongside existing landing sections
 
 ---
 
 ## Changes
 
-### 1. Create new `.liquid-glass` utility class
-Add to `src/index.css`:
-- Increased backdrop blur (`backdrop-blur-2xl` instead of `xl`)
-- Gradient border effect using a pseudo-element
-- Inner highlight/reflection gradient
-- Animated shimmer keyframe for hover state
+### 1. Create backend function: `supabase/functions/chat/index.ts`
+- Accepts `{ messages }` from the client
+- Prepends the full Stryke AI system prompt (all the personality, knowledge, and guardrails from the brief)
+- Calls `https://ai.gateway.lovable.dev/v1/chat/completions` with `google/gemini-3-flash-preview` and `stream: true`
+- Returns the SSE stream directly to the client
+- Handles 429 (rate limit) and 402 (payment required) errors
 
-### 2. Update FeatureCard component
-Replace `glass-card` with new liquid glass styling:
-- Relative positioning for pseudo-elements
-- Gradient overlay for light refraction effect
-- Animated highlight sweep on hover
-- Enhanced shadow with color tinting
+### 2. Update `supabase/config.toml`
+- Register the `chat` function with `verify_jwt = false` (public access for landing page visitors)
+
+### 3. Create chat UI: `src/components/landing/AIChatbot.tsx`
+- **Floating button**: Fixed bottom-right, red glow, boxing glove or message icon, pulse animation
+- **Chat panel**: Glass-card styled panel (~400px wide, ~500px tall) with:
+  - Header with "Stryke AI" title and close button
+  - Scrollable message area with user/assistant message bubbles
+  - Markdown rendering for AI responses (install `react-markdown`)
+  - Text input with send button
+  - Typing indicator while streaming
+- **Streaming**: Token-by-token SSE parsing, updating assistant message progressively
+- **Welcome message**: Auto-display initial greeting on first open
+- Framer Motion animations for open/close transitions
+- Mobile: full-width panel on small screens
+
+### 4. Update `src/pages/Index.tsx`
+- Import and render `AIChatbot` component inside the page
+
+### 5. Install dependency
+- Add `react-markdown` for rendering AI responses with proper formatting
 
 ---
 
 ## Technical Details
 
-### New CSS in `src/index.css`
+### System Prompt (backend only)
+The entire Stryke AI prompt provided above will be embedded in the edge function as the system message. It will never be visible to the client.
 
-```css
-.liquid-glass {
-  @apply relative bg-white/[0.03] backdrop-blur-2xl rounded-2xl overflow-hidden;
-  border: 1px solid transparent;
-  background-image: linear-gradient(
-    135deg,
-    rgba(255,255,255,0.1) 0%,
-    rgba(255,255,255,0.02) 50%,
-    rgba(255,255,255,0.05) 100%
-  );
-  background-origin: border-box;
-}
+### Message Flow
+1. User types message in chat input
+2. Client sends `POST` to `/functions/v1/chat` with conversation history
+3. Edge function prepends system prompt, calls AI gateway with streaming
+4. SSE tokens stream back, rendered progressively in the chat bubble
+5. Conversation history maintained in React state (no database persistence needed)
 
-.liquid-glass::before {
-  /* Gradient border effect */
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  padding: 1px;
-  background: linear-gradient(
-    135deg,
-    rgba(255,255,255,0.2),
-    rgba(255,255,255,0.05),
-    rgba(255,255,255,0.1)
-  );
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  pointer-events: none;
-}
-
-.liquid-glass::after {
-  /* Shimmer highlight effect */
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    105deg,
-    transparent 40%,
-    rgba(255,255,255,0.08) 45%,
-    rgba(255,255,255,0.12) 50%,
-    rgba(255,255,255,0.08) 55%,
-    transparent 60%
-  );
-  transform: translateX(-100%);
-  transition: transform 0.6s ease;
-  pointer-events: none;
-}
-
-.liquid-glass:hover::after {
-  transform: translateX(100%);
-}
-```
-
-### Component Update in `ProductShowcase.tsx`
-
-Replace line 76:
-```tsx
-// Before
-<div className="glass-card p-4 h-full group hover:border-primary/40 ...">
-
-// After  
-<div className="liquid-glass p-4 h-full group hover:shadow-lg hover:shadow-primary/10 transition-all duration-300 flex flex-col">
-```
+### Styling
+- Chat bubble: `glass-card` with `glow-red` effect
+- Messages: User messages right-aligned with primary background, assistant messages left-aligned with glass background
+- Input area: Matches existing `Input` component styling
+- Responsive: Full-width overlay on mobile, floating panel on desktop
 
 ---
 
-## Files to Modify
+## Files Summary
 
-| File | Change |
+| File | Action |
 |------|--------|
-| `src/index.css` | Add `.liquid-glass` utility with pseudo-elements and shimmer animation |
-| `src/components/landing/ProductShowcase.tsx` | Replace `glass-card` with `liquid-glass` on the feature cards |
-
----
-
-## Result
-
-Cards will have:
-- A subtle gradient that simulates light passing through glass
-- A gradient border that shifts from brighter to softer edges
-- A smooth shimmer effect that sweeps across on hover
-- Enhanced depth perception with softer backdrop blur
+| `supabase/functions/chat/index.ts` | Create -- AI chat backend with Stryke system prompt |
+| `supabase/config.toml` | Update -- Register chat function |
+| `src/components/landing/AIChatbot.tsx` | Create -- Floating chatbot UI with streaming |
+| `src/pages/Index.tsx` | Update -- Add AIChatbot component |
+| `package.json` | Update -- Add `react-markdown` dependency |
