@@ -11,6 +11,11 @@ import boxerSessionVideo from "@/assets/screens/boxer-session.mp4";
 import boxerTrainingVideo from "@/assets/screens/boxer-training.mp4";
 import boxerCommunityVideo from "@/assets/screens/boxer-community.mp4";
 
+// Coach screen recordings
+import coachDashboardVideo from "@/assets/screens/coach-dashboard.mp4";
+import coachAnalyticsVideo from "@/assets/screens/coach-analytics.mp4";
+import coachFightersVideo from "@/assets/screens/coach-fighters.mp4";
+
 export interface VideoScreenProps {
   isPlaying?: boolean;
 }
@@ -138,120 +143,44 @@ export const BoxerProgressScreen = ({ isPlaying = true }: VideoScreenProps) => {
 
 // ============ COACH SCREENS ============
 
-export const CoachRosterScreen = () => (
-  <div className="h-full bg-gradient-to-b from-zinc-900 to-background p-4 pt-12">
-    <div className="text-center mb-4">
-      <p className="text-xs text-muted-foreground mb-1">Team Dashboard</p>
-      <h3 className="text-lg font-bold text-foreground">Active Fighters</h3>
-    </div>
-    
-    <div className="space-y-3">
-      {[
-        { name: "Marcus J.", status: "Ready", power: 92, sessions: 12 },
-        { name: "Derek T.", status: "Fatigued", power: 78, sessions: 8 },
-        { name: "Alex R.", status: "Peak", power: 95, sessions: 15 },
-      ].map((fighter, i) => (
-        <div key={i} className="glass-card p-3">
-          <div className="flex justify-between items-center mb-2">
-            <span className="text-sm font-bold text-foreground">{fighter.name}</span>
-            <span className={`text-[10px] px-2 py-0.5 rounded-full ${
-              fighter.status === 'Peak' ? 'bg-green-500/20 text-green-400' :
-              fighter.status === 'Fatigued' ? 'bg-yellow-500/20 text-yellow-400' :
-              'bg-primary/20 text-primary'
-            }`}>{fighter.status}</span>
-          </div>
-          <div className="flex justify-between text-[10px] text-muted-foreground">
-            <span>Power: {fighter.power}%</span>
-            <span>{fighter.sessions} sessions/mo</span>
-          </div>
-          <div className="mt-2 h-1.5 bg-white/10 rounded-full overflow-hidden">
-            <div className="h-full bg-primary rounded-full" style={{ width: `${fighter.power}%` }} />
-          </div>
-        </div>
-      ))}
-    </div>
-  </div>
-);
+export const CoachRosterScreen = ({ isPlaying = true }: VideoScreenProps) => {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  useEffect(() => {
+    if (videoRef.current) {
+      if (isPlaying) videoRef.current.play().catch(() => {});
+      else videoRef.current.pause();
+    }
+  }, [isPlaying]);
+  return (
+    <video ref={videoRef} src={coachFightersVideo} loop muted playsInline className="w-full h-full object-cover" />
+  );
+};
 
-export const CoachAnalyticsScreen = () => (
-  <div className="h-full bg-gradient-to-b from-zinc-900 to-background p-4 pt-12">
-    <div className="text-center mb-4">
-      <p className="text-xs text-muted-foreground mb-1">Training Load</p>
-      <h3 className="text-lg font-bold text-foreground">Weekly Overview</h3>
-    </div>
-    
-    <div className="glass-card p-4 mb-4">
-      <div className="flex items-end justify-between gap-1 h-20">
-        {[
-          { intensity: 60, volume: 80 },
-          { intensity: 75, volume: 70 },
-          { intensity: 45, volume: 90 },
-          { intensity: 85, volume: 60 },
-          { intensity: 70, volume: 75 },
-        ].map((day, i) => (
-          <div key={i} className="flex-1 flex gap-0.5">
-            <div className="flex-1 bg-primary/60 rounded-t" style={{ height: `${day.intensity}%` }} />
-            <div className="flex-1 bg-blue-500/60 rounded-t" style={{ height: `${day.volume}%` }} />
-          </div>
-        ))}
-      </div>
-      <div className="flex justify-between mt-2 text-[8px] text-muted-foreground">
-        <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span>
-      </div>
-    </div>
-    
-    <div className="flex gap-3 mb-4 text-[10px]">
-      <div className="flex items-center gap-1">
-        <div className="w-2 h-2 rounded bg-primary/60" />
-        <span className="text-muted-foreground">Intensity</span>
-      </div>
-      <div className="flex items-center gap-1">
-        <div className="w-2 h-2 rounded bg-blue-500/60" />
-        <span className="text-muted-foreground">Volume</span>
-      </div>
-    </div>
-    
-    <div className="grid grid-cols-2 gap-3">
-      <div className="glass-card p-3 text-center">
-        <p className="text-xl font-black text-foreground">3,420</p>
-        <p className="text-[10px] text-muted-foreground">Total Punches</p>
-      </div>
-      <div className="glass-card p-3 text-center">
-        <p className="text-xl font-black text-primary">94%</p>
-        <p className="text-[10px] text-muted-foreground">Attendance</p>
-      </div>
-    </div>
-  </div>
-);
+export const CoachAnalyticsScreen = ({ isPlaying = true }: VideoScreenProps) => {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  useEffect(() => {
+    if (videoRef.current) {
+      if (isPlaying) videoRef.current.play().catch(() => {});
+      else videoRef.current.pause();
+    }
+  }, [isPlaying]);
+  return (
+    <video ref={videoRef} src={coachAnalyticsVideo} loop muted playsInline className="w-full h-full object-cover" />
+  );
+};
 
-export const CoachInsightsScreen = () => (
-  <div className="h-full bg-gradient-to-b from-zinc-900 to-background p-4 pt-12">
-    <div className="text-center mb-4">
-      <p className="text-xs text-muted-foreground mb-1">AI Insights</p>
-      <h3 className="text-lg font-bold text-foreground">Technique Analysis</h3>
-    </div>
-    
-    <div className="space-y-3">
-      <div className="glass-card p-3 border-l-2 border-yellow-400">
-        <p className="text-xs font-semibold text-foreground mb-1">Derek T. - Hook Technique</p>
-        <p className="text-[10px] text-muted-foreground">Elbow dropping 15° before impact. Suggest focus pads drill.</p>
-      </div>
-      <div className="glass-card p-3 border-l-2 border-green-400">
-        <p className="text-xs font-semibold text-foreground mb-1">Marcus J. - Jab Speed</p>
-        <p className="text-[10px] text-muted-foreground">+8% velocity improvement. Ready for combo advancement.</p>
-      </div>
-      <div className="glass-card p-3 border-l-2 border-primary">
-        <p className="text-xs font-semibold text-foreground mb-1">Alex R. - Fight Ready</p>
-        <p className="text-[10px] text-muted-foreground">All metrics at peak. Optimal condition for competition.</p>
-      </div>
-    </div>
-    
-    <div className="mt-4 glass-card p-3 text-center">
-      <p className="text-[10px] text-muted-foreground mb-1">Team Readiness Score</p>
-      <p className="text-2xl font-black text-primary">87%</p>
-    </div>
-  </div>
-);
+export const CoachInsightsScreen = ({ isPlaying = true }: VideoScreenProps) => {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  useEffect(() => {
+    if (videoRef.current) {
+      if (isPlaying) videoRef.current.play().catch(() => {});
+      else videoRef.current.pause();
+    }
+  }, [isPlaying]);
+  return (
+    <video ref={videoRef} src={coachDashboardVideo} loop muted playsInline className="w-full h-full object-cover" />
+  );
+};
 
 // ============ PROMOTER SCREENS ============
 
