@@ -6,6 +6,7 @@ import FeatureGrid from "@/components/landing/FeatureGrid";
 import CTASection from "@/components/landing/CTASection";
 import Footer from "@/components/landing/Footer";
 import SplashTitle from "@/components/landing/SplashTitle";
+import AIChatbot from "@/components/landing/AIChatbot";
 import { CustomerTypeProvider } from "@/context/CustomerTypeContext";
 
 const Index = () => {
@@ -20,6 +21,7 @@ const Index = () => {
         <ProductShowcase />
         <CTASection />
         <Footer />
+        <AIChatbot />
       </div>
     </CustomerTypeProvider>
   );
