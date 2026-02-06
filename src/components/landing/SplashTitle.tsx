@@ -4,27 +4,31 @@ import { useState, useEffect } from "react";
 const SplashTitle = () => {
   const [isVisible, setIsVisible] = useState(true);
 
+  // Block scrolling while splash is visible
+  useEffect(() => {
+    if (isVisible) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [isVisible]);
+
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsVisible(false);
     }, 5000);
 
-    const handleScroll = () => {
-      if (window.scrollY > 50) {
-        setIsVisible(false);
-      }
-    };
-
     const handleClick = () => {
       setIsVisible(false);
     };
 
-    window.addEventListener("scroll", handleScroll);
     window.addEventListener("click", handleClick);
 
     return () => {
       clearTimeout(timer);
-      window.removeEventListener("scroll", handleScroll);
       window.removeEventListener("click", handleClick);
     };
   }, []);
@@ -55,7 +59,7 @@ const SplashTitle = () => {
             transition={{ duration: 0.6, delay: 1 }}
             className="absolute bottom-10 text-muted-foreground text-sm"
           >
-            Click or scroll to continue
+            Click to continue
           </motion.p>
         </motion.div>
       )}
