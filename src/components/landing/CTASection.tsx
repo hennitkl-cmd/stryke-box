@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { ArrowRight, CheckCircle, Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useCustomerType, CustomerType } from "@/context/CustomerTypeContext";
+import { supabase } from "@/integrations/supabase/client";
 
 const ctaContent: Record<CustomerType, string> = {
   boxer: "Join the Waitlist",
@@ -36,14 +37,28 @@ const CTASection = () => {
     }
 
     setIsSubmitting(true);
-    
-    // Simulate API call - replace with actual backend integration
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-    
+
+    const { error } = await supabase
+      .from("waitlist_signups")
+      .insert({ email: email.trim(), customer_type: customerType });
+
     setIsSubmitting(false);
+
+    if (error) {
+      const isDuplicate = error.code === "23505";
+      toast({
+        title: isDuplicate ? "Already signed up!" : "Something went wrong",
+        description: isDuplicate
+          ? "This email is already on the waitlist."
+          : "Please try again in a moment.",
+        variant: isDuplicate ? "default" : "destructive",
+      });
+      return;
+    }
+
     setIsSubmitted(true);
     setEmail("");
-    
+
     toast({
       title: "You're on the list!",
       description: "We'll notify you when STRYKE launches.",
