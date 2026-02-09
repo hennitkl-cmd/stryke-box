@@ -1,25 +1,15 @@
 
 
-# Splash Screen: Scroll blockieren
+# Update Favicon to Stryke Logo
 
-Der Splash-Screen ("Don't just watch the fight. Read it.") soll das Scrollen komplett blockieren, solange er sichtbar ist. Er verschwindet nur durch Klicken oder automatisch nach 5 Sekunden.
-
----
-
-## Aenderungen
-
-### `src/components/landing/SplashTitle.tsx`
-
-1. **Scroll-Listener entfernen** -- Der `handleScroll`-Code wird komplett entfernt, da Scrollen den Splash nicht mehr wegmachen soll.
-
-2. **Scrollen blockieren waehrend Splash sichtbar** -- `document.body.style.overflow = "hidden"` setzen wenn der Splash sichtbar ist, und auf `"unset"` zuruecksetzen wenn er verschwindet.
-
-3. **Hinweistext anpassen** -- "Click or scroll to continue" aendern zu "Click to continue", da Scrollen nicht mehr funktioniert.
+Replace the default Lovable favicon with the Stryke logo.
 
 ---
 
-## Technische Details
+## Changes
 
-- `useEffect` blockiert Scrollen mit `overflow: hidden` auf `body`
-- Cleanup-Funktion stellt Scrollen wieder her wenn die Komponente unmountet oder der Splash verschwindet
-- Timer (5s) und Click-Handler bleiben wie bisher
+### `index.html`
+- Copy `src/assets/logo-stryke.png` to `public/favicon.png`
+- Add a `<link rel="icon" href="/favicon.png" type="image/png">` to the `<head>`
+- Remove the existing `<link rel="icon" ...>` referencing the old favicon if present
+
