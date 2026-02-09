@@ -1,15 +1,12 @@
 
 
-# Update Favicon to Stryke Logo
+# Tab-Titel auf "Stryke" aendern
 
-Replace the default Lovable favicon with the Stryke logo.
+Der Browser-Tab zeigt aktuell "Lovable App" an. Das wird zu "Stryke" geaendert.
 
----
-
-## Changes
+## Aenderungen
 
 ### `index.html`
-- Copy `src/assets/logo-stryke.png` to `public/favicon.png`
-- Add a `<link rel="icon" href="/favicon.png" type="image/png">` to the `<head>`
-- Remove the existing `<link rel="icon" ...>` referencing the old favicon if present
+- `<title>Lovable App</title>` aendern zu `<title>Stryke</title>`
+- `<meta property="og:title" content="Lovable App" />` aendern zu `<meta property="og:title" content="Stryke" />`
 
