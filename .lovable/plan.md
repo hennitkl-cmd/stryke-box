@@ -1,42 +1,54 @@
 
 
-# Website-Ladezeit auf dem Handy optimieren
+# Videos komprimieren und schneller laden
 
 ## Problem
 
-Die Seite laedt 6 MP4-Videodateien (Boxer-Sessions, Training, Community + Coach-Dashboard, Analytics, Fighters) als statische Assets. Alle werden beim Seitenaufbau geladen, auch wenn sie noch gar nicht sichtbar sind. Auf mobilem Internet fuehrt das zu langen Wartezeiten.
+Die 6 MP4-Videodateien werden als statische Assets im App-Bundle mitgeliefert. Auch mit Lazy Loading muessen sie irgendwann heruntergeladen werden - und wenn die Dateien gross sind, dauert das auf mobilem Internet lange.
 
-## Loesung
+## Loesung: Videos in Cloud-Speicher auslagern
 
-### 1. Videos erst laden, wenn sie sichtbar werden (Lazy Loading)
+Statt die Videos direkt im Code zu buendeln, werden sie in den Cloud-Speicher (Storage) verschoben. Das bringt mehrere Vorteile:
 
-Die Video-Komponenten in `PhoneMockup.tsx` werden so umgebaut, dass das `src`-Attribut erst gesetzt wird, wenn die Komponente im Viewport sichtbar ist. So werden Videos nur geladen, wenn der Nutzer dorthin scrollt.
+- **CDN-Auslieferung**: Videos werden ueber ein globales Content Delivery Network ausgeliefert, was deutlich schneller ist
+- **Kleineres App-Bundle**: Die App selbst laedt viel schneller, weil keine grossen Videodateien mehr im Code stecken
+- **Einfaches Austauschen**: Komprimierte Videos koennen jederzeit hochgeladen werden, ohne den Code zu aendern
 
-### 2. Nur das aktive Video laden (Mobile Carousel)
+### Zusaetzlich: Videos extern komprimieren
 
-Im mobilen Carousel (`FeatureGrid.tsx`) wird nur das Video des aktuell sichtbaren Slides geladen. Die anderen bleiben ohne `src`, bis sie angezeigt werden.
+Du kannst die Videos vorher mit einem kostenlosen Online-Tool komprimieren (z.B. handbrake.fr oder clideo.com). Empfohlene Einstellungen:
 
-### 3. Video preload="none" setzen
+- **Aufloesung**: 720x1560 (die Phone-Mockups sind nur ~280px breit, also reicht das locker)
+- **Bitrate**: 500-800 kbps (statt typisch 2-5 Mbps)
+- **Format**: MP4 mit H.264
 
-Alle `<video>`-Elemente bekommen `preload="none"`, damit der Browser nicht automatisch anfaengt, Videodaten herunterzuladen.
-
-### 4. Poster-Bilder als Platzhalter anzeigen
-
-Die bestehenden PNG-Screenshots werden als `poster` angezeigt, solange das Video noch nicht geladen ist. So sieht der Nutzer sofort ein Bild statt eines leeren Rahmens.
+Das kann die Dateigroesse um 70-90% reduzieren.
 
 ## Technische Details
 
-### `src/components/landing/PhoneMockup.tsx`
-- Fuer alle 6 Video-Screen-Komponenten (BoxerTrainingScreen, BoxerRecoveryScreen, BoxerProgressScreen, CoachRosterScreen, CoachAnalyticsScreen, CoachInsightsScreen):
-  - `preload="none"` hinzufuegen
-  - Intersection Observer oder `isPlaying`-Prop nutzen, um `src` erst zu setzen wenn noetig
-  - Poster-Bilder werden bereits genutzt (fuer Boxer-Screens), Coach-Screens bekommen ebenfalls statische Poster-Bilder als Fallback
+### 1. Storage-Bucket erstellen
+- Neuen oeffentlichen Bucket `videos` im Cloud-Speicher anlegen
+- Upload-Policy fuer authentifizierte Nutzer (oder direkt per SQL)
 
-### `src/components/landing/FeatureGrid.tsx`
-- Im mobilen Carousel: Nur der aktuelle Slide bekommt `isPlaying={true}`, die anderen bleiben bei `false` (bereits implementiert - keine Aenderung noetig)
+### 2. Videos hochladen
+- Alle 6 MP4-Dateien werden per Code in den Storage-Bucket hochgeladen
+- Alternativ: Edge Function die die bestehenden Asset-URLs nimmt und in Storage kopiert
+
+### 3. `PhoneMockup.tsx` umbauen
+- Statt lokale Imports (`import boxerSessionVideo from "@/assets/screens/..."`) werden die Storage-URLs verwendet
+- Die URLs werden als Konstanten definiert, z.B.:
+  ```
+  const VIDEO_BASE_URL = "https://.../storage/v1/object/public/videos/";
+  ```
+- Jede Video-Komponente bekommt die URL als String statt als importiertes Asset
+
+### 4. Lokale Video-Dateien entfernen
+- Die 6 MP4-Dateien aus `src/assets/screens/` loeschen (die `.mov`-Datei ebenfalls)
+- Die PNG-Poster-Bilder bleiben als Platzhalter erhalten
 
 ### Erwartetes Ergebnis
-- Initiale Ladezeit deutlich reduziert (keine Videos werden sofort geladen)
-- Videos starten erst beim Scrollen zum jeweiligen Abschnitt
-- Poster-Bilder sorgen fuer sofortige visuelle Darstellung
+- App-Bundle wird um die gesamte Video-Groesse kleiner (vermutlich 20-50 MB weniger)
+- Initiale Seitenladezeit drastisch verbessert
+- Videos werden erst bei Bedarf vom CDN geladen
+- Poster-Bilder erscheinen sofort als Platzhalter
 
