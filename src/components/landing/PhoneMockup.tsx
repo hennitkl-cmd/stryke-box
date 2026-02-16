@@ -63,7 +63,7 @@ const PhoneMockup = ({ children, className = "" }: PhoneMockupProps) => {
 
 // ============ BOXER SCREENS ============
 
-export const BoxerTrainingScreen = ({ isPlaying = true }: VideoScreenProps) => {
+export const BoxerTrainingScreen = ({ isPlaying = false }: VideoScreenProps) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   
   useEffect(() => {
@@ -79,8 +79,9 @@ export const BoxerTrainingScreen = ({ isPlaying = true }: VideoScreenProps) => {
   return (
     <video 
       ref={videoRef}
-      src={boxerSessionVideo}
+      src={isPlaying ? boxerSessionVideo : undefined}
       poster={boxerSessionImage}
+      preload="none"
       loop
       muted
       playsInline
@@ -89,7 +90,7 @@ export const BoxerTrainingScreen = ({ isPlaying = true }: VideoScreenProps) => {
   );
 };
 
-export const BoxerRecoveryScreen = ({ isPlaying = true }: VideoScreenProps) => {
+export const BoxerRecoveryScreen = ({ isPlaying = false }: VideoScreenProps) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   
   useEffect(() => {
@@ -105,8 +106,9 @@ export const BoxerRecoveryScreen = ({ isPlaying = true }: VideoScreenProps) => {
   return (
     <video 
       ref={videoRef}
-      src={boxerTrainingVideo}
+      src={isPlaying ? boxerTrainingVideo : undefined}
       poster={boxerTrainingImage}
+      preload="none"
       loop
       muted
       playsInline
@@ -115,7 +117,7 @@ export const BoxerRecoveryScreen = ({ isPlaying = true }: VideoScreenProps) => {
   );
 };
 
-export const BoxerProgressScreen = ({ isPlaying = true }: VideoScreenProps) => {
+export const BoxerProgressScreen = ({ isPlaying = false }: VideoScreenProps) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   
   useEffect(() => {
@@ -131,8 +133,9 @@ export const BoxerProgressScreen = ({ isPlaying = true }: VideoScreenProps) => {
   return (
     <video 
       ref={videoRef}
-      src={boxerCommunityVideo}
+      src={isPlaying ? boxerCommunityVideo : undefined}
       poster={boxerCommunityImage}
+      preload="none"
       loop
       muted
       playsInline
@@ -143,7 +146,7 @@ export const BoxerProgressScreen = ({ isPlaying = true }: VideoScreenProps) => {
 
 // ============ COACH SCREENS ============
 
-export const CoachRosterScreen = ({ isPlaying = true }: VideoScreenProps) => {
+export const CoachRosterScreen = ({ isPlaying = false }: VideoScreenProps) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   useEffect(() => {
     if (videoRef.current) {
@@ -152,11 +155,11 @@ export const CoachRosterScreen = ({ isPlaying = true }: VideoScreenProps) => {
     }
   }, [isPlaying]);
   return (
-    <video ref={videoRef} src={coachFightersVideo} loop muted playsInline className="w-full h-full object-cover" />
+    <video ref={videoRef} src={isPlaying ? coachFightersVideo : undefined} poster={boxerSessionImage} preload="none" loop muted playsInline className="w-full h-full object-cover" />
   );
 };
 
-export const CoachAnalyticsScreen = ({ isPlaying = true }: VideoScreenProps) => {
+export const CoachAnalyticsScreen = ({ isPlaying = false }: VideoScreenProps) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   useEffect(() => {
     if (videoRef.current) {
@@ -165,11 +168,11 @@ export const CoachAnalyticsScreen = ({ isPlaying = true }: VideoScreenProps) => 
     }
   }, [isPlaying]);
   return (
-    <video ref={videoRef} src={coachAnalyticsVideo} loop muted playsInline className="w-full h-full object-cover" />
+    <video ref={videoRef} src={isPlaying ? coachAnalyticsVideo : undefined} poster={boxerTrainingImage} preload="none" loop muted playsInline className="w-full h-full object-cover" />
   );
 };
 
-export const CoachInsightsScreen = ({ isPlaying = true }: VideoScreenProps) => {
+export const CoachInsightsScreen = ({ isPlaying = false }: VideoScreenProps) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   useEffect(() => {
     if (videoRef.current) {
@@ -178,7 +181,7 @@ export const CoachInsightsScreen = ({ isPlaying = true }: VideoScreenProps) => {
     }
   }, [isPlaying]);
   return (
-    <video ref={videoRef} src={coachDashboardVideo} loop muted playsInline className="w-full h-full object-cover" />
+    <video ref={videoRef} src={isPlaying ? coachDashboardVideo : undefined} poster={boxerCommunityImage} preload="none" loop muted playsInline className="w-full h-full object-cover" />
   );
 };
 
