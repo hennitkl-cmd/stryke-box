@@ -6,15 +6,14 @@ import boxerSessionImage from "@/assets/screens/boxer-session.png";
 import boxerTrainingImage from "@/assets/screens/boxer-training.png";
 import boxerCommunityImage from "@/assets/screens/boxer-community.png";
 
-// Boxer screen recordings
-import boxerSessionVideo from "@/assets/screens/boxer-session.mp4";
-import boxerTrainingVideo from "@/assets/screens/boxer-training.mp4";
-import boxerCommunityVideo from "@/assets/screens/boxer-community.mp4";
-
-// Coach screen recordings
-import coachDashboardVideo from "@/assets/screens/coach-dashboard.mp4";
-import coachAnalyticsVideo from "@/assets/screens/coach-analytics.mp4";
-import coachFightersVideo from "@/assets/screens/coach-fighters.mp4";
+// Video URLs from Cloud Storage (CDN)
+const VIDEO_BASE_URL = "https://wnfypheskgiavkoprtvf.supabase.co/storage/v1/object/public/videos/";
+const boxerSessionVideo = `${VIDEO_BASE_URL}boxer-session.mp4`;
+const boxerTrainingVideo = `${VIDEO_BASE_URL}boxer-training.mp4`;
+const boxerCommunityVideo = `${VIDEO_BASE_URL}boxer-community.mp4`;
+const coachDashboardVideo = `${VIDEO_BASE_URL}coach-dashboard.mp4`;
+const coachAnalyticsVideo = `${VIDEO_BASE_URL}coach-analytics.mp4`;
+const coachFightersVideo = `${VIDEO_BASE_URL}coach-fighters.mp4`;
 
 export interface VideoScreenProps {
   isPlaying?: boolean;
