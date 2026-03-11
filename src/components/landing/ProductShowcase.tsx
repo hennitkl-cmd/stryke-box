@@ -58,6 +58,8 @@ const FeatureCard = ({ spec, index, isInView }: { spec: SpecItem; index: number;
 const ProductShowcase = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
+  const carouselRef = useRef(null);
+  const isCarouselInView = useInView(carouselRef, { margin: "-50px" });
   const [api, setApi] = useState<CarouselApi>();
   const [current, setCurrent] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
@@ -76,10 +78,10 @@ const ProductShowcase = () => {
 
   // Auto-advance
   useEffect(() => {
-    if (!api || isPaused) return;
+    if (!api || isPaused || !isCarouselInView) return;
     const interval = setInterval(() => api.scrollNext(), 5000);
     return () => clearInterval(interval);
-  }, [api, isPaused]);
+  }, [api, isPaused, isCarouselInView]);
 
   return (
     <section id="product-showcase" className="py-24 md:py-32 relative overflow-hidden">
@@ -107,6 +109,7 @@ const ProductShowcase = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, delay: 0.2 }}
+          ref={carouselRef}
           className="max-w-3xl mx-auto mb-16"
           onMouseEnter={() => setIsPaused(true)}
           onMouseLeave={() => setIsPaused(false)}
