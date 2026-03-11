@@ -94,7 +94,7 @@ const ProductHero3D = () => {
             Compression Wrist Sleeve mit integrierter Sensortechnik
           </p>
         </motion.div>
-      </motion.div>
+      </div>
     </section>
   );
 };
