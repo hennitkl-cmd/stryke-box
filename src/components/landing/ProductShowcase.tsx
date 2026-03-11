@@ -110,7 +110,7 @@ const ProductShowcase = () => {
   const [expandedCard, setExpandedCard] = useState<number | null>(null);
 
   return (
-    <section id="product" className="py-24 md:py-32 relative overflow-hidden">
+    <section id="product-showcase" className="py-24 md:py-32 relative overflow-hidden">
       {/* Background accent */}
       <div className="absolute top-1/2 right-0 w-[600px] h-[600px] bg-primary/3 rounded-full blur-[150px] translate-x-1/2" />
 

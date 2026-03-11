@@ -1,6 +1,7 @@
 import { useRef, useState, useCallback } from "react";
 import { motion } from "framer-motion";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, ArrowDown } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import productImage from "@/assets/stryke-product-hero.png";
 
 const ProductHero3D = () => {
@@ -61,6 +62,24 @@ const ProductHero3D = () => {
           className="absolute -bottom-8 left-1/2 -translate-x-1/2 w-[60%] h-6 rounded-full blur-xl opacity-40"
           style={{ background: "hsl(0, 100%, 40%)" }}
         />
+      </motion.div>
+
+      {/* Product Gallery Button */}
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.6, duration: 0.6 }}
+        className="z-10 mt-4"
+      >
+        <Button
+          variant="ghost"
+          size="sm"
+          className="text-muted-foreground hover:text-primary gap-1.5"
+          onClick={() => document.getElementById("product-showcase")?.scrollIntoView({ behavior: "smooth" })}
+        >
+          Product Gallery
+          <ArrowDown className="w-3.5 h-3.5" />
+        </Button>
       </motion.div>
 
       {/* Title */}
