@@ -1,4 +1,5 @@
 import Navigation from "@/components/landing/Navigation";
+import ProductHero3D from "@/components/landing/ProductHero3D";
 import Hero from "@/components/landing/Hero";
 import ProductShowcase from "@/components/landing/ProductShowcase";
 import ScienceSection from "@/components/landing/ScienceSection";
@@ -15,6 +16,7 @@ const Index = () => {
       <SplashTitle />
       <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
         <Navigation />
+        <ProductHero3D />
         <Hero />
         <FeatureGrid />
         <ScienceSection />
