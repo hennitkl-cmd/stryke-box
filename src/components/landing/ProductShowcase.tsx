@@ -58,6 +58,8 @@ const FeatureCard = ({ spec, index, isInView }: { spec: SpecItem; index: number;
 const ProductShowcase = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
+  const carouselRef = useRef(null);
+  const isCarouselInView = useInView(carouselRef, { margin: "-50px" });
   const [api, setApi] = useState<CarouselApi>();
   const [current, setCurrent] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
