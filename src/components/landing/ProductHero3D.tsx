@@ -91,7 +91,7 @@ const ProductHero3D = () => {
             STRYKE <span className="text-gradient-red">Sensor</span>
           </h2>
           <p className="text-muted-foreground mt-2 text-sm md:text-base">
-            Compression Wrist Sleeve mit integrierter Sensortechnik
+            Compression Wrist Sleeve with integrated Sensor Technology
           </p>
         </motion.div>
       </div>
