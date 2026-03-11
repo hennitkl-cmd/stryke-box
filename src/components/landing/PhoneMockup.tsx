@@ -1,10 +1,8 @@
 import { motion } from "framer-motion";
 import { ReactNode, useRef, useEffect } from "react";
 
-// Boxer screenshots (used as poster/fallback)
-import boxerSessionImage from "@/assets/screens/boxer-session.png";
-import boxerTrainingImage from "@/assets/screens/boxer-training.png";
-import boxerCommunityImage from "@/assets/screens/boxer-community.png";
+// Universal poster/fallback for all phone mockups
+import phonePoster from "@/assets/screens/phone-poster.jpg";
 
 // Video URLs from Cloud Storage (CDN)
 const VIDEO_BASE_URL = "https://wnfypheskgiavkoprtvf.supabase.co/storage/v1/object/public/videos/";
@@ -79,7 +77,7 @@ export const BoxerTrainingScreen = ({ isPlaying = false }: VideoScreenProps) => 
     <video 
       ref={videoRef}
       src={isPlaying ? boxerSessionVideo : undefined}
-      poster={boxerSessionImage}
+      poster={phonePoster}
       preload="none"
       loop
       muted
@@ -106,7 +104,7 @@ export const BoxerRecoveryScreen = ({ isPlaying = false }: VideoScreenProps) => 
     <video 
       ref={videoRef}
       src={isPlaying ? boxerTrainingVideo : undefined}
-      poster={boxerTrainingImage}
+      poster={phonePoster}
       preload="none"
       loop
       muted
@@ -133,7 +131,7 @@ export const BoxerProgressScreen = ({ isPlaying = false }: VideoScreenProps) => 
     <video 
       ref={videoRef}
       src={isPlaying ? boxerCommunityVideo : undefined}
-      poster={boxerCommunityImage}
+      poster={phonePoster}
       preload="none"
       loop
       muted
@@ -154,7 +152,7 @@ export const CoachRosterScreen = ({ isPlaying = false }: VideoScreenProps) => {
     }
   }, [isPlaying]);
   return (
-    <video ref={videoRef} src={isPlaying ? coachFightersVideo : undefined} poster={boxerSessionImage} preload="none" loop muted playsInline className="w-full h-full object-cover" />
+    <video ref={videoRef} src={isPlaying ? coachFightersVideo : undefined} poster={phonePoster} preload="none" loop muted playsInline className="w-full h-full object-cover" />
   );
 };
 
@@ -167,7 +165,7 @@ export const CoachAnalyticsScreen = ({ isPlaying = false }: VideoScreenProps) =>
     }
   }, [isPlaying]);
   return (
-    <video ref={videoRef} src={isPlaying ? coachAnalyticsVideo : undefined} poster={boxerTrainingImage} preload="none" loop muted playsInline className="w-full h-full object-cover" />
+    <video ref={videoRef} src={isPlaying ? coachAnalyticsVideo : undefined} poster={phonePoster} preload="none" loop muted playsInline className="w-full h-full object-cover" />
   );
 };
 
@@ -180,7 +178,7 @@ export const CoachInsightsScreen = ({ isPlaying = false }: VideoScreenProps) => 
     }
   }, [isPlaying]);
   return (
-    <video ref={videoRef} src={isPlaying ? coachDashboardVideo : undefined} poster={boxerCommunityImage} preload="none" loop muted playsInline className="w-full h-full object-cover" />
+    <video ref={videoRef} src={isPlaying ? coachDashboardVideo : undefined} poster={phonePoster} preload="none" loop muted playsInline className="w-full h-full object-cover" />
   );
 };
 
