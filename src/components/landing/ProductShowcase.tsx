@@ -81,7 +81,7 @@ const ProductShowcase = () => {
     if (!api || isPaused || !isCarouselInView) return;
     const interval = setInterval(() => api.scrollNext(), 5000);
     return () => clearInterval(interval);
-  }, [api, isPaused]);
+  }, [api, isPaused, isCarouselInView]);
 
   return (
     <section id="product-showcase" className="py-24 md:py-32 relative overflow-hidden">
