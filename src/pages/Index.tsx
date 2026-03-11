@@ -16,6 +16,7 @@ const Index = () => {
       <SplashTitle />
       <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
         <Navigation />
+        <ProductHero3D />
         <Hero />
         <FeatureGrid />
         <ScienceSection />
