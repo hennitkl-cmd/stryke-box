@@ -4,7 +4,7 @@ import { useTexture, Environment } from "@react-three/drei";
 import { motion, useScroll, useTransform } from "framer-motion";
 import * as THREE from "three";
 import logoTexture from "@/assets/logo-stryke.png";
-import { ChevronDown } from "lucide-react";
+import { ArrowDown } from "lucide-react";
 
 const WristSleeve = ({ rotationY }: {rotationY: number;}) => {
   const groupRef = useRef<THREE.Group>(null);
