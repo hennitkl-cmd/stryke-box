@@ -78,7 +78,7 @@ const ProductShowcase = () => {
 
   // Auto-advance
   useEffect(() => {
-    if (!api || isPaused) return;
+    if (!api || isPaused || !isCarouselInView) return;
     const interval = setInterval(() => api.scrollNext(), 5000);
     return () => clearInterval(interval);
   }, [api, isPaused]);
