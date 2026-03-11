@@ -1,6 +1,7 @@
 import { useRef, useState, useCallback } from "react";
 import { motion } from "framer-motion";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, ArrowDown } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import productImage from "@/assets/stryke-product-hero.png";
 
 const ProductHero3D = () => {
