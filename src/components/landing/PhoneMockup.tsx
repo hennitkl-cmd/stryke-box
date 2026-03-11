@@ -165,7 +165,7 @@ export const CoachAnalyticsScreen = ({ isPlaying = false }: VideoScreenProps) =>
     }
   }, [isPlaying]);
   return (
-    <video ref={videoRef} src={isPlaying ? coachAnalyticsVideo : undefined} poster={boxerTrainingImage} preload="none" loop muted playsInline className="w-full h-full object-cover" />
+    <video ref={videoRef} src={isPlaying ? coachAnalyticsVideo : undefined} poster={phonePoster} preload="none" loop muted playsInline className="w-full h-full object-cover" />
   );
 };
 
