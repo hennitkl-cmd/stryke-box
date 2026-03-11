@@ -77,7 +77,7 @@ export const BoxerTrainingScreen = ({ isPlaying = false }: VideoScreenProps) => 
     <video 
       ref={videoRef}
       src={isPlaying ? boxerSessionVideo : undefined}
-      poster={boxerSessionImage}
+      poster={phonePoster}
       preload="none"
       loop
       muted
