@@ -58,7 +58,7 @@ const ProductHero3D = () => {
         {/* Floor glow reflection */}
         <div
           className="absolute -bottom-8 left-1/2 -translate-x-1/2 w-[60%] h-6 rounded-full blur-xl opacity-40"
-          style={{ background: "hsl(120, 60%, 40%)" }}
+          style={{ background: "hsl(0, 100%, 40%)" }}
         />
       </motion.div>
 
