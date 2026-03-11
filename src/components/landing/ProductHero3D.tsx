@@ -53,7 +53,7 @@ const ProductHero3D = () => {
         <img
           src={productImage}
           alt="STRYKE Sensor Wrist Sleeve – Compression sleeve with integrated sensor technology"
-          className="w-[320px] md:w-[480px] lg:w-[560px] h-auto object-contain"
+          className="w-[420px] md:w-[600px] lg:w-[720px] h-auto object-contain"
           style={{ filter: "drop-shadow(0 30px 60px hsl(0, 100%, 40%, 0.3))" }}
         />
         {/* Floor glow reflection */}
