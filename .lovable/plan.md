@@ -1,54 +1,41 @@
 
 
-# Videos komprimieren und schneller laden
+# 3D Produkt-Render Hero Section
 
-## Problem
+## Was wird gebaut
 
-Die 6 MP4-Videodateien werden als statische Assets im App-Bundle mitgeliefert. Auch mit Lazy Loading muessen sie irgendwann heruntergeladen werden - und wenn die Dateien gross sind, dauert das auf mobilem Internet lange.
+Eine neue fullscreen Section direkt nach der Navigation (vor dem bestehenden Hero), die ein **programmatisch erstelltes 3D-Modell** des Compression Wrist Sleeves zeigt -- kein Foto, sondern ein echtes 3D-Objekt auf dem dunklen Seitenhintergrund. Das Modell dreht sich beim Scrollen.
 
-## Loesung: Videos in Cloud-Speicher auslagern
+## Technischer Ansatz
 
-Statt die Videos direkt im Code zu buendeln, werden sie in den Cloud-Speicher (Storage) verschoben. Das bringt mehrere Vorteile:
+**React Three Fiber** mit einem prozedural modellierten Sleeve:
 
-- **CDN-Auslieferung**: Videos werden ueber ein globales Content Delivery Network ausgeliefert, was deutlich schneller ist
-- **Kleineres App-Bundle**: Die App selbst laedt viel schneller, weil keine grossen Videodateien mehr im Code stecken
-- **Einfaches Austauschen**: Komprimierte Videos koennen jederzeit hochgeladen werden, ohne den Code zu aendern
+- `CylinderGeometry` (leicht konisch) als Sleeve-Koerper
+- Schwarze Mesh-Textur mit mattem Stoff-Look (MeshStandardMaterial mit Roughness)
+- Rotes Stryke-Blitz-Logo als Decal/Textur auf der Vorderseite (aus dem hochgeladenen Bild extrahiert und als transparente PNG-Textur)
+- Dezente rote Naehte/Linien als zusaetzliche Geometrie
+- Der graue Sensor-Bereich auf der Innenseite als separates Mesh-Element
 
-### Zusaetzlich: Videos extern komprimieren
+## Aenderungen
 
-Du kannst die Videos vorher mit einem kostenlosen Online-Tool komprimieren (z.B. handbrake.fr oder clideo.com). Empfohlene Einstellungen:
+### 1. Dependencies
+- `three@^0.160.0`, `@react-three/fiber@^8.18.0`, `@react-three/drei@^9.122.0`
 
-- **Aufloesung**: 720x1560 (die Phone-Mockups sind nur ~280px breit, also reicht das locker)
-- **Bitrate**: 500-800 kbps (statt typisch 2-5 Mbps)
-- **Format**: MP4 mit H.264
+### 2. Assets
+- Logo-Textur aus `src/assets/logo-stryke.png` fuer das Decal auf dem Sleeve
+- Das hochgeladene Produktfoto als Referenz (nicht als Textur verwendet)
 
-Das kann die Dateigroesse um 70-90% reduzieren.
+### 3. Neue Komponente: `src/components/landing/ProductHero3D.tsx`
+- `Canvas` mit transparentem Hintergrund (`gl={{ alpha: true }}`)
+- Sticky inner container innerhalb einer ~200vh Section
+- `useScroll` + `useTransform` fuer scroll-basierte Y-Rotation (0-360 Grad)
+- Beleuchtung: Ambient Light + roter Spot Light fuer Glow-Effekt
+- Titel "STRYKE Sensor" und Scroll-Indikator darunter
+- Fallback: statisches Produktbild falls WebGL nicht verfuegbar
 
-## Technische Details
+### 4. `src/pages/Index.tsx`
+- `<ProductHero3D />` nach `<Navigation />`, vor `<Hero />` einfuegen
 
-### 1. Storage-Bucket erstellen
-- Neuen oeffentlichen Bucket `videos` im Cloud-Speicher anlegen
-- Upload-Policy fuer authentifizierte Nutzer (oder direkt per SQL)
-
-### 2. Videos hochladen
-- Alle 6 MP4-Dateien werden per Code in den Storage-Bucket hochgeladen
-- Alternativ: Edge Function die die bestehenden Asset-URLs nimmt und in Storage kopiert
-
-### 3. `PhoneMockup.tsx` umbauen
-- Statt lokale Imports (`import boxerSessionVideo from "@/assets/screens/..."`) werden die Storage-URLs verwendet
-- Die URLs werden als Konstanten definiert, z.B.:
-  ```
-  const VIDEO_BASE_URL = "https://.../storage/v1/object/public/videos/";
-  ```
-- Jede Video-Komponente bekommt die URL als String statt als importiertes Asset
-
-### 4. Lokale Video-Dateien entfernen
-- Die 6 MP4-Dateien aus `src/assets/screens/` loeschen (die `.mov`-Datei ebenfalls)
-- Die PNG-Poster-Bilder bleiben als Platzhalter erhalten
-
-### Erwartetes Ergebnis
-- App-Bundle wird um die gesamte Video-Groesse kleiner (vermutlich 20-50 MB weniger)
-- Initiale Seitenladezeit drastisch verbessert
-- Videos werden erst bei Bedarf vom CDN geladen
-- Poster-Bilder erscheinen sofort als Platzhalter
+## Ergebnis
+Nach dem Splash Screen sieht man ein grosses 3D-Modell des Wrist Sleeves, das sich beim Scrollen dreht. Transparenter Canvas-Hintergrund zeigt den dunklen Seitenhintergrund durch. Danach kommt der normale Hero-Bereich.
 
