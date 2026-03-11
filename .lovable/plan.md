@@ -1,54 +1,44 @@
 
 
-# Videos komprimieren und schneller laden
+# Redesign Product Gallery as Image Slideshow
 
-## Problem
+## Overview
+Replace the current two-column layout (image + feature cards) with a full-width image slideshow/carousel using the 4 uploaded product photos.
 
-Die 6 MP4-Videodateien werden als statische Assets im App-Bundle mitgeliefert. Auch mit Lazy Loading muessen sie irgendwann heruntergeladen werden - und wenn die Dateien gross sind, dauert das auf mobilem Internet lange.
+## Images (in order)
+1. **X-ray diagram** (arrows/details) — `Lovable_screenshot_detailed-2.png`
+2. **Close-up logo** (water droplets) — `ChatGPT_Image_5._März_2026_16_04_31.png`
+3. **Green sensor view** — `use-the-exact-product-shown-in-the-attac...jpeg`
+4. **Floating product** (gym background) — `ChatGPT_Image_5._März_2026_16_04_28.png`
 
-## Loesung: Videos in Cloud-Speicher auslagern
+## Changes
 
-Statt die Videos direkt im Code zu buendeln, werden sie in den Cloud-Speicher (Storage) verschoben. Das bringt mehrere Vorteile:
+### 1. Copy 4 images to `src/assets/gallery/`
+- `gallery-detail.png`
+- `gallery-closeup.png`
+- `gallery-sensor.jpeg`
+- `gallery-floating.png`
 
-- **CDN-Auslieferung**: Videos werden ueber ein globales Content Delivery Network ausgeliefert, was deutlich schneller ist
-- **Kleineres App-Bundle**: Die App selbst laedt viel schneller, weil keine grossen Videodateien mehr im Code stecken
-- **Einfaches Austauschen**: Komprimierte Videos koennen jederzeit hochgeladen werden, ohne den Code zu aendern
+### 2. Rewrite `src/components/landing/ProductShowcase.tsx`
+- Remove the left-column image + right-column feature cards layout
+- Keep the section header ("The Technology" / "Built for Champions")
+- Replace with an Embla carousel using the existing `Carousel`, `CarouselContent`, `CarouselItem`, `CarouselPrevious`, `CarouselNext` components from `src/components/ui/carousel.tsx`
+- Each slide: full-width image inside a glass-morphism container with rounded corners
+- Add dot indicators below the carousel showing current slide
+- Keep the feature cards below the carousel in a simpler 2x3 or 3-column grid (unchanged logic)
+- The carousel auto-advances every 5 seconds, pauses on hover
 
-### Zusaetzlich: Videos extern komprimieren
+### 3. Layout structure
+```text
+┌──────────────────────────────────┐
+│  "The Technology"  header        │
+├──────────────────────────────────┤
+│  ◀  [ Slideshow Image ]  ▶      │
+│        ● ○ ○ ○                   │
+├──────────────────────────────────┤
+│  Feature cards grid (unchanged)  │
+└──────────────────────────────────┘
+```
 
-Du kannst die Videos vorher mit einem kostenlosen Online-Tool komprimieren (z.B. handbrake.fr oder clideo.com). Empfohlene Einstellungen:
-
-- **Aufloesung**: 720x1560 (die Phone-Mockups sind nur ~280px breit, also reicht das locker)
-- **Bitrate**: 500-800 kbps (statt typisch 2-5 Mbps)
-- **Format**: MP4 mit H.264
-
-Das kann die Dateigroesse um 70-90% reduzieren.
-
-## Technische Details
-
-### 1. Storage-Bucket erstellen
-- Neuen oeffentlichen Bucket `videos` im Cloud-Speicher anlegen
-- Upload-Policy fuer authentifizierte Nutzer (oder direkt per SQL)
-
-### 2. Videos hochladen
-- Alle 6 MP4-Dateien werden per Code in den Storage-Bucket hochgeladen
-- Alternativ: Edge Function die die bestehenden Asset-URLs nimmt und in Storage kopiert
-
-### 3. `PhoneMockup.tsx` umbauen
-- Statt lokale Imports (`import boxerSessionVideo from "@/assets/screens/..."`) werden die Storage-URLs verwendet
-- Die URLs werden als Konstanten definiert, z.B.:
-  ```
-  const VIDEO_BASE_URL = "https://.../storage/v1/object/public/videos/";
-  ```
-- Jede Video-Komponente bekommt die URL als String statt als importiertes Asset
-
-### 4. Lokale Video-Dateien entfernen
-- Die 6 MP4-Dateien aus `src/assets/screens/` loeschen (die `.mov`-Datei ebenfalls)
-- Die PNG-Poster-Bilder bleiben als Platzhalter erhalten
-
-### Erwartetes Ergebnis
-- App-Bundle wird um die gesamte Video-Groesse kleiner (vermutlich 20-50 MB weniger)
-- Initiale Seitenladezeit drastisch verbessert
-- Videos werden erst bei Bedarf vom CDN geladen
-- Poster-Bilder erscheinen sofort als Platzhalter
+The carousel will be centered, max-width ~800px, with the existing nav arrows styled to match the dark theme. Dot indicators use `bg-primary` for active, `bg-white/20` for inactive.
 
