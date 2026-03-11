@@ -1,17 +1,12 @@
 import { useRef, useState, useCallback } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { ChevronDown } from "lucide-react";
-import productImage1 from "@/assets/stryke-product-hero.png";
-import productImage2 from "@/assets/stryke-product-hero-2.png";
-
-const images = [productImage1, productImage2];
+import productImage from "@/assets/stryke-product-hero.png";
 
 const ProductHero3D = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [rotateX, setRotateX] = useState(0);
   const [rotateY, setRotateY] = useState(0);
-  const [activeIndex, setActiveIndex] = useState(0);
-  const touchStartX = useRef(0);
 
   const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
     const rect = e.currentTarget.getBoundingClientRect();
@@ -26,17 +21,6 @@ const ProductHero3D = () => {
     setRotateY(0);
   }, []);
 
-  const handleTouchStart = useCallback((e: React.TouchEvent) => {
-    touchStartX.current = e.touches[0].clientX;
-  }, []);
-
-  const handleTouchEnd = useCallback((e: React.TouchEvent) => {
-    const delta = e.changedTouches[0].clientX - touchStartX.current;
-    if (Math.abs(delta) > 50) {
-      setActiveIndex((prev) => (delta < 0 ? Math.min(prev + 1, images.length - 1) : Math.max(prev - 1, 0)));
-    }
-  }, []);
-
   return (
     <section
       ref={containerRef}
@@ -44,8 +28,6 @@ const ProductHero3D = () => {
       id="product-3d"
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      onTouchStart={handleTouchStart}
-      onTouchEnd={handleTouchEnd}
     >
       {/* Background glow */}
       <div className="absolute inset-0 pointer-events-none">
@@ -62,27 +44,18 @@ const ProductHero3D = () => {
         initial={{ opacity: 0, scale: 0.9, y: 30 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         transition={{ duration: 1, ease: "easeOut", delay: 0.3 }}
-        className="relative z-10 cursor-grab"
+        className="relative z-10"
         style={{
           transform: `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`,
           transition: "transform 0.15s ease-out",
         }}
       >
-        <div className="relative w-[320px] md:w-[480px] lg:w-[560px] h-[320px] md:h-[480px] lg:h-[560px]">
-          <AnimatePresence mode="wait">
-            <motion.img
-              key={activeIndex}
-              src={images[activeIndex]}
-              alt="STRYKE Sensor Wrist Sleeve – Compression sleeve with integrated sensor technology"
-              className="absolute inset-0 w-full h-full object-contain"
-              style={{ filter: "drop-shadow(0 30px 60px hsl(0, 100%, 40%, 0.3))" }}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.4 }}
-            />
-          </AnimatePresence>
-        </div>
+        <img
+          src={productImage}
+          alt="STRYKE Sensor Wrist Sleeve – Compression sleeve with integrated sensor technology"
+          className="w-[320px] md:w-[480px] lg:w-[560px] h-auto object-contain"
+          style={{ filter: "drop-shadow(0 30px 60px hsl(0, 100%, 40%, 0.3))" }}
+        />
         {/* Floor glow reflection */}
         <div
           className="absolute -bottom-8 left-1/2 -translate-x-1/2 w-[60%] h-6 rounded-full blur-xl opacity-40"
@@ -90,26 +63,12 @@ const ProductHero3D = () => {
         />
       </motion.div>
 
-      {/* Dot indicators */}
-      <div className="flex gap-2 mt-6 z-10">
-        {images.map((_, i) => (
-          <button
-            key={i}
-            onClick={() => setActiveIndex(i)}
-            className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${
-              i === activeIndex ? "bg-destructive scale-125" : "bg-muted-foreground/40"
-            }`}
-            aria-label={`View product image ${i + 1}`}
-          />
-        ))}
-      </div>
-
       {/* Title */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.8, duration: 0.8 }}
-        className="text-center mt-4 md:mt-8 px-4 z-10"
+        className="text-center mt-8 md:mt-12 px-4 z-10"
       >
         <h2 className="text-3xl md:text-5xl font-black tracking-tight text-foreground">
           STRYKE <span className="text-gradient-red">Sensor</span>
