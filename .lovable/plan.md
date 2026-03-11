@@ -1,54 +1,20 @@
 
 
-# Videos komprimieren und schneller laden
+# Add Swipeable Product Image Carousel
 
-## Problem
+## Overview
+Add the uploaded image as a second hero shot. Users swipe/click between the two product images while the background glow, title, and scroll indicator stay fixed.
 
-Die 6 MP4-Videodateien werden als statische Assets im App-Bundle mitgeliefert. Auch mit Lazy Loading muessen sie irgendwann heruntergeladen werden - und wenn die Dateien gross sind, dauert das auf mobilem Internet lange.
+## Changes
 
-## Loesung: Videos in Cloud-Speicher auslagern
+### 1. Copy uploaded image to project
+Copy `user-uploads://use-the-exact-product-shown-in-the-attac_dOSR4c2XSRGYKnapnnvpIA_gnL9GF6OQd2WZ_aQ9et2tw-removebg-preview.png` to `src/assets/stryke-product-hero-2.png`.
 
-Statt die Videos direkt im Code zu buendeln, werden sie in den Cloud-Speicher (Storage) verschoben. Das bringt mehrere Vorteile:
-
-- **CDN-Auslieferung**: Videos werden ueber ein globales Content Delivery Network ausgeliefert, was deutlich schneller ist
-- **Kleineres App-Bundle**: Die App selbst laedt viel schneller, weil keine grossen Videodateien mehr im Code stecken
-- **Einfaches Austauschen**: Komprimierte Videos koennen jederzeit hochgeladen werden, ohne den Code zu aendern
-
-### Zusaetzlich: Videos extern komprimieren
-
-Du kannst die Videos vorher mit einem kostenlosen Online-Tool komprimieren (z.B. handbrake.fr oder clideo.com). Empfohlene Einstellungen:
-
-- **Aufloesung**: 720x1560 (die Phone-Mockups sind nur ~280px breit, also reicht das locker)
-- **Bitrate**: 500-800 kbps (statt typisch 2-5 Mbps)
-- **Format**: MP4 mit H.264
-
-Das kann die Dateigroesse um 70-90% reduzieren.
-
-## Technische Details
-
-### 1. Storage-Bucket erstellen
-- Neuen oeffentlichen Bucket `videos` im Cloud-Speicher anlegen
-- Upload-Policy fuer authentifizierte Nutzer (oder direkt per SQL)
-
-### 2. Videos hochladen
-- Alle 6 MP4-Dateien werden per Code in den Storage-Bucket hochgeladen
-- Alternativ: Edge Function die die bestehenden Asset-URLs nimmt und in Storage kopiert
-
-### 3. `PhoneMockup.tsx` umbauen
-- Statt lokale Imports (`import boxerSessionVideo from "@/assets/screens/..."`) werden die Storage-URLs verwendet
-- Die URLs werden als Konstanten definiert, z.B.:
-  ```
-  const VIDEO_BASE_URL = "https://.../storage/v1/object/public/videos/";
-  ```
-- Jede Video-Komponente bekommt die URL als String statt als importiertes Asset
-
-### 4. Lokale Video-Dateien entfernen
-- Die 6 MP4-Dateien aus `src/assets/screens/` loeschen (die `.mov`-Datei ebenfalls)
-- Die PNG-Poster-Bilder bleiben als Platzhalter erhalten
-
-### Erwartetes Ergebnis
-- App-Bundle wird um die gesamte Video-Groesse kleiner (vermutlich 20-50 MB weniger)
-- Initiale Seitenladezeit drastisch verbessert
-- Videos werden erst bei Bedarf vom CDN geladen
-- Poster-Bilder erscheinen sofort als Platzhalter
+### 2. Update `src/components/landing/ProductHero3D.tsx`
+- Import the second product image.
+- Add state to track current image index (0 or 1).
+- Replace the single `<img>` with an `AnimatePresence`-driven image swap — crossfade between images on swipe/click.
+- Add touch swipe detection (track `onTouchStart`/`onTouchEnd` x-delta) and left/right click areas or arrow buttons.
+- Add dot indicators (two small dots below the image) showing which image is active.
+- The parallax effect, background glow, floor glow, title, and scroll indicator remain unchanged — only the image inside the parallax container swaps.
 
