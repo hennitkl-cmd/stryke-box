@@ -1,16 +1,54 @@
 
 
-# Fix Excessive Spacing in Product Hero Section
+# Videos komprimieren und schneller laden
 
 ## Problem
-The `ProductHero3D` section uses `h-[200vh]` (line 28) with a `sticky` inner container. This was designed for scroll-driven 3D animation effects but now just creates a huge empty gap between the STRYKE Sensor section and the Hero section below it.
 
-## Fix — `src/components/landing/ProductHero3D.tsx`
+Die 6 MP4-Videodateien werden als statische Assets im App-Bundle mitgeliefert. Auch mit Lazy Loading muessen sie irgendwann heruntergeladen werden - und wenn die Dateien gross sind, dauert das auf mobilem Internet lange.
 
-1. **Line 28**: Change `h-[200vh]` to `h-screen` — the section only needs one viewport height since there's no scroll-driven animation anymore
-2. **Line 31**: Remove `sticky top-0` from the inner div since it's no longer needed without the scroll-through effect
-3. **Lines 10-16**: Remove the `useScroll` / `useTransform` hooks and the `opacity`/`scale` scroll transforms since they depend on the extra height
-4. **Line 30**: Remove the `style={{ opacity, scale }}` from the motion div
+## Loesung: Videos in Cloud-Speicher auslagern
 
-This reduces the section to a single full-screen hero with the image, button, and title — no wasted space.
+Statt die Videos direkt im Code zu buendeln, werden sie in den Cloud-Speicher (Storage) verschoben. Das bringt mehrere Vorteile:
+
+- **CDN-Auslieferung**: Videos werden ueber ein globales Content Delivery Network ausgeliefert, was deutlich schneller ist
+- **Kleineres App-Bundle**: Die App selbst laedt viel schneller, weil keine grossen Videodateien mehr im Code stecken
+- **Einfaches Austauschen**: Komprimierte Videos koennen jederzeit hochgeladen werden, ohne den Code zu aendern
+
+### Zusaetzlich: Videos extern komprimieren
+
+Du kannst die Videos vorher mit einem kostenlosen Online-Tool komprimieren (z.B. handbrake.fr oder clideo.com). Empfohlene Einstellungen:
+
+- **Aufloesung**: 720x1560 (die Phone-Mockups sind nur ~280px breit, also reicht das locker)
+- **Bitrate**: 500-800 kbps (statt typisch 2-5 Mbps)
+- **Format**: MP4 mit H.264
+
+Das kann die Dateigroesse um 70-90% reduzieren.
+
+## Technische Details
+
+### 1. Storage-Bucket erstellen
+- Neuen oeffentlichen Bucket `videos` im Cloud-Speicher anlegen
+- Upload-Policy fuer authentifizierte Nutzer (oder direkt per SQL)
+
+### 2. Videos hochladen
+- Alle 6 MP4-Dateien werden per Code in den Storage-Bucket hochgeladen
+- Alternativ: Edge Function die die bestehenden Asset-URLs nimmt und in Storage kopiert
+
+### 3. `PhoneMockup.tsx` umbauen
+- Statt lokale Imports (`import boxerSessionVideo from "@/assets/screens/..."`) werden die Storage-URLs verwendet
+- Die URLs werden als Konstanten definiert, z.B.:
+  ```
+  const VIDEO_BASE_URL = "https://.../storage/v1/object/public/videos/";
+  ```
+- Jede Video-Komponente bekommt die URL als String statt als importiertes Asset
+
+### 4. Lokale Video-Dateien entfernen
+- Die 6 MP4-Dateien aus `src/assets/screens/` loeschen (die `.mov`-Datei ebenfalls)
+- Die PNG-Poster-Bilder bleiben als Platzhalter erhalten
+
+### Erwartetes Ergebnis
+- App-Bundle wird um die gesamte Video-Groesse kleiner (vermutlich 20-50 MB weniger)
+- Initiale Seitenladezeit drastisch verbessert
+- Videos werden erst bei Bedarf vom CDN geladen
+- Poster-Bilder erscheinen sofort als Platzhalter
 

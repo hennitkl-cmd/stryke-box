@@ -1,19 +1,10 @@
-import { useRef, useState } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { useState } from "react";
+import { motion } from "framer-motion";
 import { ArrowDown } from "lucide-react";
 import heroProduct from "@/assets/stryke-hero-product.png";
 
 const ProductHero3D = () => {
-  const sectionRef = useRef<HTMLDivElement>(null);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
-
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start start", "end start"],
-  });
-
-  const opacity = useTransform(scrollYProgress, [0.7, 1], [1, 0]);
-  const scale = useTransform(scrollYProgress, [0, 0.5, 1], [1, 1.05, 0.95]);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     const rect = e.currentTarget.getBoundingClientRect();
@@ -25,10 +16,9 @@ const ProductHero3D = () => {
   const handleMouseLeave = () => setMousePos({ x: 0, y: 0 });
 
   return (
-    <section ref={sectionRef} className="relative h-[200vh]" id="product-3d">
-      <motion.div
-        style={{ opacity, scale }}
-        className="sticky top-0 h-screen flex flex-col items-center justify-center overflow-hidden"
+    <section className="relative h-screen" id="product-3d">
+      <div
+        className="h-full flex flex-col items-center justify-center overflow-hidden"
       >
         {/* Background glow effect */}
         <div className="absolute inset-0 pointer-events-none">
@@ -104,7 +94,7 @@ const ProductHero3D = () => {
             Compression Wrist Sleeve mit integrierter Sensortechnik
           </p>
         </motion.div>
-      </motion.div>
+      </div>
     </section>
   );
 };
