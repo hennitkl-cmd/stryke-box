@@ -9,9 +9,9 @@ const VIDEO_BASE_URL = "https://wnfypheskgiavkoprtvf.supabase.co/storage/v1/obje
 const boxerSessionVideo = `${VIDEO_BASE_URL}boxer-session.mp4`;
 const boxerTrainingVideo = `${VIDEO_BASE_URL}boxer-training.mp4`;
 const boxerCommunityVideo = `${VIDEO_BASE_URL}boxer-community.mp4`;
-const coachDashboardVideo = `${VIDEO_BASE_URL}coach-dashboard.mp4`;
-const coachAnalyticsVideo = `${VIDEO_BASE_URL}coach-analytics.mp4`;
-const coachFightersVideo = `${VIDEO_BASE_URL}coach-fighters.mp4`;
+const coachDashboardVideo = `${VIDEO_BASE_URL}coach-fighters.mp4`;
+const coachAnalyticsVideo = `${VIDEO_BASE_URL}coach-dashboard.mp4`;
+const coachFightersVideo = `${VIDEO_BASE_URL}coach-analytics.mp4`;
 
 export interface VideoScreenProps {
   isPlaying?: boolean;
