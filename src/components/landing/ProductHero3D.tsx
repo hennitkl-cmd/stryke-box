@@ -122,7 +122,7 @@ const WristSleeve = ({ rotationY }: { rotationY: number }) => {
 
       {/* Sensor pad on the inside/back */}
       <mesh position={[0, -0.3, -1.03]} rotation={[0, Math.PI, 0]}>
-        <roundedRectGeometry args={[0.8, 1.2, 0.1]} />
+        <planeGeometry args={[0.8, 1.2]} />
         <primitive object={sensorMaterial} attach="material" />
       </mesh>
 
