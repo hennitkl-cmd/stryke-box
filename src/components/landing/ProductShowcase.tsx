@@ -109,6 +109,7 @@ const ProductShowcase = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, delay: 0.2 }}
+          ref={carouselRef}
           className="max-w-3xl mx-auto mb-16"
           onMouseEnter={() => setIsPaused(true)}
           onMouseLeave={() => setIsPaused(false)}
