@@ -4,7 +4,7 @@ import { useTexture, Environment } from "@react-three/drei";
 import { motion, useScroll, useTransform } from "framer-motion";
 import * as THREE from "three";
 import logoTexture from "@/assets/logo-stryke.png";
-import { ChevronDown } from "lucide-react";
+import { ArrowDown } from "lucide-react";
 
 const WristSleeve = ({ rotationY }: {rotationY: number;}) => {
   const groupRef = useRef<THREE.Group>(null);
@@ -257,6 +257,24 @@ const ProductHero3D = () => {
           }
         </div>
 
+        {/* Product Gallery Button - nav pill style */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.6, duration: 0.6 }}
+          className="mt-4"
+        >
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.98 }}
+            onClick={() => document.getElementById("product-showcase")?.scrollIntoView({ behavior: "smooth" })}
+            className="rounded-full border border-white/10 bg-background/80 backdrop-blur-xl px-6 py-2.5 text-sm font-semibold text-foreground hover:bg-white/5 hover:border-white/30 transition-all duration-300 inline-flex items-center gap-2"
+          >
+            Product Gallery
+            <ArrowDown className="w-4 h-4" />
+          </motion.button>
+        </motion.div>
+
         {/* Title */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -270,22 +288,6 @@ const ProductHero3D = () => {
           <p className="text-muted-foreground mt-2 text-sm md:text-base">
             Compression Wrist Sleeve mit integrierter Sensortechnik
           </p>
-        </motion.div>
-
-        {/* Scroll indicator */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.2 }}
-          className="absolute bottom-8 flex flex-col items-center gap-2">
-          
-          <span className="text-muted-foreground text-xs uppercase tracking-widest">Scroll to explore</span>
-          <motion.div
-            animate={{ y: [0, 8, 0] }}
-            transition={{ duration: 1.5, repeat: Infinity }}>
-            
-            <ChevronDown className="w-5 h-5 text-muted-foreground" />
-          </motion.div>
         </motion.div>
       </motion.div>
     </section>);
