@@ -1,7 +1,7 @@
 import { useRef, useState, useCallback } from "react";
 import { motion } from "framer-motion";
 import { ChevronDown } from "lucide-react";
-import productImage from "@/assets/stryke-product-hero.jpeg";
+import productImage from "@/assets/stryke-product-hero.png";
 
 const ProductHero3D = () => {
   const containerRef = useRef<HTMLDivElement>(null);
