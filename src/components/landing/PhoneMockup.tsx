@@ -131,7 +131,7 @@ export const BoxerProgressScreen = ({ isPlaying = false }: VideoScreenProps) => 
     <video 
       ref={videoRef}
       src={isPlaying ? boxerCommunityVideo : undefined}
-      poster={boxerCommunityImage}
+      poster={phonePoster}
       preload="none"
       loop
       muted
