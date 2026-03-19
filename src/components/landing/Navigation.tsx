@@ -99,11 +99,10 @@ const Navigation = () => {
                 whileTap={{ scale: 0.98 }}
               >
                 <Button
-                  variant="outline"
                   onClick={() => scrollToSection("cta")}
-                  className="rounded-full border-white/20 bg-transparent hover:bg-white/5 hover:border-white/30 text-foreground font-semibold px-6"
+                  className="rounded-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold px-6"
                 >
-                  Get Started
+                  Join Waitlist
                 </Button>
               </motion.div>
 
