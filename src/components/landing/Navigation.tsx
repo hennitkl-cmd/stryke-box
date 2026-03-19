@@ -169,11 +169,10 @@ const Navigation = () => {
               >
                 <Button
                   size="lg"
-                  variant="outline"
                   onClick={() => scrollToSection("cta")}
-                  className="rounded-full border-white/20 bg-transparent hover:bg-white/5 hover:border-white/30 text-foreground font-bold px-8 py-6 text-lg"
+                  className="rounded-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold px-8 py-6 text-lg"
                 >
-                  Get Started
+                  Join Waitlist
                 </Button>
               </motion.div>
             </motion.div>
