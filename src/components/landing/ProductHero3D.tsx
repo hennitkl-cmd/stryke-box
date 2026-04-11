@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { ArrowDown } from "lucide-react";
-import heroProduct from "@/assets/stryke-hero-product.png";
+import heroProduct from "@/assets/stryke-hero-product.webp";
 
 const ProductHero3D = () => {
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });

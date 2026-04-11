@@ -11,10 +11,10 @@ import {
   type CarouselApi,
 } from "@/components/ui/carousel";
 
-import galleryDetail from "@/assets/gallery/gallery-detail.png";
-import galleryCloseup from "@/assets/gallery/gallery-closeup.png";
-import gallerySensor from "@/assets/gallery/gallery-sensor.jpeg";
-import galleryFloating from "@/assets/gallery/gallery-floating.png";
+import galleryDetail from "@/assets/gallery/gallery-detail.webp";
+import galleryCloseup from "@/assets/gallery/gallery-closeup.webp";
+import gallerySensor from "@/assets/gallery/gallery-sensor.webp";
+import galleryFloating from "@/assets/gallery/gallery-floating.webp";
 
 interface SpecItem {
   icon: LucideIcon;
