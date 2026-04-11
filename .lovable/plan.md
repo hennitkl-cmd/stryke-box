@@ -1,33 +1,46 @@
 
 
-## Plan: Add Title/Description to Promoter Video & Fix 16:9 Aspect Ratio
+## Plan: Performance-Optimierung der Landing Page
 
-### Changes (all in `src/components/landing/FeatureGrid.tsx`)
+### Problem
+Die Seite lädt viele schwere Assets gleichzeitig und rendert alle Sektionen sofort, auch wenn sie nicht sichtbar sind.
 
-1. **Add a title and description above the video** — something like "Live Data Overlay" as heading and a short descriptor like "See how STRYKE data powers real-time broadcast overlays during live fights." styled consistently with the rest of the section.
+**Hauptverursacher:**
+- `stryke-sensor.png` — **2.7 MB** (wird im Bundle mitgeliefert)
+- `gallery-closeup.png` — **2.1 MB**, `gallery-floating.png` — **2.0 MB** (ebenfalls gebundelt)
+- `stryke-hero-product.png` — **424 KB**
+- 6 Videos werden als URLs definiert (CDN-hosted, gut), aber alle Komponenten werden sofort geladen
+- Alle Sektionen (Navigation, Hero, FeatureGrid, ScienceSection, ProductShowcase, CTA, Footer, AIChatbot) werden beim ersten Render importiert und ausgeführt
 
-2. **Fix 16:9 aspect ratio** — wrap the `<video>` in a container with `aspect-video` (which is 16:9) and use `object-cover` to eliminate black bars. Move `aspect-video` from the video element to the outer container div to ensure the frame itself is 16:9.
+### Optimierungen
 
-### Technical Details
+**1. Bilder komprimieren und in WebP konvertieren**
+- Die großen PNGs (gallery + stryke-sensor) in WebP konvertieren → typisch 70-80% kleiner
+- Gesamtersparnis: ca. 5-6 MB → ~1-1.5 MB
 
-In the promoter video section (~lines 284-308), add a text block before the video container and ensure the glass-card container enforces 16:9:
+**2. Lazy Loading für Below-the-fold Sektionen**
+- `React.lazy()` + `Suspense` für Komponenten die nicht sofort sichtbar sind:
+  - `FeatureGrid`, `ScienceSection`, `ProductShowcase`, `CTASection`, `Footer`, `AIChatbot`
+- Nur `Navigation`, `ProductHero3D` und `Hero` sofort laden
 
-```tsx
-{/* Title */}
-<div className="text-center mb-6">
-  <h3 className="text-2xl md:text-3xl font-bold text-foreground">
-    Live Data <span className="text-gradient-red">Overlay</span>
-  </h3>
-  <p className="text-muted-foreground mt-2 max-w-xl mx-auto">
-    See how STRYKE sensor data powers real-time broadcast graphics during live fights.
-  </p>
-</div>
+**3. Native Lazy Loading für Bilder**
+- `loading="lazy"` auf alle `<img>` Tags in ProductShowcase und anderen Below-the-fold Sektionen
+- Hero-Bild bleibt eager (above the fold)
 
-{/* Video container with aspect-video on wrapper */}
-<div className="glass-card rounded-2xl overflow-hidden ... aspect-video">
-  <video ... className="w-full h-full object-cover" />
-</div>
-```
+**4. Bilder in ProductShowcase optimieren**
+- Gallery-Bilder mit `loading="lazy"` und `decoding="async"` versehen
 
-Single file change, minimal scope.
+### Dateien die geändert werden
+
+| Datei | Änderung |
+|---|---|
+| `src/pages/Index.tsx` | Lazy imports + Suspense für 6 Sektionen |
+| `src/components/landing/ProductShowcase.tsx` | `loading="lazy"` auf Gallery-Bilder |
+| `src/components/landing/ProductHero3D.tsx` | `decoding="async"` auf Hero-Bild |
+| Assets (build-time) | WebP-Konvertierung der großen PNGs |
+
+### Erwartetes Ergebnis
+- Initiale Ladezeit deutlich reduziert (weniger JS + kleinere Bilder)
+- Sektionen laden erst wenn der User in ihre Nähe scrollt
+- Keine visuellen Änderungen
 
