@@ -290,7 +290,7 @@ const FeatureGrid = () => {
                   className="max-w-4xl mx-auto"
                 >
                   <div className="text-center mb-6">
-                    <h3 className="text-2xl md:text-3xl font-bold text-foreground">
+                    <h3 className="text-2xl font-bold text-foreground md:text-5xl">
                       Live Data <span className="text-gradient-red">Overlay</span>
                     </h3>
                     <p className="text-muted-foreground mt-2 max-w-xl mx-auto">
