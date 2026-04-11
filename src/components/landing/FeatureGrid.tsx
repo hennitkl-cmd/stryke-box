@@ -191,15 +191,31 @@ const FeatureGrid = () => {
       } : {}} transition={{
         duration: 0.6
       }} className="text-center mb-16">
-          <span className="text-primary text-sm font-semibold tracking-widest uppercase">
-            Core Capabilities
-          </span>
-          <h2 className="text-4xl md:text-5xl font-black mt-4 mb-6">
-            Train Like a <span className="text-gradient-red">Pro</span>
-          </h2>
-          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            Real feedback on speed, power, and fatigue - round by round           
-          </p>
+          {customerType === "promoter" ? (
+            <>
+              <span className="text-primary text-sm font-semibold tracking-widest uppercase">
+                Broadcast Ready
+              </span>
+              <h2 className="text-4xl md:text-5xl font-black mt-4 mb-6">
+                Live Data <span className="text-gradient-red">Overlay</span>
+              </h2>
+              <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+                See how STRYKE sensor data powers real-time broadcast graphics during live fights.
+              </p>
+            </>
+          ) : (
+            <>
+              <span className="text-primary text-sm font-semibold tracking-widest uppercase">
+                Core Capabilities
+              </span>
+              <h2 className="text-4xl md:text-5xl font-black mt-4 mb-6">
+                Train Like a <span className="text-gradient-red">Pro</span>
+              </h2>
+              <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+                Real feedback on speed, power, and fatigue - round by round           
+              </p>
+            </>
+          )}
         </motion.div>
 
         {/* Content - Conditional Rendering */}
@@ -289,14 +305,6 @@ const FeatureGrid = () => {
                   transition={{ duration: 0.6 }}
                   className="max-w-4xl mx-auto"
                 >
-                  <div className="text-center mb-6">
-                    <h3 className="text-2xl font-bold text-foreground md:text-5xl">
-                      Live Data <span className="text-gradient-red">Overlay</span>
-                    </h3>
-                    <p className="text-muted-foreground mt-2 max-w-xl mx-auto">
-                      See how STRYKE sensor data powers real-time broadcast graphics during live fights.
-                    </p>
-                  </div>
                   <div className="relative glass-card rounded-2xl overflow-hidden border border-primary/20 shadow-[0_0_40px_-10px_hsl(var(--primary)/0.3)] aspect-video">
                     {/* LIVE badge */}
                     <div className="absolute top-4 left-4 z-10 flex items-center gap-2 bg-primary/90 backdrop-blur-sm text-primary-foreground px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider">
