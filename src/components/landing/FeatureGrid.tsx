@@ -305,20 +305,20 @@ const FeatureGrid = () => {
                   transition={{ duration: 0.6 }}
                   className="max-w-4xl mx-auto"
                 >
-                  <div className="relative glass-card rounded-2xl overflow-hidden border border-primary/20 shadow-[0_0_40px_-10px_hsl(var(--primary)/0.3)] aspect-video">
-                    {/* LIVE badge */}
-                    <div className="absolute top-4 left-4 z-10 flex items-center gap-2 bg-primary/90 backdrop-blur-sm text-primary-foreground px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider">
-                      <span className="w-2 h-2 rounded-full bg-primary-foreground animate-pulse" />
-                      Live
-                    </div>
-                    <video
-                      src="https://wnfypheskgiavkoprtvf.supabase.co/storage/v1/object/public/videos/live-overlay-demo.mp4"
-                      autoPlay
-                      muted
-                      loop
-                      playsInline
-                      className="w-full h-full object-cover"
-                    />
+                   <div className="relative glass-card rounded-2xl overflow-hidden border border-primary/20 shadow-[0_0_40px_-10px_hsl(var(--primary)/0.3)]">
+                     {/* LIVE badge */}
+                     <div className="absolute top-4 left-4 z-10 flex items-center gap-2 bg-primary/90 backdrop-blur-sm text-primary-foreground px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider">
+                       <span className="w-2 h-2 rounded-full bg-primary-foreground animate-pulse" />
+                       Live
+                     </div>
+                     <video
+                       src="https://wnfypheskgiavkoprtvf.supabase.co/storage/v1/object/public/videos/live-overlay-demo.mp4"
+                       autoPlay
+                       muted
+                       loop
+                       playsInline
+                       className="w-full block rounded-2xl"
+                     />
                   </div>
                 </motion.div>
               )}
