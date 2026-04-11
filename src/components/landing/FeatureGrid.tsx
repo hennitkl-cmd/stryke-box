@@ -287,9 +287,17 @@ const FeatureGrid = () => {
                   initial={{ opacity: 0, scale: 0.95 }}
                   animate={isInView ? { opacity: 1, scale: 1 } : {}}
                   transition={{ duration: 0.6 }}
-                  className="relative max-w-4xl mx-auto"
+                  className="max-w-4xl mx-auto"
                 >
-                  <div className="glass-card rounded-2xl overflow-hidden border border-primary/20 shadow-[0_0_40px_-10px_hsl(var(--primary)/0.3)]">
+                  <div className="text-center mb-6">
+                    <h3 className="text-2xl md:text-3xl font-bold text-foreground">
+                      Live Data <span className="text-gradient-red">Overlay</span>
+                    </h3>
+                    <p className="text-muted-foreground mt-2 max-w-xl mx-auto">
+                      See how STRYKE sensor data powers real-time broadcast graphics during live fights.
+                    </p>
+                  </div>
+                  <div className="relative glass-card rounded-2xl overflow-hidden border border-primary/20 shadow-[0_0_40px_-10px_hsl(var(--primary)/0.3)] aspect-video">
                     {/* LIVE badge */}
                     <div className="absolute top-4 left-4 z-10 flex items-center gap-2 bg-primary/90 backdrop-blur-sm text-primary-foreground px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider">
                       <span className="w-2 h-2 rounded-full bg-primary-foreground animate-pulse" />
@@ -301,7 +309,7 @@ const FeatureGrid = () => {
                       muted
                       loop
                       playsInline
-                      className="w-full aspect-video object-cover"
+                      className="w-full h-full object-cover"
                     />
                   </div>
                 </motion.div>
