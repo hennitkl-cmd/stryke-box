@@ -1,46 +1,36 @@
 
 
-## Plan: Performance-Optimierung der Landing Page
+## Plan: TTFB & FCP Optimierung
 
-### Problem
-Die Seite lädt viele schwere Assets gleichzeitig und rendert alle Sektionen sofort, auch wenn sie nicht sichtbar sind.
+### Maßnahmen
 
-**Hauptverursacher:**
-- `stryke-sensor.png` — **2.7 MB** (wird im Bundle mitgeliefert)
-- `gallery-closeup.png` — **2.1 MB**, `gallery-floating.png` — **2.0 MB** (ebenfalls gebundelt)
-- `stryke-hero-product.png` — **424 KB**
-- 6 Videos werden als URLs definiert (CDN-hosted, gut), aber alle Komponenten werden sofort geladen
-- Alle Sektionen (Navigation, Hero, FeatureGrid, ScienceSection, ProductShowcase, CTA, Footer, AIChatbot) werden beim ersten Render importiert und ausgeführt
+**1. Hero-Bild preloaden (`index.html`)**
+- `<link rel="preload" as="image" type="image/webp" href="/src/assets/stryke-hero-product.webp">` im `<head>`
+- Das Hero-Bild ist das größte above-the-fold Asset — Preloading eliminiert die Wartezeit auf den JS-Bundle-Parse
 
-### Optimierungen
+**2. Logo preloaden (`index.html`)**
+- `<link rel="preload" as="image" href="/src/assets/logo-stryke.png">` für das Nav-Logo
 
-**1. Bilder komprimieren und in WebP konvertieren**
-- Die großen PNGs (gallery + stryke-sensor) in WebP konvertieren → typisch 70-80% kleiner
-- Gesamtersparnis: ca. 5-6 MB → ~1-1.5 MB
+**3. Inter Font via Google Fonts mit `font-display: swap` laden (`index.html`)**
+- Aktuell wird Inter nur als `font-family` Fallback deklariert, aber nie geladen → Browser nutzt system-ui
+- Google Fonts `<link rel="preconnect">` + `<link rel="stylesheet">` mit `display=swap` hinzufügen
+- Dadurch wird Inter tatsächlich geladen, aber ohne Render-Blocking
 
-**2. Lazy Loading für Below-the-fold Sektionen**
-- `React.lazy()` + `Suspense` für Komponenten die nicht sofort sichtbar sind:
-  - `FeatureGrid`, `ScienceSection`, `ProductShowcase`, `CTASection`, `Footer`, `AIChatbot`
-- Nur `Navigation`, `ProductHero3D` und `Hero` sofort laden
+**4. DNS-Prefetch für CDN-Domains (`index.html`)**
+- `<link rel="dns-prefetch" href="https://wnfypheskgiavkoprtvf.supabase.co">` für spätere Video-Loads
+- Reduziert Latenz wenn Videos lazy geladen werden
 
-**3. Native Lazy Loading für Bilder**
-- `loading="lazy"` auf alle `<img>` Tags in ProductShowcase und anderen Below-the-fold Sektionen
-- Hero-Bild bleibt eager (above the fold)
+**5. Critical CSS inlinen — Splash-Screen Styles (`index.html`)**
+- Minimale inline Styles für den SplashTitle-Background (schwarzer Hintergrund) direkt in `<style>` im `<head>`
+- Verhindert FOUC (Flash of Unstyled Content) bevor CSS geladen ist
 
-**4. Bilder in ProductShowcase optimieren**
-- Gallery-Bilder mit `loading="lazy"` und `decoding="async"` versehen
-
-### Dateien die geändert werden
+### Dateien
 
 | Datei | Änderung |
 |---|---|
-| `src/pages/Index.tsx` | Lazy imports + Suspense für 6 Sektionen |
-| `src/components/landing/ProductShowcase.tsx` | `loading="lazy"` auf Gallery-Bilder |
-| `src/components/landing/ProductHero3D.tsx` | `decoding="async"` auf Hero-Bild |
-| Assets (build-time) | WebP-Konvertierung der großen PNGs |
+| `index.html` | Preload-Links, Font-Loading, DNS-Prefetch, Inline Critical CSS |
 
 ### Erwartetes Ergebnis
-- Initiale Ladezeit deutlich reduziert (weniger JS + kleinere Bilder)
-- Sektionen laden erst wenn der User in ihre Nähe scrollt
+- FCP ~300-500ms schneller durch Font-Swap und Asset-Preloading
 - Keine visuellen Änderungen
 
