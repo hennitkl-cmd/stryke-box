@@ -1,54 +1,44 @@
 
 
-# Videos komprimieren und schneller laden
+## Plan: Embed Live Overlay Demo Video for Promoter Tab
 
-## Problem
+### Context
+Currently, when users select the "Promoter" role, the FeatureGrid section shows three simple icon+text benefit cards. The uploaded video demonstrates live broadcast overlays — this is a strong visual that deserves prominent placement.
 
-Die 6 MP4-Videodateien werden als statische Assets im App-Bundle mitgeliefert. Auch mit Lazy Loading muessen sie irgendwann heruntergeladen werden - und wenn die Dateien gross sind, dauert das auf mobilem Internet lange.
+### Approach
+Upload the video to the existing `videos` storage bucket, then replace the static Promoter benefit cards in FeatureGrid with a featured video section — a large, styled video player (auto-playing, muted, looping) framed as a broadcast monitor/TV overlay, with the three benefit items displayed alongside or below it.
 
-## Loesung: Videos in Cloud-Speicher auslagern
+### Layout
+```text
+┌──────────────────────────────────────────┐
+│          "Core Capabilities"             │
+│   "Live Data. Real-Time Broadcasts."     │
+│                                          │
+│  ┌────────────────────────────────────┐  │
+│  │                                    │  │
+│  │     16:9 Video Player              │  │
+│  │     (glass-card frame, rounded,    │  │
+│  │      autoplay, muted, loop)        │  │
+│  │                                    │  │
+│  └────────────────────────────────────┘  │
+│                                          │
+│  ┌──────┐  ┌──────┐  ┌──────┐           │
+│  │ Live │  │Event │  │Revenue│           │
+│  │Overlay│ │Analyt│  │Growth │           │
+│  └──────┘  └──────┘  └──────┘           │
+└──────────────────────────────────────────┘
+```
 
-Statt die Videos direkt im Code zu buendeln, werden sie in den Cloud-Speicher (Storage) verschoben. Das bringt mehrere Vorteile:
+### Steps
 
-- **CDN-Auslieferung**: Videos werden ueber ein globales Content Delivery Network ausgeliefert, was deutlich schneller ist
-- **Kleineres App-Bundle**: Die App selbst laedt viel schneller, weil keine grossen Videodateien mehr im Code stecken
-- **Einfaches Austauschen**: Komprimierte Videos koennen jederzeit hochgeladen werden, ohne den Code zu aendern
+1. **Upload video** to the `videos` storage bucket as `live-overlay-demo.mp4`
+2. **Update FeatureGrid.tsx** — when `customerType === "promoter"`, render a featured video player in a glass-card frame (autoplay, muted, loop, playsInline) above the three benefit cards
+3. **Style the video** with rounded corners, subtle glow/border, and a "LIVE" badge overlay to match the broadcast theme
+4. **Keep benefit cards** below the video in a 3-column grid
 
-### Zusaetzlich: Videos extern komprimieren
-
-Du kannst die Videos vorher mit einem kostenlosen Online-Tool komprimieren (z.B. handbrake.fr oder clideo.com). Empfohlene Einstellungen:
-
-- **Aufloesung**: 720x1560 (die Phone-Mockups sind nur ~280px breit, also reicht das locker)
-- **Bitrate**: 500-800 kbps (statt typisch 2-5 Mbps)
-- **Format**: MP4 mit H.264
-
-Das kann die Dateigroesse um 70-90% reduzieren.
-
-## Technische Details
-
-### 1. Storage-Bucket erstellen
-- Neuen oeffentlichen Bucket `videos` im Cloud-Speicher anlegen
-- Upload-Policy fuer authentifizierte Nutzer (oder direkt per SQL)
-
-### 2. Videos hochladen
-- Alle 6 MP4-Dateien werden per Code in den Storage-Bucket hochgeladen
-- Alternativ: Edge Function die die bestehenden Asset-URLs nimmt und in Storage kopiert
-
-### 3. `PhoneMockup.tsx` umbauen
-- Statt lokale Imports (`import boxerSessionVideo from "@/assets/screens/..."`) werden die Storage-URLs verwendet
-- Die URLs werden als Konstanten definiert, z.B.:
-  ```
-  const VIDEO_BASE_URL = "https://.../storage/v1/object/public/videos/";
-  ```
-- Jede Video-Komponente bekommt die URL als String statt als importiertes Asset
-
-### 4. Lokale Video-Dateien entfernen
-- Die 6 MP4-Dateien aus `src/assets/screens/` loeschen (die `.mov`-Datei ebenfalls)
-- Die PNG-Poster-Bilder bleiben als Platzhalter erhalten
-
-### Erwartetes Ergebnis
-- App-Bundle wird um die gesamte Video-Groesse kleiner (vermutlich 20-50 MB weniger)
-- Initiale Seitenladezeit drastisch verbessert
-- Videos werden erst bei Bedarf vom CDN geladen
-- Poster-Bilder erscheinen sofort als Platzhalter
+### Technical Details
+- Video source: CDN URL from the `videos` storage bucket (`https://wnfypheskgiavkoprtvf.supabase.co/storage/v1/object/public/videos/live-overlay-demo.mp4`)
+- Video element: native `<video>` tag with `autoPlay muted loop playsInline` attributes, lazy-loaded when section is in view
+- Framing: `glass-card` with `rounded-2xl overflow-hidden` and optional red glow border
+- Mobile: video stacks full-width above the benefit cards
 
