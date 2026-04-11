@@ -19,7 +19,7 @@ const SplashTitle = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsVisible(false);
-    }, 5000);
+    }, 3000);
 
     const handleClick = () => {
       setIsVisible(false);
