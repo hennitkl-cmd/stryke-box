@@ -280,27 +280,58 @@ const FeatureGrid = () => {
           y: -20
         }} transition={{
           duration: 0.4
-        }} className="grid md:grid-cols-3 gap-6 lg:gap-8">
-              {benefits.map((benefit, index) => <motion.div key={benefit.title} initial={{
-            opacity: 0,
-            y: 30
-          }} animate={isInView ? {
-            opacity: 1,
-            y: 0
-          } : {}} transition={{
-            duration: 0.6,
-            delay: 0.2 + index * 0.1
-          }} className="glass-card p-8 group hover:border-primary/30 transition-colors">
-                  <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-6 group-hover:bg-primary/20 transition-colors">
-                    <benefit.icon className="w-7 h-7 text-primary" />
+        }} className="space-y-12">
+              {/* Featured Video for Promoter */}
+              {customerType === "promoter" && (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={isInView ? { opacity: 1, scale: 1 } : {}}
+                  transition={{ duration: 0.6 }}
+                  className="relative max-w-4xl mx-auto"
+                >
+                  <div className="glass-card rounded-2xl overflow-hidden border border-primary/20 shadow-[0_0_40px_-10px_hsl(var(--primary)/0.3)]">
+                    {/* LIVE badge */}
+                    <div className="absolute top-4 left-4 z-10 flex items-center gap-2 bg-primary/90 backdrop-blur-sm text-primary-foreground px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider">
+                      <span className="w-2 h-2 rounded-full bg-primary-foreground animate-pulse" />
+                      Live
+                    </div>
+                    <video
+                      src="https://wnfypheskgiavkoprtvf.supabase.co/storage/v1/object/public/videos/live-overlay-demo.mp4"
+                      autoPlay
+                      muted
+                      loop
+                      playsInline
+                      className="w-full aspect-video object-cover"
+                    />
                   </div>
-                  <h3 className="text-xl font-bold mb-3 text-foreground">
-                    {benefit.title}
-                  </h3>
-                  <p className="text-muted-foreground leading-relaxed">
-                    {benefit.description}
-                  </p>
-                </motion.div>)}
+                </motion.div>
+              )}
+
+              {/* Benefit cards */}
+              <div className="grid md:grid-cols-3 gap-6 lg:gap-8">
+                {benefits.map((benefit, index) => (
+                  <motion.div key={benefit.title} initial={{
+                    opacity: 0,
+                    y: 30
+                  }} animate={isInView ? {
+                    opacity: 1,
+                    y: 0
+                  } : {}} transition={{
+                    duration: 0.6,
+                    delay: 0.2 + index * 0.1
+                  }} className="glass-card p-8 group hover:border-primary/30 transition-colors">
+                    <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-6 group-hover:bg-primary/20 transition-colors">
+                      <benefit.icon className="w-7 h-7 text-primary" />
+                    </div>
+                    <h3 className="text-xl font-bold mb-3 text-foreground">
+                      {benefit.title}
+                    </h3>
+                    <p className="text-muted-foreground leading-relaxed">
+                      {benefit.description}
+                    </p>
+                  </motion.div>
+                ))}
+              </div>
             </motion.div>}
         </AnimatePresence>
       </div>
