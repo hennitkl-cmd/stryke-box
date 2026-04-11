@@ -122,6 +122,8 @@ const ProductShowcase = () => {
                     <img
                       src={slide.src}
                       alt={slide.alt}
+                      loading="lazy"
+                      decoding="async"
                       className="w-full h-auto rounded-xl object-cover aspect-[16/10]"
                     />
                   </div>

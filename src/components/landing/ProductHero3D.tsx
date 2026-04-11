@@ -43,6 +43,7 @@ const ProductHero3D = () => {
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
+            decoding="async"
             className="w-full h-auto object-contain"
             style={{
               filter: "drop-shadow(0 30px 60px hsl(0, 100%, 40%, 0.3))",
