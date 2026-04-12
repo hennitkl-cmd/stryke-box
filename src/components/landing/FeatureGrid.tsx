@@ -309,7 +309,7 @@ const FeatureGrid = () => {
                      {/* LIVE badge */}
                      <div className="absolute top-4 left-4 z-10 flex items-center gap-2 bg-primary/90 backdrop-blur-sm text-primary-foreground px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider">
                        <span className="w-2 h-2 rounded-full bg-primary-foreground animate-pulse" />
-                       Live
+                       Demo Overlay
                      </div>
                      <video
                        src="https://wnfypheskgiavkoprtvf.supabase.co/storage/v1/object/public/videos/live-overlay-demo.mp4"
