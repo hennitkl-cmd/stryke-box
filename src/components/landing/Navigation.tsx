@@ -95,7 +95,7 @@ const Navigation = () => {
               {/* Desktop CTA */}
               <div className="hidden md:flex items-center gap-3">
                 <motion.a
-                  href="https://www.instagram.com/stryke.box/"
+                  href="https://www.instagram.com/stryke_systems/"
                   target="_blank"
                   rel="noopener noreferrer"
                   whileHover={{ scale: 1.1 }}
