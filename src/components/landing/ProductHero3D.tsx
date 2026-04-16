@@ -1,6 +1,9 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { ArrowDown } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import NotificationBadge from "./NotificationBadge";
+import heroProduct from "@/assets/stryke-hero-product.webp";
 import heroProduct from "@/assets/stryke-hero-product.webp";
 
 const ProductHero3D = () => {
