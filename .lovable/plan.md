@@ -1,51 +1,42 @@
 
 
-## Plan: Waitlist Referral System
+## Plan: Notification Badges on Waitlist Buttons
 
-### How it works (user perspective)
-1. Someone signs up for the waitlist with their email
-2. After signup, they see a **unique referral link** they can copy and share (e.g. `stryke-box.lovable.app/?ref=abc123`)
-3. When a friend visits that link and signs up, the referral is tracked automatically
-4. The referrer's count goes up. Once they hit **3 successful referrals**, they get added to a separate "rewards" table
+Add a small animated notification badge (gift icon + "Earn Rewards") on all three "Join Waitlist" buttons to promote the referral system.
 
-### Database changes (2 new tables, 1 table update)
+### What it looks like
 
-**1. Update `waitlist_signups` table**
-- Add `referral_code` column (unique text, auto-generated)
-- Add `referred_by` column (nullable, references another signup's referral_code)
-- Add `referral_count` column (integer, default 0)
+Each button gets a small red/cherry notification dot or pill positioned at the top-right corner — similar to app notification badges. The badge will:
+- Show a gift icon (🎁) or small text like "🎁 3 = Reward"  
+- Pulse subtly to draw attention
+- Be positioned as an absolute overlay on the button wrapper
 
-**2. New table: `referral_rewards`**
-- `id`, `email`, `referral_code`, `referral_count`, `created_at`
-- Populated automatically when someone hits 3 referrals
-- RLS: insert allowed (via trigger), no public read
+### Buttons to update (3 total)
 
-**3. Database trigger**
-- On insert into `waitlist_signups` with a `referred_by` value: increment the referrer's `referral_count`
-- When `referral_count` reaches 3: insert into `referral_rewards`
+1. **Navigation — Desktop** (line ~107-117 in Navigation.tsx): "Join Waitlist" button in the floating nav pill
+2. **Navigation — Mobile** (line ~179-188 in Navigation.tsx): "Join Waitlist" button in the mobile menu overlay  
+3. **Hero Section** (line ~153 in Hero.tsx): The main CTA button below the headline
 
-### Frontend changes
+### Implementation
 
-**1. Read `?ref=` query param on page load**
-- Store in React state/context so it's available when the CTA form submits
+**1. Create a `NotificationBadge` component** (`src/components/landing/NotificationBadge.tsx`)
+- Small absolute-positioned pill/dot with a pulsing animation
+- Shows a Gift icon or "🎁 Rewards" text
+- Cherry red background, white text, rounded-full
+- Uses Framer Motion for a subtle pulse/bounce animation
 
-**2. CTASection — after signup success**
-- Show the user's unique referral link with a copy button
-- Show referral progress (e.g. "0/3 friends referred")
+**2. Update `Navigation.tsx`**
+- Wrap both "Join Waitlist" buttons in a `relative` container
+- Add `<NotificationBadge />` positioned at top-right of each button
 
-**3. New route: `/?ref=abc123`**
-- No new page needed — just read the query param on the Index page and pass it down
+**3. Update `Hero.tsx`**
+- Same pattern: wrap the CTA button in a `relative` container with `<NotificationBadge />`
 
-### Files to create/modify
+### Files
 
 | File | Change |
 |---|---|
-| Migration SQL | Add columns to `waitlist_signups`, create `referral_rewards`, create trigger |
-| `src/pages/Index.tsx` | Read `?ref=` query param, pass to CTA |
-| `src/components/landing/CTASection.tsx` | Submit `referred_by`, show referral link + progress after signup |
-
-### Security
-- RLS on `referral_rewards`: insert via trigger only (no public insert), no public read
-- `waitlist_signups` referral_count updates happen server-side via trigger, not client
-- Referral codes are random UUIDs — not guessable
+| `src/components/landing/NotificationBadge.tsx` | New — small animated badge component |
+| `src/components/landing/Navigation.tsx` | Add badge to both desktop + mobile "Join Waitlist" buttons |
+| `src/components/landing/Hero.tsx` | Add badge to the Hero CTA button |
 
