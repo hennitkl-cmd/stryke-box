@@ -14,24 +14,57 @@ export type Database = {
   }
   public: {
     Tables: {
+      referral_rewards: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          referral_code: string
+          referral_count: number
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+          referral_code: string
+          referral_count?: number
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          referral_code?: string
+          referral_count?: number
+        }
+        Relationships: []
+      }
       waitlist_signups: {
         Row: {
           created_at: string
           customer_type: string
           email: string
           id: string
+          referral_code: string
+          referral_count: number
+          referred_by: string | null
         }
         Insert: {
           created_at?: string
           customer_type?: string
           email: string
           id?: string
+          referral_code?: string
+          referral_count?: number
+          referred_by?: string | null
         }
         Update: {
           created_at?: string
           customer_type?: string
           email?: string
           id?: string
+          referral_code?: string
+          referral_count?: number
+          referred_by?: string | null
         }
         Relationships: []
       }
