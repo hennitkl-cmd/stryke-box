@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { ArrowDown } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import NotificationBadge from "./NotificationBadge";
 import heroProduct from "@/assets/stryke-hero-product.webp";
 
 const ProductHero3D = () => {
@@ -94,6 +96,23 @@ const ProductHero3D = () => {
           <p className="text-muted-foreground mt-2 text-sm md:text-base">
             Compression Wrist Sleeve with integrated Sensor Technology
           </p>
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.8, duration: 0.6 }}
+            className="mt-6 relative inline-block"
+          >
+            <NotificationBadge />
+            <Button
+              size="lg"
+              onClick={() =>
+                document.getElementById("cta")?.scrollIntoView({ behavior: "smooth" })
+              }
+              className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold px-8 py-6 text-lg rounded-full"
+            >
+              Join Waitlist
+            </Button>
+          </motion.div>
         </motion.div>
       </div>
     </section>
