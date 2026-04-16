@@ -2,10 +2,11 @@ import { motion, useInView, AnimatePresence } from "framer-motion";
 import { useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ArrowRight, CheckCircle, Loader2 } from "lucide-react";
+import { ArrowRight, CheckCircle, Loader2, Copy, Check, Gift } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useCustomerType, CustomerType } from "@/context/CustomerTypeContext";
 import { supabase } from "@/integrations/supabase/client";
+import { Progress } from "@/components/ui/progress";
 
 const ctaContent: Record<CustomerType, string> = {
   boxer: "Join the Waitlist",
@@ -14,15 +15,32 @@ const ctaContent: Record<CustomerType, string> = {
   fan: "Get Early Access",
 };
 
-const CTASection = () => {
+interface CTASectionProps {
+  referredBy?: string;
+}
+
+const CTASection = ({ referredBy = "" }: CTASectionProps) => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
   const [email, setEmail] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [referralCode, setReferralCode] = useState("");
+  const [referralCount, setReferralCount] = useState(0);
+  const [copied, setCopied] = useState(false);
   const { toast } = useToast();
   const { customerType } = useCustomerType();
   const ctaText = ctaContent[customerType];
+
+  const referralLink = referralCode
+    ? `${window.location.origin}/?ref=${referralCode}`
+    : "";
+
+  const handleCopy = async () => {
+    await navigator.clipboard.writeText(referralLink);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -38,13 +56,20 @@ const CTASection = () => {
 
     setIsSubmitting(true);
 
+    const insertData: Record<string, string> = {
+      email: email.trim(),
+      customer_type: customerType,
+    };
+    if (referredBy) {
+      insertData.referred_by = referredBy;
+    }
+
     const { error } = await supabase
       .from("waitlist_signups")
-      .insert({ email: email.trim(), customer_type: customerType });
-
-    setIsSubmitting(false);
+      .insert(insertData);
 
     if (error) {
+      setIsSubmitting(false);
       const isDuplicate = error.code === "23505";
       toast({
         title: isDuplicate ? "Already signed up!" : "Something went wrong",
@@ -56,6 +81,20 @@ const CTASection = () => {
       return;
     }
 
+    // Fetch the referral code for the newly created signup
+    const { data } = await supabase
+      .from("waitlist_signups")
+      .select("referral_code, referral_count")
+      .eq("email", email.trim())
+      .single();
+
+    setIsSubmitting(false);
+
+    if (data) {
+      setReferralCode(data.referral_code);
+      setReferralCount(data.referral_count);
+    }
+
     setIsSubmitted(true);
     setEmail("");
 
@@ -64,6 +103,9 @@ const CTASection = () => {
       description: "We'll notify you when STRYKE launches.",
     });
   };
+
+  const progressPercent = Math.min((referralCount / 3) * 100, 100);
+  const rewardEarned = referralCount >= 3;
 
   return (
     <section id="cta" className="py-24 md:py-32 relative overflow-hidden">
@@ -111,7 +153,7 @@ const CTASection = () => {
             Join the waitlist and be the first to experience elite-level training technology.
           </motion.p>
 
-          {/* Email Form */}
+          {/* Email Form / Post-signup */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
@@ -121,10 +163,63 @@ const CTASection = () => {
               <motion.div
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="flex items-center justify-center gap-3 p-6 glass-card max-w-md mx-auto"
+                className="max-w-md mx-auto space-y-6"
               >
-                <CheckCircle className="w-6 h-6 text-primary" />
-                <span className="font-medium">You're on the list! We'll be in touch.</span>
+                {/* Success message */}
+                <div className="flex items-center justify-center gap-3 p-6 glass-card">
+                  <CheckCircle className="w-6 h-6 text-primary" />
+                  <span className="font-medium">You're on the list! We'll be in touch.</span>
+                </div>
+
+                {/* Referral section */}
+                {referralCode && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.3 }}
+                    className="glass-card p-6 space-y-4"
+                  >
+                    <div className="flex items-center justify-center gap-2 text-sm font-semibold text-primary">
+                      <Gift className="w-4 h-4" />
+                      Refer 3 Friends — Unlock Exclusive Rewards
+                    </div>
+
+                    {/* Progress */}
+                    <div className="space-y-2">
+                      <div className="flex justify-between text-sm text-muted-foreground">
+                        <span>{referralCount}/3 friends referred</span>
+                        {rewardEarned && (
+                          <span className="text-primary font-medium">🎉 Reward earned!</span>
+                        )}
+                      </div>
+                      <Progress value={progressPercent} className="h-2" />
+                    </div>
+
+                    {/* Referral link */}
+                    <div className="space-y-2">
+                      <p className="text-xs text-muted-foreground">Share your unique link:</p>
+                      <div className="flex gap-2">
+                        <Input
+                          readOnly
+                          value={referralLink}
+                          className="h-10 bg-secondary border-border text-foreground text-xs flex-1"
+                        />
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={handleCopy}
+                          className="h-10 px-3 border-border"
+                        >
+                          {copied ? (
+                            <Check className="w-4 h-4 text-primary" />
+                          ) : (
+                            <Copy className="w-4 h-4" />
+                          )}
+                        </Button>
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
               </motion.div>
             ) : (
               <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
