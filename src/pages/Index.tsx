@@ -1,4 +1,5 @@
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useMemo } from "react";
+import { useSearchParams } from "react-router-dom";
 import Navigation from "@/components/landing/Navigation";
 import ProductHero3D from "@/components/landing/ProductHero3D";
 import Hero from "@/components/landing/Hero";
@@ -13,6 +14,9 @@ const Footer = lazy(() => import("@/components/landing/Footer"));
 const AIChatbot = lazy(() => import("@/components/landing/AIChatbot"));
 
 const Index = () => {
+  const [searchParams] = useSearchParams();
+  const referredBy = useMemo(() => searchParams.get("ref") || "", [searchParams]);
+
   return (
     <CustomerTypeProvider>
       <SplashTitle />
@@ -24,7 +28,7 @@ const Index = () => {
           <FeatureGrid />
           <ScienceSection />
           <ProductShowcase />
-          <CTASection />
+          <CTASection referredBy={referredBy} />
           <Footer />
           <AIChatbot />
         </Suspense>
