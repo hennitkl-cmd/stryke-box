@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Menu, X, Instagram } from "lucide-react";
 import logo from "@/assets/logo-stryke.png";
+import NotificationBadge from "./NotificationBadge";
 
 const Navigation = () => {
   const [scrolled, setScrolled] = useState(false);

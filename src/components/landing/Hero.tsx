@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { ChevronDown } from "lucide-react";
 import RoleSelector from "./RoleSelector";
 import { useCustomerType, CustomerType } from "@/context/CustomerTypeContext";
+import NotificationBadge from "./NotificationBadge";
 const heroContent: Record<CustomerType, {
   headline: string;
   subheadline: string;
