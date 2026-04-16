@@ -1,36 +1,51 @@
 
 
-## Plan: TTFB & FCP Optimierung
+## Plan: Waitlist Referral System
 
-### Maßnahmen
+### How it works (user perspective)
+1. Someone signs up for the waitlist with their email
+2. After signup, they see a **unique referral link** they can copy and share (e.g. `stryke-box.lovable.app/?ref=abc123`)
+3. When a friend visits that link and signs up, the referral is tracked automatically
+4. The referrer's count goes up. Once they hit **3 successful referrals**, they get added to a separate "rewards" table
 
-**1. Hero-Bild preloaden (`index.html`)**
-- `<link rel="preload" as="image" type="image/webp" href="/src/assets/stryke-hero-product.webp">` im `<head>`
-- Das Hero-Bild ist das größte above-the-fold Asset — Preloading eliminiert die Wartezeit auf den JS-Bundle-Parse
+### Database changes (2 new tables, 1 table update)
 
-**2. Logo preloaden (`index.html`)**
-- `<link rel="preload" as="image" href="/src/assets/logo-stryke.png">` für das Nav-Logo
+**1. Update `waitlist_signups` table**
+- Add `referral_code` column (unique text, auto-generated)
+- Add `referred_by` column (nullable, references another signup's referral_code)
+- Add `referral_count` column (integer, default 0)
 
-**3. Inter Font via Google Fonts mit `font-display: swap` laden (`index.html`)**
-- Aktuell wird Inter nur als `font-family` Fallback deklariert, aber nie geladen → Browser nutzt system-ui
-- Google Fonts `<link rel="preconnect">` + `<link rel="stylesheet">` mit `display=swap` hinzufügen
-- Dadurch wird Inter tatsächlich geladen, aber ohne Render-Blocking
+**2. New table: `referral_rewards`**
+- `id`, `email`, `referral_code`, `referral_count`, `created_at`
+- Populated automatically when someone hits 3 referrals
+- RLS: insert allowed (via trigger), no public read
 
-**4. DNS-Prefetch für CDN-Domains (`index.html`)**
-- `<link rel="dns-prefetch" href="https://wnfypheskgiavkoprtvf.supabase.co">` für spätere Video-Loads
-- Reduziert Latenz wenn Videos lazy geladen werden
+**3. Database trigger**
+- On insert into `waitlist_signups` with a `referred_by` value: increment the referrer's `referral_count`
+- When `referral_count` reaches 3: insert into `referral_rewards`
 
-**5. Critical CSS inlinen — Splash-Screen Styles (`index.html`)**
-- Minimale inline Styles für den SplashTitle-Background (schwarzer Hintergrund) direkt in `<style>` im `<head>`
-- Verhindert FOUC (Flash of Unstyled Content) bevor CSS geladen ist
+### Frontend changes
 
-### Dateien
+**1. Read `?ref=` query param on page load**
+- Store in React state/context so it's available when the CTA form submits
 
-| Datei | Änderung |
+**2. CTASection — after signup success**
+- Show the user's unique referral link with a copy button
+- Show referral progress (e.g. "0/3 friends referred")
+
+**3. New route: `/?ref=abc123`**
+- No new page needed — just read the query param on the Index page and pass it down
+
+### Files to create/modify
+
+| File | Change |
 |---|---|
-| `index.html` | Preload-Links, Font-Loading, DNS-Prefetch, Inline Critical CSS |
+| Migration SQL | Add columns to `waitlist_signups`, create `referral_rewards`, create trigger |
+| `src/pages/Index.tsx` | Read `?ref=` query param, pass to CTA |
+| `src/components/landing/CTASection.tsx` | Submit `referred_by`, show referral link + progress after signup |
 
-### Erwartetes Ergebnis
-- FCP ~300-500ms schneller durch Font-Swap und Asset-Preloading
-- Keine visuellen Änderungen
+### Security
+- RLS on `referral_rewards`: insert via trigger only (no public insert), no public read
+- `waitlist_signups` referral_count updates happen server-side via trigger, not client
+- Referral codes are random UUIDs — not guessable
 
