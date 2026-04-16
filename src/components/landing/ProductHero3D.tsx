@@ -4,7 +4,6 @@ import { ArrowDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import NotificationBadge from "./NotificationBadge";
 import heroProduct from "@/assets/stryke-hero-product.webp";
-import heroProduct from "@/assets/stryke-hero-product.webp";
 
 const ProductHero3D = () => {
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
