@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Menu, X, Instagram } from "lucide-react";
 import logo from "@/assets/logo-stryke.png";
+import NotificationBadge from "./NotificationBadge";
 
 const Navigation = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -104,17 +105,20 @@ const Navigation = () => {
                 >
                   <Instagram className="w-4 h-4" />
                 </motion.a>
-                <motion.div
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  <Button
-                    onClick={() => scrollToSection("cta")}
-                    className="rounded-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold px-6"
+                <div className="relative">
+                  <NotificationBadge />
+                  <motion.div
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.98 }}
                   >
-                    Join Waitlist
-                  </Button>
-                </motion.div>
+                    <Button
+                      onClick={() => scrollToSection("cta")}
+                      className="rounded-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold px-6"
+                    >
+                      Join Waitlist
+                    </Button>
+                  </motion.div>
+                </div>
               </div>
 
               {/* Mobile Menu Button */}
@@ -176,8 +180,9 @@ const Navigation = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3, delay: 0.4 }}
-                className="pt-4"
+                className="pt-4 relative"
               >
+                <NotificationBadge />
                 <Button
                   size="lg"
                   onClick={() => scrollToSection("cta")}

@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { ChevronDown } from "lucide-react";
 import RoleSelector from "./RoleSelector";
 import { useCustomerType, CustomerType } from "@/context/CustomerTypeContext";
+import NotificationBadge from "./NotificationBadge";
 const heroContent: Record<CustomerType, {
   headline: string;
   subheadline: string;
@@ -149,7 +150,8 @@ const Hero = () => {
               scale: 1.05
             }} whileTap={{
               scale: 0.98
-            }}>
+            }} className="relative">
+                <NotificationBadge />
                 <Button size="lg" onClick={() => scrollToSection("cta")} className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold px-8 py-6 text-lg glow-red animate-pulse-glow">
                   {content.ctaText}
                 </Button>
