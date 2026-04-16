@@ -56,17 +56,13 @@ const CTASection = ({ referredBy = "" }: CTASectionProps) => {
 
     setIsSubmitting(true);
 
-    const insertData: Record<string, string> = {
-      email: email.trim(),
-      customer_type: customerType,
-    };
-    if (referredBy) {
-      insertData.referred_by = referredBy;
-    }
-
     const { error } = await supabase
       .from("waitlist_signups")
-      .insert(insertData);
+      .insert({
+        email: email.trim(),
+        customer_type: customerType,
+        ...(referredBy ? { referred_by: referredBy } : {}),
+      });
 
     if (error) {
       setIsSubmitting(false);
