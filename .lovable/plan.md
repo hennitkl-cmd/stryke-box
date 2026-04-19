@@ -1,42 +1,28 @@
 
+The user is asking a research question about fonts — no implementation needed.
 
-## Plan: Notification Badges on Waitlist Buttons
+Looking at the codebase:
+- `tailwind.config.ts` defines `fontFamily.sans: ['Inter', 'system-ui', 'sans-serif']`
+- `src/index.css` sets `body { font-family: 'Inter', system-ui, sans-serif; }`
+- `index.html` loads Inter from Google Fonts with weights 400–900
+- "Become Undeniable" lives in the Hero section — uses default font stack (Inter) with heavy weight + tracking utilities
 
-Add a small animated notification badge (gift icon + "Earn Rewards") on all three "Join Waitlist" buttons to promote the referral system.
+## Fonts in use
 
-### What it looks like
+The entire site uses a **single typeface**: **Inter** (Google Fonts), loaded with weights 400, 500, 600, 700, 800, 900.
 
-Each button gets a small red/cherry notification dot or pill positioned at the top-right corner — similar to app notification badges. The badge will:
-- Show a gift icon (🎁) or small text like "🎁 3 = Reward"  
-- Pulse subtly to draw attention
-- Be positioned as an absolute overlay on the button wrapper
+### Where it's defined
+- `index.html` — loads Inter from Google Fonts
+- `src/index.css` — sets `font-family: 'Inter', system-ui, sans-serif` on body
+- `tailwind.config.ts` — `font-sans` is mapped to Inter
 
-### Buttons to update (3 total)
+### "Become Undeniable" specifically (Hero)
+- **Font**: Inter
+- **Weight**: 900 (font-black)
+- **Style**: Tight tracking (`tracking-tight`), large display sizes (`text-6xl` → `text-9xl`)
+- The red gradient text "UNDENIABLE" uses the `.text-gradient-red` utility (cherry red → red-400 gradient)
 
-1. **Navigation — Desktop** (line ~107-117 in Navigation.tsx): "Join Waitlist" button in the floating nav pill
-2. **Navigation — Mobile** (line ~179-188 in Navigation.tsx): "Join Waitlist" button in the mobile menu overlay  
-3. **Hero Section** (line ~153 in Hero.tsx): The main CTA button below the headline
+### Fallback chain
+If Inter fails to load: `system-ui` → generic `sans-serif`.
 
-### Implementation
-
-**1. Create a `NotificationBadge` component** (`src/components/landing/NotificationBadge.tsx`)
-- Small absolute-positioned pill/dot with a pulsing animation
-- Shows a Gift icon or "🎁 Rewards" text
-- Cherry red background, white text, rounded-full
-- Uses Framer Motion for a subtle pulse/bounce animation
-
-**2. Update `Navigation.tsx`**
-- Wrap both "Join Waitlist" buttons in a `relative` container
-- Add `<NotificationBadge />` positioned at top-right of each button
-
-**3. Update `Hero.tsx`**
-- Same pattern: wrap the CTA button in a `relative` container with `<NotificationBadge />`
-
-### Files
-
-| File | Change |
-|---|---|
-| `src/components/landing/NotificationBadge.tsx` | New — small animated badge component |
-| `src/components/landing/Navigation.tsx` | Add badge to both desktop + mobile "Join Waitlist" buttons |
-| `src/components/landing/Hero.tsx` | Add badge to the Hero CTA button |
-
+So all headlines (Hero, Splash "Don't just watch the fight. Read it.", section titles) and body text are Inter — just at different weights and sizes for hierarchy.
