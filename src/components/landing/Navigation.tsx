@@ -73,7 +73,7 @@ const Navigation = () => {
                   window.scrollTo({ top: 0, behavior: "smooth" });
                 }}
               >
-                <img src={logo} alt="PEAK" className="h-8 w-auto" />
+                <img src={logo} alt="PEAK" className="h-12 w-auto" />
                 <span className="text-lg font-black tracking-tight text-foreground">
                   PEAK
                 </span>
