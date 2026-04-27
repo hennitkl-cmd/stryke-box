@@ -11,10 +11,8 @@ import {
   type CarouselApi,
 } from "@/components/ui/carousel";
 
-import galleryDetail from "@/assets/gallery/gallery-detail.webp";
-import galleryCloseup from "@/assets/gallery/gallery-closeup.webp";
-import gallerySensor from "@/assets/gallery/gallery-sensor.webp";
-import galleryFloating from "@/assets/gallery/gallery-floating.webp";
+import galleryPPG from "@/assets/gallery/peak-ppg.png";
+import galleryXray from "@/assets/gallery/peak-xray.png";
 
 interface SpecItem {
   icon: LucideIcon;
@@ -32,10 +30,8 @@ const specs: SpecItem[] = [
 ];
 
 const slides = [
-  { src: galleryDetail, alt: "PEAK sensor detailed diagram" },
-  { src: galleryCloseup, alt: "PEAK sensor close-up" },
-  { src: gallerySensor, alt: "PEAK sensor technology" },
-  { src: galleryFloating, alt: "PEAK sensor floating view" },
+  { src: galleryPPG, alt: "PEAK sleeve with PPG heart rate sensor illuminated" },
+  { src: galleryXray, alt: "PEAK sleeve x-ray view showing internal components" },
 ];
 
 const FeatureCard = ({ spec, index, isInView }: { spec: SpecItem; index: number; isInView: boolean }) => (
