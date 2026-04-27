@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Menu, X, Instagram } from "lucide-react";
-import logo from "@/assets/logo-stryke.png";
+import logo from "@/assets/logo-peak.png";
 import NotificationBadge from "./NotificationBadge";
 
 const Navigation = () => {
