@@ -10,7 +10,7 @@ type Message = { role: "user" | "assistant"; content: string };
 const WELCOME_MESSAGE: Message = {
   role: "assistant",
   content:
-    "Hey! I'm the Stryke AI Assistant 🥊 I can tell you all about our boxing wearable tech, how it helps fighters, coaches, and fans. What brings you to Stryke?",
+    "Hey! I'm the PEAK AI Assistant 🥊 I can tell you all about our boxing wearable tech, how it helps fighters, coaches, and fans. What brings you to PEAK?",
 };
 
 const AIChatbot = () => {
@@ -186,11 +186,11 @@ const AIChatbot = () => {
             <div className="flex items-center justify-between px-5 py-4 border-b border-border">
               <div className="flex items-center gap-3">
                 <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center">
-                  <span className="text-sm font-black text-primary">S</span>
+                  <span className="text-sm font-black text-primary">P</span>
                 </div>
                 <div>
                   <h3 className="text-sm font-bold text-foreground leading-none">
-                    Stryke AI
+                    PEAK AI
                   </h3>
                   <span className="text-[11px] text-muted-foreground">
                     Ask me anything
@@ -257,7 +257,7 @@ const AIChatbot = () => {
                 type="text"
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
-                placeholder="Ask about Stryke..."
+                placeholder="Ask about PEAK..."
                 disabled={isLoading}
                 className="flex-1 h-10 px-4 rounded-xl bg-secondary border border-border text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary transition-colors disabled:opacity-50"
               />

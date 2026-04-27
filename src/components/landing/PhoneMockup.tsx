@@ -187,9 +187,9 @@ export const CoachInsightsScreen = ({ isPlaying = false }: VideoScreenProps) => 
 export const PromoterLiveScreen = () => (
   <div className="h-full bg-gradient-to-b from-zinc-900 to-background p-4 pt-12">
     <div className="text-center mb-4">
-      <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-500/20 mb-2">
-        <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
-        <span className="text-[10px] font-bold text-red-400">LIVE</span>
+      <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-600/20 mb-2">
+        <div className="w-2 h-2 rounded-full bg-blue-600 animate-pulse" />
+        <span className="text-[10px] font-bold text-blue-400">LIVE</span>
       </div>
       <h3 className="text-lg font-bold text-foreground">Round 4</h3>
     </div>

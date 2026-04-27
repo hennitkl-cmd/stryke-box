@@ -11,8 +11,8 @@ const Footer = () => {
             className="flex items-center gap-3"
             whileHover={{ scale: 1.02 }}
           >
-            <img src={logo} alt="STRYKE" className="h-8 w-auto" />
-            <span className="text-lg font-black tracking-tight">STRYKE</span>
+            <img src={logo} alt="PEAK" className="h-8 w-auto" />
+            <span className="text-lg font-black tracking-tight">PEAK</span>
           </motion.div>
 
           {/* Links */}
@@ -30,7 +30,7 @@ const Footer = () => {
 
           {/* Copyright */}
           <p className="text-sm text-muted-foreground">
-            © {new Date().getFullYear()} STRYKE. All rights reserved.
+            © {new Date().getFullYear()} PEAK. All rights reserved.
           </p>
         </div>
       </div>
