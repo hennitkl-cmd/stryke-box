@@ -200,7 +200,7 @@ const FeatureGrid = () => {
                 Live Data <span className="text-gradient-red">Overlay</span>
               </h2>
               <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-                See how STRYKE sensor data powers real-time broadcast graphics during live fights.
+                See how PEAK sensor data powers real-time broadcast graphics during live fights.
               </p>
             </>
           ) : (

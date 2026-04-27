@@ -104,7 +104,7 @@ const ScienceSection = () => {
                   <Line
                     type="monotone"
                     dataKey="velocity"
-                    stroke="hsl(0 100% 40%)"
+                    stroke="hsl(215 100% 31%)"
                     strokeWidth={3}
                     dot={false}
                     animationDuration={500}
@@ -135,8 +135,8 @@ const ScienceSection = () => {
                 <AreaChart data={forceData}>
                   <defs>
                     <linearGradient id="forceGradient" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stopColor="hsl(0 100% 40%)" stopOpacity={0.4} />
-                      <stop offset="100%" stopColor="hsl(0 100% 40%)" stopOpacity={0} />
+                      <stop offset="0%" stopColor="hsl(215 100% 31%)" stopOpacity={0.4} />
+                      <stop offset="100%" stopColor="hsl(215 100% 31%)" stopOpacity={0} />
                     </linearGradient>
                   </defs>
                   <XAxis dataKey="time" hide />
@@ -152,7 +152,7 @@ const ScienceSection = () => {
                   <Area
                     type="monotone"
                     dataKey="force"
-                    stroke="hsl(0 100% 40%)"
+                    stroke="hsl(215 100% 31%)"
                     strokeWidth={2}
                     fill="url(#forceGradient)"
                     animationDuration={500}

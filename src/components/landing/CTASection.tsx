@@ -96,7 +96,7 @@ const CTASection = ({ referredBy = "" }: CTASectionProps) => {
 
     toast({
       title: "You're on the list!",
-      description: "We'll notify you when STRYKE launches.",
+      description: "We'll notify you when PEAK launches.",
     });
   };
 

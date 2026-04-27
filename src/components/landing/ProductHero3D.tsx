@@ -28,7 +28,7 @@ const ProductHero3D = () => {
             className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full opacity-20"
             style={{
               background:
-                "radial-gradient(circle, hsl(0 100% 40% / 0.4) 0%, transparent 70%)",
+                "radial-gradient(circle, hsl(215 100% 31% / 0.4) 0%, transparent 70%)",
             }}
           />
         </div>
@@ -41,14 +41,14 @@ const ProductHero3D = () => {
         >
           <motion.img
             src={heroProduct}
-            alt="STRYKE Sensor Sleeve"
+            alt="PEAK Sensor Sleeve"
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
             decoding="async"
             className="w-full h-auto object-contain"
             style={{
-              filter: "drop-shadow(0 30px 60px hsl(0, 100%, 40%, 0.3))",
+              filter: "drop-shadow(0 30px 60px hsl(215, 100%, 31%, 0.35))",
               transform: `perspective(800px) rotateX(${mousePos.y * -8}deg) rotateY(${mousePos.x * 8}deg)`,
               transition: "transform 0.15s ease-out",
             }}
@@ -57,7 +57,7 @@ const ProductHero3D = () => {
           {/* Floor glow */}
           <div
             className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[70%] h-6 rounded-full blur-2xl opacity-30"
-            style={{ backgroundColor: "hsl(0, 100%, 40%)" }}
+            style={{ backgroundColor: "hsl(215, 100%, 31%)" }}
           />
         </div>
 
@@ -91,7 +91,7 @@ const ProductHero3D = () => {
           className="text-center mt-4 md:mt-8 px-4"
         >
           <h2 className="text-3xl md:text-5xl font-black tracking-tight text-foreground">
-            STRYKE <span className="text-gradient-red">Boxing Sensor</span>
+            PEAK <span className="text-gradient-red">Boxing Sensor</span>
           </h2>
           <p className="text-muted-foreground mt-2 text-sm md:text-base">
             Compression Wrist Sleeve with integrated Sensor Technology

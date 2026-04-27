@@ -32,10 +32,10 @@ const specs: SpecItem[] = [
 ];
 
 const slides = [
-  { src: galleryDetail, alt: "STRYKE sensor detailed diagram" },
-  { src: galleryCloseup, alt: "STRYKE sensor close-up" },
-  { src: gallerySensor, alt: "STRYKE sensor technology" },
-  { src: galleryFloating, alt: "STRYKE sensor floating view" },
+  { src: galleryDetail, alt: "PEAK sensor detailed diagram" },
+  { src: galleryCloseup, alt: "PEAK sensor close-up" },
+  { src: gallerySensor, alt: "PEAK sensor technology" },
+  { src: galleryFloating, alt: "PEAK sensor floating view" },
 ];
 
 const FeatureCard = ({ spec, index, isInView }: { spec: SpecItem; index: number; isInView: boolean }) => (
