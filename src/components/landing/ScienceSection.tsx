@@ -1,6 +1,6 @@
 import { motion, useInView } from "framer-motion";
 import { useRef, useState, useEffect } from "react";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, Zap, Activity, Crosshair } from "lucide-react";
 import {
   LineChart,
   Line,
@@ -49,12 +49,60 @@ const ScienceSection = () => {
     }
   }, [isInView]);
 
-  return (
-    <section id="science" className="py-24 md:py-32 relative overflow-hidden bg-secondary/30">
-      {/* Background accent */}
-      <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[150px] -translate-x-1/2" />
+  // Latest metric values for header chips
+  const latestVelocity = Math.round(
+    velocityData[velocityData.length - 1]?.velocity || 0
+  );
+  const latestForce = Math.round(
+    forceData[forceData.length - 1]?.force || 0
+  );
+  const accuracyAvg = Math.round(
+    accuracyMetrics.reduce((s, m) => s + m.value, 0) / accuracyMetrics.length
+  );
 
-      <div className="container mx-auto px-6" ref={ref}>
+  // Shared chart card class — adds the soft blue glow that pulses while in view
+  const cardClass =
+    "glass-card p-6 relative transition-shadow duration-700 " +
+    (isInView
+      ? "shadow-[0_0_40px_-12px_hsl(215_100%_31%/0.45)] hover:shadow-[0_0_60px_-12px_hsl(215_100%_31%/0.6)]"
+      : "shadow-none");
+
+  return (
+    <section
+      id="science"
+      className="py-24 md:py-32 relative overflow-hidden bg-secondary/30"
+    >
+      {/* Background accents */}
+      <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[150px] -translate-x-1/2" />
+      <div className="absolute bottom-0 right-0 w-[600px] h-[600px] bg-primary/5 rounded-full blur-[160px] translate-x-1/3 translate-y-1/3" />
+
+      {/* Reusable SVG defs (glow filter + gradients) — defined once at root */}
+      <svg width="0" height="0" className="absolute">
+        <defs>
+          <filter id="blue-glow" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur stdDeviation="3" result="coloredBlur" />
+            <feMerge>
+              <feMergeNode in="coloredBlur" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+          <filter
+            id="blue-glow-soft"
+            x="-50%"
+            y="-50%"
+            width="200%"
+            height="200%"
+          >
+            <feGaussianBlur stdDeviation="6" result="coloredBlur" />
+            <feMerge>
+              <feMergeNode in="coloredBlur" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+        </defs>
+      </svg>
+
+      <div className="container mx-auto px-6 relative" ref={ref}>
         {/* Section Header */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -66,10 +114,12 @@ const ScienceSection = () => {
             Data-Driven Performance
           </span>
           <h2 className="text-4xl md:text-5xl font-black mt-4 mb-6">
-            The Science of the <span className="text-gradient-red">Strike</span>
+            The Science of the{" "}
+            <span className="text-gradient-red">Strike</span>
           </h2>
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            Every punch analyzed. Every pattern identified. Your path to perfection, visualized.
+            Every punch analyzed. Every pattern identified. Your path to
+            perfection, visualized.
           </p>
         </motion.div>
 
@@ -80,34 +130,67 @@ const ScienceSection = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="glass-card p-6"
+            className={cardClass}
           >
             <div className="flex items-center justify-between mb-4">
-              <h3 className="font-bold text-lg">Punch Velocity</h3>
-              <span className="text-primary text-2xl font-black">
-                {Math.round(velocityData[velocityData.length - 1]?.velocity || 0)} mph
-              </span>
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-lg bg-primary/15 flex items-center justify-center">
+                  <Zap className="w-4 h-4 text-primary" />
+                </div>
+                <h3 className="font-bold text-lg">Punch Velocity</h3>
+              </div>
+              <motion.span
+                key={latestVelocity}
+                initial={{ opacity: 0, y: -4 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3 }}
+                className="text-primary text-2xl font-black drop-shadow-[0_0_8px_hsl(215_100%_31%/0.7)]"
+              >
+                {latestVelocity} mph
+              </motion.span>
             </div>
             <div className="h-48">
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={velocityData}>
+                  <defs>
+                    <linearGradient
+                      id="velocityStroke"
+                      x1="0"
+                      y1="0"
+                      x2="1"
+                      y2="0"
+                    >
+                      <stop offset="0%" stopColor="hsl(215 100% 45%)" />
+                      <stop offset="100%" stopColor="hsl(215 100% 60%)" />
+                    </linearGradient>
+                  </defs>
                   <XAxis dataKey="time" hide />
                   <YAxis hide domain={[20, 80]} />
                   <Tooltip
+                    cursor={{
+                      stroke: "hsl(215 100% 45%)",
+                      strokeWidth: 1,
+                      strokeDasharray: "3 3",
+                    }}
                     contentStyle={{
                       backgroundColor: "hsl(0 0% 4%)",
-                      border: "1px solid hsl(0 0% 14%)",
+                      border: "1px solid hsl(215 100% 31% / 0.4)",
                       borderRadius: "8px",
+                      boxShadow: "0 0 20px hsl(215 100% 31% / 0.25)",
                     }}
                     labelStyle={{ color: "hsl(0 0% 60%)" }}
                   />
                   <Line
                     type="monotone"
                     dataKey="velocity"
-                    stroke="hsl(215 100% 31%)"
+                    stroke="url(#velocityStroke)"
                     strokeWidth={3}
                     dot={false}
-                    animationDuration={500}
+                    isAnimationActive={isInView}
+                    animationBegin={300}
+                    animationDuration={1400}
+                    animationEasing="ease-out"
+                    filter="url(#blue-glow)"
                   />
                 </LineChart>
               </ResponsiveContainer>
@@ -121,41 +204,80 @@ const ScienceSection = () => {
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6, delay: 0.3 }}
-            className="glass-card p-6"
+            transition={{ duration: 0.6, delay: 0.35 }}
+            className={cardClass}
           >
             <div className="flex items-center justify-between mb-4">
-              <h3 className="font-bold text-lg">Impact Force</h3>
-              <span className="text-primary text-2xl font-black">
-                {Math.round(forceData[forceData.length - 1]?.force || 0)} N
-              </span>
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-lg bg-primary/15 flex items-center justify-center">
+                  <Activity className="w-4 h-4 text-primary" />
+                </div>
+                <h3 className="font-bold text-lg">Impact Force</h3>
+              </div>
+              <motion.span
+                key={latestForce}
+                initial={{ opacity: 0, y: -4 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3 }}
+                className="text-primary text-2xl font-black drop-shadow-[0_0_8px_hsl(215_100%_31%/0.7)]"
+              >
+                {latestForce} N
+              </motion.span>
             </div>
             <div className="h-48">
               <ResponsiveContainer width="100%" height="100%">
                 <AreaChart data={forceData}>
                   <defs>
                     <linearGradient id="forceGradient" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stopColor="hsl(215 100% 31%)" stopOpacity={0.4} />
-                      <stop offset="100%" stopColor="hsl(215 100% 31%)" stopOpacity={0} />
+                      <stop
+                        offset="0%"
+                        stopColor="hsl(215 100% 40%)"
+                        stopOpacity={0.55}
+                      />
+                      <stop
+                        offset="100%"
+                        stopColor="hsl(215 100% 40%)"
+                        stopOpacity={0}
+                      />
+                    </linearGradient>
+                    <linearGradient
+                      id="forceStroke"
+                      x1="0"
+                      y1="0"
+                      x2="1"
+                      y2="0"
+                    >
+                      <stop offset="0%" stopColor="hsl(215 100% 50%)" />
+                      <stop offset="100%" stopColor="hsl(200 100% 60%)" />
                     </linearGradient>
                   </defs>
                   <XAxis dataKey="time" hide />
                   <YAxis hide domain={[100, 350]} />
                   <Tooltip
+                    cursor={{
+                      stroke: "hsl(215 100% 45%)",
+                      strokeWidth: 1,
+                      strokeDasharray: "3 3",
+                    }}
                     contentStyle={{
                       backgroundColor: "hsl(0 0% 4%)",
-                      border: "1px solid hsl(0 0% 14%)",
+                      border: "1px solid hsl(215 100% 31% / 0.4)",
                       borderRadius: "8px",
+                      boxShadow: "0 0 20px hsl(215 100% 31% / 0.25)",
                     }}
                     labelStyle={{ color: "hsl(0 0% 60%)" }}
                   />
                   <Area
                     type="monotone"
                     dataKey="force"
-                    stroke="hsl(215 100% 31%)"
-                    strokeWidth={2}
+                    stroke="url(#forceStroke)"
+                    strokeWidth={2.5}
                     fill="url(#forceGradient)"
-                    animationDuration={500}
+                    isAnimationActive={isInView}
+                    animationBegin={500}
+                    animationDuration={1400}
+                    animationEasing="ease-out"
+                    filter="url(#blue-glow)"
                   />
                 </AreaChart>
               </ResponsiveContainer>
@@ -169,23 +291,46 @@ const ScienceSection = () => {
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6, delay: 0.4 }}
-            className="glass-card p-6"
+            transition={{ duration: 0.6, delay: 0.5 }}
+            className={cardClass}
           >
-            <h3 className="font-bold text-lg mb-6">Accuracy Tracking</h3>
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-lg bg-primary/15 flex items-center justify-center">
+                  <Crosshair className="w-4 h-4 text-primary" />
+                </div>
+                <h3 className="font-bold text-lg">Accuracy Tracking</h3>
+              </div>
+              <span className="text-primary text-2xl font-black drop-shadow-[0_0_8px_hsl(215_100%_31%/0.7)]">
+                {accuracyAvg}%
+              </span>
+            </div>
             <div className="space-y-5">
               {accuracyMetrics.map((metric, index) => (
                 <div key={metric.label}>
                   <div className="flex justify-between mb-2">
-                    <span className="text-sm text-muted-foreground">{metric.label}</span>
-                    <span className="text-sm font-semibold">{metric.value}%</span>
+                    <span className="text-sm text-muted-foreground">
+                      {metric.label}
+                    </span>
+                    <motion.span
+                      initial={{ opacity: 0 }}
+                      animate={isInView ? { opacity: 1 } : {}}
+                      transition={{ delay: 0.9 + index * 0.12, duration: 0.4 }}
+                      className="text-sm font-semibold text-foreground"
+                    >
+                      {metric.value}%
+                    </motion.span>
                   </div>
-                  <div className="h-2 bg-secondary rounded-full overflow-hidden">
+                  <div className="h-2 bg-secondary rounded-full overflow-hidden relative">
                     <motion.div
                       initial={{ width: 0 }}
                       animate={isInView ? { width: `${metric.value}%` } : {}}
-                      transition={{ duration: 1, delay: 0.5 + index * 0.1, ease: "easeOut" }}
-                      className="h-full bg-primary rounded-full"
+                      transition={{
+                        duration: 1.2,
+                        delay: 0.7 + index * 0.12,
+                        ease: [0.22, 1, 0.36, 1],
+                      }}
+                      className="h-full rounded-full bg-gradient-to-r from-primary to-blue-400 shadow-[0_0_10px_hsl(215_100%_45%/0.7)]"
                     />
                   </div>
                 </div>
@@ -201,11 +346,11 @@ const ScienceSection = () => {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6, delay: 0.6 }}
+          transition={{ duration: 0.6, delay: 0.9 }}
           className="flex justify-center mt-12"
         >
           <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass text-sm font-medium text-muted-foreground">
-            <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
+            <span className="w-2 h-2 rounded-full bg-primary animate-pulse shadow-[0_0_8px_hsl(215_100%_45%/0.9)]" />
             And a lot of other features
             <ChevronDown className="w-4 h-4" />
           </span>
