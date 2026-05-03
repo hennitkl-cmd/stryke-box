@@ -48,9 +48,7 @@ const SplashTitle = () => {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tight text-gradient-red text-center px-6 max-w-4xl"
           >
-            Don't just watch the fight.
-            <br />
-            Read it.
+            Smash your plateau.
           </motion.h1>
           
           <motion.p
