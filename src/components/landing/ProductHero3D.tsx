@@ -20,8 +20,8 @@ const metrics: Metric[] = [
 ];
 
 const cardPositions = [
-  "absolute top-[8%] left-0 md:left-[-4%]",
-  "absolute top-[8%] right-0 md:right-[-4%]",
+  "absolute top-[22%] left-0 md:left-[-4%]",
+  "absolute top-[22%] right-0 md:right-[-4%]",
   "absolute bottom-[10%] left-0 md:left-[-4%]",
   "absolute bottom-[10%] right-0 md:right-[-4%]",
 ];
