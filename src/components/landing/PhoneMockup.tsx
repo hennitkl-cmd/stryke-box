@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { ReactNode, useRef, useEffect } from "react";
 
 // Universal poster/fallback for all phone mockups
-import phonePoster from "@/assets/screens/phone-poster.jpg";
+import phonePoster from "@/assets/screens/phone-poster.png";
 
 // Video URLs from Cloud Storage (CDN)
 const VIDEO_BASE_URL = "https://wnfypheskgiavkoprtvf.supabase.co/storage/v1/object/public/videos/";
