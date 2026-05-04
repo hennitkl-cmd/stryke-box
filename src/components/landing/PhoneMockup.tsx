@@ -6,9 +6,9 @@ import phonePoster from "@/assets/screens/phone-poster.jpg";
 
 // Video URLs from Cloud Storage (CDN)
 const VIDEO_BASE_URL = "https://wnfypheskgiavkoprtvf.supabase.co/storage/v1/object/public/videos/";
-const boxerSessionVideo = `${VIDEO_BASE_URL}boxer-session.mp4`;
-const boxerTrainingVideo = `${VIDEO_BASE_URL}boxer-training.mp4`;
-const boxerCommunityVideo = `${VIDEO_BASE_URL}boxer-community.mp4`;
+const boxerSessionVideo = `${VIDEO_BASE_URL}boxer-session-v2.mp4`;
+const boxerTrainingVideo = `${VIDEO_BASE_URL}boxer-training-v2.mp4`;
+const boxerCommunityVideo = `${VIDEO_BASE_URL}boxer-community-v2.mp4`;
 const coachDashboardVideo = `${VIDEO_BASE_URL}coach-fighters.mp4`;
 const coachAnalyticsVideo = `${VIDEO_BASE_URL}coach-dashboard.mp4`;
 const coachFightersVideo = `${VIDEO_BASE_URL}coach-analytics.mp4`;
